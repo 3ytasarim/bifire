@@ -1,0 +1,24 @@
+# dependencies
+/node_modules
+
+# next.js
+/.next/
+/out/
+next-env.d.ts
+*.tsbuildinfo
+
+# env (gerçek credential asla commit edilmez)
+.env
+.env.*
+!.env.example
+
+# uploads (sunucuda kalıcı disk)
+/public/uploads/
+
+# misc
+.DS_Store
+*.pem
+npm-debug.log*
+
+# yüklenen dosyalar (Hetzner kalıcı diski)
+/storage/

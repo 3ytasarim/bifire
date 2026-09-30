@@ -1,0 +1,226 @@
+@import "tailwindcss";
+@plugin "@tailwindcss/typography";
+
+/*
+ * BIFIRE tasarım sistemi
+ * Karakter: ateş + mimari. Taş, metal, cam, ahşap. Zemin kırık beyaz ve antrasit; ateş turuncusu
+ * yalnızca vurgu (çizgi, ikon, CTA hover, küçük etiket) — yüzey rengi olarak kullanılmaz.
+ * Kontrast: ember (#E0691F) koyu zeminde metin için uygun; açık zeminde metin gerekiyorsa ember-ink (AA 4.5:1+).
+ */
+@theme {
+  --color-ink: #0c0c0d;
+  --color-anthracite: #161719;
+  --color-smoke: #232427;
+  --color-graphite: #34363a;
+  --color-steel: #5d5f64;
+  --color-stone: #8a857e;
+  --color-sand: #d8d1c6;
+  --color-linen: #ebe6de;
+  --color-bone: #f4f1ec;
+  --color-paper: #faf8f5;
+  --color-ember: #e0691f;
+  --color-ember-ink: #a3440e;
+  --color-amber: #e8a868;
+  --color-glow: #f6c28b;
+
+  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+
+  --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
+  --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
+
+  --animate-rise: rise 0.9s var(--ease-premium) both;
+  --animate-fade: fade 1.2s var(--ease-soft) both;
+
+  @keyframes rise {
+    from {
+      opacity: 0;
+      transform: translateY(24px);
+    }
+    to {
+      opacity: 1;
+      transform: none;
+    }
+  }
+  @keyframes fade {
+    from {
+      opacity: 0;
+    }
+    to {
+      opacity: 1;
+    }
+  }
+}
+
+/* Hero slider ilerleme çizgisi (inline animation ile kullanılır, @theme dışında tanımlı) */
+@keyframes hero-progress {
+  from {
+    transform: scaleX(0);
+  }
+  to {
+    transform: scaleX(1);
+  }
+}
+
+@layer base {
+  html {
+    -webkit-text-size-adjust: 100%;
+    scroll-padding-top: 6rem;
+  }
+  body {
+    @apply bg-paper font-sans text-ink antialiased;
+    text-rendering: optimizeLegibility;
+    font-feature-settings: "ss01", "cv11";
+  }
+  h1,
+  h2,
+  h3,
+  h4 {
+    @apply font-display;
+    text-wrap: balance;
+  }
+  p {
+    text-wrap: pretty;
+  }
+  ::selection {
+    @apply bg-ember text-ink;
+  }
+  :focus-visible {
+    outline: 2px solid var(--color-ember);
+    outline-offset: 3px;
+  }
+  [hidden] {
+    display: none !important;
+  }
+}
+
+@layer components {
+  /* Sayfa kabı: 320px → 2560px, 16px mobil kenar boşluğu */
+  .shell {
+    @apply mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-10 2xl:px-12;
+  }
+
+  .eyebrow {
+    @apply inline-flex items-center gap-3 text-[11px] font-semibold tracking-[0.28em] uppercase;
+  }
+  .eyebrow::before {
+    content: "";
+    @apply block h-px w-8 bg-current opacity-60;
+  }
+
+  .display-1 {
+    @apply font-display text-[2.6rem] leading-[1.02] font-semibold tracking-[-0.035em] sm:text-6xl lg:text-7xl 2xl:text-[5.5rem];
+  }
+  .display-2 {
+    @apply font-display text-[2rem] leading-[1.08] font-semibold tracking-[-0.03em] sm:text-5xl lg:text-[3.5rem];
+  }
+  .display-3 {
+    @apply font-display text-2xl leading-tight font-semibold tracking-[-0.02em] sm:text-3xl;
+  }
+  .lead {
+    @apply text-base leading-relaxed sm:text-lg;
+  }
+
+  .btn {
+    @apply inline-flex min-h-12 items-center justify-center gap-2.5 px-7 text-[13px] font-semibold tracking-[0.14em] uppercase transition-[background-color,color,border-color,transform] duration-300 ease-(--ease-premium) disabled:cursor-not-allowed disabled:opacity-60;
+  }
+  /* Kullanım: class="btn btn-ember" */
+  .btn-ember {
+    @apply bg-ember text-ink hover:bg-amber;
+  }
+  .btn-light {
+    @apply bg-bone text-ink hover:bg-white;
+  }
+  .btn-dark {
+    @apply bg-ink text-bone hover:bg-graphite;
+  }
+  .btn-ghost-light {
+    @apply border border-white/35 text-white hover:border-white hover:bg-white/10;
+  }
+  .btn-ghost-dark {
+    @apply border border-ink/25 text-ink hover:border-ink hover:bg-ink hover:text-bone;
+  }
+  .btn .btn-arrow {
+    @apply transition-transform duration-300 ease-(--ease-premium);
+  }
+  .btn:hover .btn-arrow {
+    transform: translateX(4px);
+  }
+
+  .link-underline {
+    background-image: linear-gradient(currentColor, currentColor);
+    background-size: 0% 1px;
+    background-position: 0 100%;
+    background-repeat: no-repeat;
+    transition: background-size 0.5s var(--ease-premium);
+  }
+  .link-underline:hover,
+  .link-underline:focus-visible {
+    background-size: 100% 1px;
+  }
+
+  /* Görsel hover yakınlaşması (kartlar) */
+  .zoom-media {
+    @apply overflow-hidden;
+  }
+  .zoom-media img {
+    transition: transform 1.2s var(--ease-premium);
+  }
+  .group:hover .zoom-media img,
+  .group:focus-visible .zoom-media img {
+    transform: scale(1.045);
+  }
+
+  /* Görsel yokken kullanılan mimari yer tutucu (taş + közün sıcak ışığı) */
+  .ember-placeholder {
+    background:
+      radial-gradient(120% 70% at 50% 110%, rgb(224 105 31 / 0.55), transparent 60%),
+      radial-gradient(60% 40% at 50% 100%, rgb(246 194 139 / 0.35), transparent 70%),
+      linear-gradient(180deg, #232427 0%, #121314 100%);
+  }
+
+  /* Zengin metin içeriği */
+  /* Kullanım: class="prose prose-lg rich" */
+  .rich {
+    @apply max-w-none;
+    --tw-prose-body: #2c2d30;
+    --tw-prose-headings: var(--color-ink);
+    --tw-prose-links: var(--color-ember-ink);
+    --tw-prose-quotes: var(--color-ink);
+    --tw-prose-quote-borders: var(--color-ember);
+    --tw-prose-bullets: var(--color-ember);
+    --tw-prose-counters: var(--color-stone);
+    --tw-prose-hr: var(--color-sand);
+  }
+  .rich :where(h2, h3, h4) {
+    @apply font-display tracking-[-0.02em];
+  }
+  .rich :where(img) {
+    @apply h-auto w-full;
+  }
+  .rich :where(a) {
+    @apply underline-offset-4;
+  }
+}
+
+/* Kaydırmayla beliren içerik — JS yok: destekleyen tarayıcılarda scroll-driven animation. */
+@supports (animation-timeline: view()) {
+  @media (prefers-reduced-motion: no-preference) {
+    .reveal {
+      animation: rise linear both;
+      animation-timeline: view();
+      animation-range: entry 0% entry 35%;
+    }
+  }
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: 0.01ms !important;
+    scroll-behavior: auto !important;
+  }
+}
