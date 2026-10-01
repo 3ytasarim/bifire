@@ -45,7 +45,14 @@ export const routes = {
   cookies: "/cerez-politikasi",
 };
 
-export type TechRow = { label: string; value: string; unit?: string | null; group?: string | null };
+/** value: kullanıcıya gösterilen (tr-TR biçimli); raw: yapısal veri için makine okunur değer (ör. "1450", "12.5"). */
+export type TechRow = { label: string; value: string; raw?: string; unit?: string | null; group?: string | null };
+
+function raw(value: { toString(): string } | null | undefined): string | undefined {
+  if (value === null || value === undefined) return undefined;
+  const n = Number(value.toString());
+  return Number.isFinite(n) ? String(n) : undefined;
+}
 
 function num(value: { toString(): string } | null | undefined): string | null {
   if (value === null || value === undefined) return null;
@@ -85,21 +92,21 @@ export function keyFacts(p: Pick<Product, "fuelType" | "powerKw" | "heatingArea"
 /** Detay sayfasındaki teknik tablo: sabit alanlar + admin'in eklediği esnek özellik satırları. */
 export function technicalRows(p: ProductTech, specs: Pick<ProductSpecification, "group" | "label" | "value" | "unit">[]): TechRow[] {
   const rows: TechRow[] = [];
-  const add = (label: string, value: string | null | undefined, unit?: string) => {
-    if (value) rows.push({ label, value, unit, group: "Genel" });
+  const add = (label: string, value: string | null | undefined, unit?: string, rawValue?: string) => {
+    if (value) rows.push({ label, value, raw: rawValue, unit, group: "Genel" });
   };
   add("Marka", p.brand);
   add("Model kodu", p.modelCode);
   add("Yakıt türü", p.fuelType ? FUEL_LABELS[p.fuelType] : null);
   add("Cam / görünüm", p.viewType ? VIEW_LABELS[p.viewType] : null);
-  add("Nominal güç", num(p.powerKw), "kW");
+  add("Nominal güç", num(p.powerKw), "kW", raw(p.powerKw));
   add("Isıtma alanı", p.heatingArea);
-  add("Verim", num(p.efficiency), "%");
-  add("Genişlik", num(p.widthMm), "mm");
-  add("Yükseklik", num(p.heightMm), "mm");
-  add("Derinlik", num(p.depthMm), "mm");
-  add("Ağırlık", num(p.weightKg), "kg");
-  add("Baca çapı", num(p.flueDiameterMm), "mm");
+  add("Verim", num(p.efficiency), "%", raw(p.efficiency));
+  add("Genişlik", num(p.widthMm), "mm", raw(p.widthMm));
+  add("Yükseklik", num(p.heightMm), "mm", raw(p.heightMm));
+  add("Derinlik", num(p.depthMm), "mm", raw(p.depthMm));
+  add("Ağırlık", num(p.weightKg), "kg", raw(p.weightKg));
+  add("Baca çapı", num(p.flueDiameterMm), "mm", raw(p.flueDiameterMm));
   add("Ölçü notu", p.dimensionsNote);
   for (const s of specs) rows.push({ label: s.label, value: s.value, unit: s.unit, group: s.group || "Teknik özellikler" });
   return rows;

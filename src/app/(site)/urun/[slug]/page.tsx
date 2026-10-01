@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: Props) {
             category: category.name,
             modelCode: product.modelCode,
             brand: product.brand,
-            properties: rows.filter((r) => r.label !== "Marka" && r.label !== "Model kodu").map((r) => ({ name: r.label, value: r.value, unitText: r.unit })),
+            properties: rows.filter((r) => r.label !== "Marka" && r.label !== "Model kodu").map((r) => ({ name: r.label, value: r.raw ?? r.value, unitText: r.unit })),
           }),
         )}
       />

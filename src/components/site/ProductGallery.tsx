@@ -11,6 +11,7 @@ import { Lightbox, type GalleryImage } from "./Lightbox";
  */
 export function ProductGallery({ images, name }: { images: GalleryImage[]; name: string }) {
   const [active, setActive] = useState(0);
+  const [changed, setChanged] = useState(false); // ilk görsel animasyonsuz (LCP), sonraki seçimler yumuşak geçişli
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   if (!images.length) {
@@ -33,7 +34,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
           fill
           priority={active === 0}
           sizes="(min-width: 1024px) 55vw, 100vw"
-          className="animate-fade object-cover"
+          className={`object-cover ${changed ? "animate-fade" : ""}`}
         />
         <span className="absolute right-4 bottom-4 flex h-11 w-11 items-center justify-center bg-bone/90 text-ink opacity-0 transition-opacity group-hover:opacity-100 group-focus-visible:opacity-100">
           <Expand aria-hidden="true" className="h-5 w-5" />
@@ -45,7 +46,10 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
             <li key={img.url}>
               <button
                 type="button"
-                onClick={() => setActive(i)}
+                onClick={() => {
+                  setChanged(true);
+                  setActive(i);
+                }}
                 aria-label={`${i + 1}. görseli göster`}
                 aria-current={i === active ? "true" : undefined}
                 className={`relative block aspect-square w-full overflow-hidden bg-linen outline-offset-2 transition-opacity ${i === active ? "ring-2 ring-ember" : "opacity-70 hover:opacity-100"}`}

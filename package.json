@@ -13,9 +13,9 @@
     "db:deploy": "prisma migrate deploy",
     "db:studio": "prisma studio",
     "admin:create": "tsx scripts/create-admin.ts",
-    "demo:seed": "tsx scripts/demo-seed.ts",
     "demo:clear": "tsx scripts/demo-clear.ts",
-    "postinstall": "prisma generate"
+    "postinstall": "prisma generate",
+    "brand:assets": "tsx scripts/generate-brand-assets.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.1",

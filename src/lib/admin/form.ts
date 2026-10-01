@@ -31,8 +31,10 @@ export const required = (label: string, max = 250) => text(max).min(1, `${label}
 export const optional = (max = 250) =>
   text(max).transform((v) => (v === "" ? null : v));
 
+/** Checkbox: işaretliyse "on" gelir; işaretsizse alan formda HİÇ yoktur (Zod 4'te anahtar açıkça optional olmalı). */
 export const bool = z
-  .union([z.literal("on"), z.literal("true"), z.literal(""), z.null(), z.undefined()])
+  .union([z.literal("on"), z.literal("true"), z.literal("")])
+  .optional()
   .transform((v) => v === "on" || v === "true");
 
 export const int = (min = 0, max = 1_000_000) =>

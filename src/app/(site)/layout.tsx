@@ -2,6 +2,7 @@ import type { Metadata } from "next";
 import { Footer } from "@/components/site/Footer";
 import { Header } from "@/components/site/Header";
 import { JsonLd } from "@/components/site/JsonLd";
+import { RevealObserver } from "@/components/site/RevealObserver";
 import { WhatsAppFloat } from "@/components/site/WhatsAppFloat";
 import { getSiteSettings } from "@/lib/settings";
 import { getImageMeta } from "@/lib/seo/image-meta";
@@ -26,6 +27,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       </main>
       <Footer />
       <WhatsAppFloat />
+      <RevealObserver />
     </>
   );
 }

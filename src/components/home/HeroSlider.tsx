@@ -48,7 +48,7 @@ function SlidePicture({ slide, first }: { slide: HeroSlideData; first: boolean }
       {mobile ? <source media="(max-width: 767px)" srcSet={mobile.srcSet} sizes="100vw" /> : null}
       <source media="(min-width: 768px)" srcSet={desktop.srcSet} sizes="100vw" />
       {/* eslint-disable-next-line jsx-a11y/alt-text -- alt getImageProps'tan geliyor */}
-      <img {...img} style={style} className="object-cover" />
+      <img {...img} style={style} className="object-cover" {...(first ? { fetchPriority: "high" as const } : {})} />
     </picture>
   );
 }

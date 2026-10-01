@@ -46,14 +46,20 @@ export function RequestForm({
   compact?: boolean;
 }) {
   const [state, action] = useActionState<RequestFormState, FormData>(submitRequest, { status: "idle" });
-  const startedRef = useRef<HTMLInputElement>(null);
+  const startedAt = useRef(0);
   const [categoryId, setCategoryId] = useState(defaultCategoryId ?? "");
   const statusRef = useRef<HTMLDivElement>(null);
 
-  // Formun açılış zamanı (bot tuzağı): DOM'a doğrudan yazılır, yeniden render gerekmez.
+  // Formun açılış zamanı (bot tuzağı) ref'te tutulur ve gönderim anında FormData'ya eklenir. DOM alanı
+  // kullanılmaz: React 19 form action'ı hata sonrası formu sıfırlar; alan 0'a dönerse ilk denemesi hatalı
+  // olan gerçek kullanıcı "bot" sanılıp talebi sessizce atılırdı.
   useEffect(() => {
-    if (startedRef.current) startedRef.current.value = String(Date.now());
+    startedAt.current = Date.now();
   }, []);
+  const submit = (fd: FormData) => {
+    fd.set("startedAt", String(startedAt.current));
+    action(fd);
+  };
   useEffect(() => {
     if (state.status !== "idle") statusRef.current?.focus();
   }, [state]);
@@ -74,10 +80,9 @@ export function RequestForm({
   const fieldId = (n: string) => `${type.toLowerCase()}-${n}`;
 
   return (
-    <form action={action} noValidate className="space-y-6">
+    <form action={submit} noValidate className="space-y-6">
       <input type="hidden" name="type" value={type} />
       <input type="hidden" name="sourcePath" value={sourcePath} />
-      <input ref={startedRef} type="hidden" name="startedAt" defaultValue="0" />
       {/* Honeypot: insanlar görmez/doldurmaz */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor={fieldId("website")}>Web siteniz</label>

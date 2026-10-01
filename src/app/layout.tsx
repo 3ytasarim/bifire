@@ -22,7 +22,11 @@ export const viewport: Viewport = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="tr" className={`${inter.variable} ${manrope.variable}`}>
+    <html lang="tr" className={`${inter.variable} ${manrope.variable}`} suppressHydrationWarning>
+      <head>
+        {/* JS çalışıyorsa işaretle: kaydırmayla beliren içerik yalnızca bu durumda gizli başlar (bkz. globals.css). */}
+        <script dangerouslySetInnerHTML={{ __html: "document.documentElement.classList.add('js')" }} />
+      </head>
       <body>{children}</body>
     </html>
   );

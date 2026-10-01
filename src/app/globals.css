@@ -203,14 +203,20 @@
   }
 }
 
-/* Kaydırmayla beliren içerik — JS yok: destekleyen tarayıcılarda scroll-driven animation. */
-@supports (animation-timeline: view()) {
-  @media (prefers-reduced-motion: no-preference) {
-    .reveal {
-      animation: rise linear both;
-      animation-timeline: view();
-      animation-range: entry 0% entry 35%;
-    }
+/*
+ * Kaydırmayla beliren içerik (tek seferlik). Yalnızca JS çalışıyorsa (<html class="js">) gizli başlar;
+ * RevealObserver görünüme girince .is-visible ekler. JS'siz istemciler ve kaydırmadan render eden
+ * araçlar (önizleme/ekran görüntüsü servisleri) içeriği her zaman görür.
+ */
+@media (prefers-reduced-motion: no-preference) {
+  .js .reveal:not(.is-visible) {
+    opacity: 0;
+    transform: translateY(24px);
+  }
+  .js .reveal {
+    transition:
+      opacity 0.9s var(--ease-premium),
+      transform 0.9s var(--ease-premium);
   }
 }
 

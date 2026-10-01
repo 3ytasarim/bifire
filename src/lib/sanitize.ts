@@ -50,10 +50,12 @@ export function sanitizeRichText(html: string | null | undefined): string {
         };
       },
     },
+    // Görsel yalnızca kendi medya deposundan (/uploads/...) veya https kaynaktan olabilir; diğerleri tamamen atılır.
+    exclusiveFilter: (frame) => frame.tag === "img" && !/^(\/uploads\/|https:\/\/)/.test(frame.attribs.src ?? ""),
     disallowedTagsMode: "discard",
   });
-  // Tiptap boş editörde "<p></p>" üretir — içerik yok sayılır.
-  return clean.replace(/<p>\s*<\/p>/g, "").trim();
+  // Tiptap boş editörde "<p></p>" üretir; boş başlıklar da (yanlışlıkla uygulanan H2 vb.) atılır.
+  return clean.replace(/<(p|h2|h3|h4|blockquote)>\s*(<br\s*\/?>)?\s*<\/\1>/g, "").trim();
 }
 
 /** HTML'den düz metin (özet, meta description, okuma süresi için). */

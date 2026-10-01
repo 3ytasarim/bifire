@@ -6,6 +6,29 @@ import { AlertCircle, CheckCircle2, Loader2 } from "lucide-react";
 export type ActionState = { status: "idle" | "error" | "success"; message?: string; errors?: Record<string, string> };
 type Action = (prev: ActionState, formData: FormData) => Promise<ActionState>;
 
+/** Hata özetinde teknik alan adları yerine okunur etiketler. */
+const FIELD_LABELS: Record<string, string> = {
+  name: "Ad",
+  title: "Başlık",
+  slug: "URL (slug)",
+  categoryId: "Kategori",
+  parentId: "Üst kategori",
+  description: "Açıklama",
+  content: "İçerik",
+  image: "Görsel",
+  coverImage: "Kapak görseli",
+  desktopImage: "Masaüstü görseli",
+  metaTitle: "Meta başlık",
+  metaDescription: "Meta açıklama",
+  canonicalUrl: "Canonical URL",
+  ogImage: "Paylaşım görseli",
+  ctaUrl: "Birincil buton bağlantısı",
+  secondaryCtaUrl: "İkincil buton bağlantısı",
+  sortOrder: "Sıra",
+  email: "E-posta",
+  password: "Şifre",
+};
+
 const ErrorsContext = createContext<Record<string, string>>({});
 const PendingContext = createContext(false);
 const DirtyContext = createContext<() => void>(() => {});
@@ -92,7 +115,18 @@ export function AdminForm({ action, children, className = "", id, resetOnSuccess
             {state.status === "error" && state.message ? (
               <p role="alert" className="mb-6 flex items-start gap-3 border border-red-200 bg-red-50 px-4 py-3 text-sm text-red-800">
                 <AlertCircle aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0" />
-                {state.message}
+                <span>
+                  {state.message}
+                  {state.errors && Object.keys(state.errors).length ? (
+                    <ul className="mt-1 list-disc pl-4">
+                      {Object.entries(state.errors).map(([k, v]) => (
+                        <li key={k}>
+                          <span className="font-semibold">{FIELD_LABELS[k] ?? k}:</span> {v}
+                        </li>
+                      ))}
+                    </ul>
+                  ) : null}
+                </span>
               </p>
             ) : null}
             {state.status === "success" && state.message ? (

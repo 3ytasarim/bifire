@@ -40,7 +40,14 @@ export default async function AboutPage() {
           breadcrumbNode(routes.about, CRUMBS),
         )}
       />
-      <PageHero crumbs={CRUMBS} eyebrow="Kurumsal" title="Ateşi mimariyle buluşturuyoruz." intro={m.body[0]} image={s.aboutImage} imageAlt={s.aboutImageAlt} />
+      <PageHero
+        crumbs={CRUMBS}
+        eyebrow="Kurumsal"
+        title="Ateşi mimariyle buluşturuyoruz."
+        intro="Bifire; mekânı anlayan, doğru ürünü seçen ve uygulamayı tek elden yürüten bir şömine markasıdır."
+        image={s.aboutImage}
+        imageAlt={s.aboutImageAlt}
+      />
 
       <section aria-labelledby="yaklasim" className="bg-paper py-20 sm:py-28">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-20">

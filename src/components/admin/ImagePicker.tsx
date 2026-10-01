@@ -1,12 +1,13 @@
 "use client";
 
 import Image from "next/image";
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { ImagePlus, Loader2, Trash2 } from "lucide-react";
 import { uploadImageAction } from "@/app/admin/(panel)/medya/actions";
 import { useFieldError, useMarkDirty } from "./AdminForm";
 import { inputCls } from "./fields";
 import { MediaLibrary } from "./MediaLibrary";
+import { currentTitle } from "./form-title";
 
 /**
  * Tek görsel alanı: önizleme + bilgisayardan yükle + kütüphaneden seç + kaldır. Değer gizli input'ta
@@ -44,6 +45,7 @@ export function ImagePicker({
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState<string | null>(null);
   const fieldError = useFieldError(name);
+  const rootRef = useRef<HTMLDivElement>(null);
 
   async function upload(file: File | undefined) {
     if (!file) return;
@@ -52,7 +54,8 @@ export function ImagePicker({
     const fd = new FormData();
     fd.set("file", file);
     if (alt) fd.set("alt", alt);
-    if (nameHint) fd.set("nameHint", nameHint);
+    const hint = alt || currentTitle(rootRef.current) || nameHint;
+    if (hint) fd.set("nameHint", hint);
     const res = await uploadImageAction(fd);
     setBusy(false);
     if (res.ok) {
@@ -62,7 +65,7 @@ export function ImagePicker({
   }
 
   return (
-    <div>
+    <div ref={rootRef}>
       <p className="mb-1.5 text-sm font-medium text-neutral-800">
         {label}
         {required ? <span className="text-ember-ink"> *</span> : null}
@@ -128,3 +131,4 @@ export function ImagePicker({
     </div>
   );
 }
+

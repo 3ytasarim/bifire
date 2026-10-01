@@ -20,8 +20,8 @@ const nextConfig: NextConfig = {
     formats: ["image/avif", "image/webp"],
   },
   experimental: {
-    // Görsel yükleme server action'ı 10 MB'a izin veriyor (lib/upload.ts); multipart ek yükü için pay var.
-    serverActions: { bodySizeLimit: "12mb" },
+    // Yükleme limitleri (lib/upload.ts): görsel 10 MB, PDF 20 MB; multipart ek yükü için pay bırakıldı.
+    serverActions: { bodySizeLimit: "24mb" },
   },
   async headers() {
     return [

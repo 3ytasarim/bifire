@@ -1,6 +1,6 @@
 "use client";
 
-import { useState } from "react";
+import { useRef, useState } from "react";
 import { EditorContent, useEditor, useEditorState, type Editor } from "@tiptap/react";
 import { StarterKit } from "@tiptap/starter-kit";
 import TiptapImage from "@tiptap/extension-image";
@@ -24,6 +24,7 @@ import {
   Unlink,
 } from "lucide-react";
 import { useFieldError, useMarkDirty } from "./AdminForm";
+import { currentTitle } from "./form-title";
 import { MediaLibrary } from "./MediaLibrary";
 
 /**
@@ -38,6 +39,7 @@ export function RichTextEditor({ name, label, defaultValue, placeholder = "Yazma
   const [mediaOpen, setMediaOpen] = useState(false);
   const markDirty = useMarkDirty();
   const error = useFieldError(name);
+  const editorWrapRef = useRef<HTMLDivElement>(null);
 
   const editor = useEditor({
     immediatelyRender: false, // Next.js SSR hydration uyumu
@@ -65,7 +67,7 @@ export function RichTextEditor({ name, label, defaultValue, placeholder = "Yazma
   });
 
   return (
-    <div>
+    <div ref={editorWrapRef}>
       <p className="mb-1.5 text-sm font-medium text-neutral-800">{label}</p>
       <input type="hidden" name={name} value={html} />
       <div className={`border bg-white ${error ? "border-red-500" : "border-neutral-300"} focus-within:border-ink`}>
@@ -110,7 +112,8 @@ export function RichTextEditor({ name, label, defaultValue, placeholder = "Yazma
         onClose={() => setMediaOpen(false)}
         onSelect={(items) => {
           const m = items[0];
-          if (m && editor) editor.chain().focus().setImage({ src: m.url, alt: m.alt ?? "" }).run();
+          // Alt metin: medyadaki alt; yoksa içeriğin başlığı (boş alt yerine anlamlı bir açıklama).
+          if (m && editor) editor.chain().focus().setImage({ src: m.url, alt: m.alt || currentTitle(editorWrapRef.current) || "" }).run();
         }}
       />
     </div>

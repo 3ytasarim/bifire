@@ -4,6 +4,7 @@ import Image from "next/image";
 import { useCallback, useEffect, useRef, useState, useTransition } from "react";
 import { Loader2, Search, Upload, X } from "lucide-react";
 import { listMediaAction, uploadImageAction, type MediaItem } from "@/app/admin/(panel)/medya/actions";
+import { currentTitle } from "./form-title";
 
 /**
  * Medya kütüphanesi seçim penceresi (native <dialog>): arama, sayfalama, yeni yükleme.
@@ -61,7 +62,8 @@ export function MediaLibrary({
     for (const file of Array.from(files)) {
       const fd = new FormData();
       fd.set("file", file);
-      if (nameHint) fd.set("nameHint", nameHint);
+      const hint = currentTitle(ref.current?.parentElement ?? null) || nameHint;
+      if (hint) fd.set("nameHint", hint);
       const res = await uploadImageAction(fd);
       if (res.ok) uploaded.push(res.data);
       else setError(`${file.name}: ${res.error}`);

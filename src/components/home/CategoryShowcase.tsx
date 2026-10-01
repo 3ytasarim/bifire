@@ -20,8 +20,13 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
         <SectionHeading id="home-categories" eyebrow={c.eyebrow} title={c.title} intro={c.intro} action={{ label: "Tüm ürünler", href: "/urunler" }} />
         <div className="mt-14 grid gap-4 sm:mt-20 sm:gap-5 lg:grid-cols-12">
           {first ? (
-            <div className="reveal lg:col-span-7">
-              <CategoryCard category={toCard(first)} aspect="aspect-[4/5] sm:aspect-[16/11]" sizes="(min-width: 1024px) 58vw, 100vw" />
+            // Tek kategori varken tam genişlik (yarım boş satır kalmasın).
+            <div className={`reveal ${second ? "lg:col-span-7" : "lg:col-span-12"}`}>
+              <CategoryCard
+                category={toCard(first)}
+                aspect={second ? "aspect-[4/5] sm:aspect-[16/11]" : "aspect-[4/5] sm:aspect-[21/9]"}
+                sizes={second ? "(min-width: 1024px) 58vw, 100vw" : "100vw"}
+              />
             </div>
           ) : null}
           {second ? (
