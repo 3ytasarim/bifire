@@ -16,6 +16,8 @@ const nextConfig: NextConfig = {
   poweredByHeader: false,
   // canonical/description/OG etiketleri tüm istemcilere (AI tarayıcıları dahil) <head> içinde gelsin.
   htmlLimitedBots: /.*/,
+  // Yalnızca `next dev`: Cloudflare quick tunnel (*.trycloudflare.com) üzerinden önizlemeye izin ver.
+  allowedDevOrigins: ["*.trycloudflare.com"],
   images: {
     formats: ["image/avif", "image/webp"],
   },
