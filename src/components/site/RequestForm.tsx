@@ -5,22 +5,23 @@ import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { ArrowRight, CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
 import { submitRequest, type RequestFormState } from "@/app/(site)/actions";
+import { Button3D } from "@/components/ui/button-3d";
 
 type Option = { id: string; name: string };
 
 function Submit({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
-    <button type="submit" disabled={pending} className="btn btn-ember w-full sm:w-auto" aria-disabled={pending}>
+    <Button3D type="submit" disabled={pending} aria-disabled={pending} tone="ember" className="w-full sm:w-auto">
       {pending ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" /> : null}
       {pending ? "Gönderiliyor…" : label}
-      {!pending ? <ArrowRight aria-hidden="true" className="btn-arrow h-4 w-4" /> : null}
-    </button>
+      {!pending ? <ArrowRight aria-hidden="true" className="h-4 w-4" /> : null}
+    </Button3D>
   );
 }
 
 const inputCls =
-  "mt-2 block min-h-12 w-full border border-sand bg-white px-4 text-[16px] text-ink transition-colors outline-none placeholder:text-stone/70 focus:border-ink aria-[invalid=true]:border-red-700";
+  "mt-2 block min-h-12 w-full rounded-xl border border-sand bg-white px-4 text-[16px] text-ink transition-colors outline-none placeholder:text-stone/70 focus:border-ink aria-[invalid=true]:border-red-700";
 
 /**
  * İletişim + teklif formu (ürün detay, iletişim ve teklif sayfalarında ortak).
@@ -66,7 +67,7 @@ export function RequestForm({
 
   if (state.status === "success") {
     return (
-      <div ref={statusRef} tabIndex={-1} role="status" className="border border-sand bg-white p-8 outline-none sm:p-10">
+      <div ref={statusRef} tabIndex={-1} role="status" className="rounded-2xl border border-linen bg-white p-8 outline-none sm:p-10">
         <CheckCircle2 aria-hidden="true" className="h-10 w-10 text-ember" />
         <p className="mt-5 font-display text-2xl font-semibold text-ink">Talebiniz alındı</p>
         <p className="mt-3 text-steel">{state.message}</p>

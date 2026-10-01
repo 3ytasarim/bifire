@@ -1,29 +1,26 @@
 import Link from "next/link";
+import { ChevronRight } from "lucide-react";
 import type { Crumb } from "@/lib/seo/json-ld";
 
 /** Görünür breadcrumb. Aynı `items` dizisi sayfada BreadcrumbList JSON-LD'ye de verilir (tek kaynak). */
-export function Breadcrumbs({ items, tone = "dark" }: { items: Crumb[]; tone?: "dark" | "light" }) {
-  const muted = tone === "light" ? "text-white/55 hover:text-white" : "text-steel hover:text-ink";
-  const current = tone === "light" ? "text-white" : "text-ink";
+export function Breadcrumbs({ items }: { items: Crumb[] }) {
   return (
     <nav aria-label="Sayfa konumu">
-      <ol className="flex flex-wrap items-center gap-x-2 gap-y-1 text-[12px] font-medium tracking-[0.08em] uppercase">
+      <ol className="flex flex-wrap items-center gap-x-1.5 gap-y-1 text-[13px] text-steel">
         {items.map((c, i) => {
           const last = i === items.length - 1;
           return (
-            <li key={c.path} className="flex items-center gap-2">
+            <li key={c.path} className="flex items-center gap-1.5">
               {last ? (
-                <span aria-current="page" className={`${current} line-clamp-1`}>
+                <span aria-current="page" className="line-clamp-1 font-medium text-ink">
                   {c.name}
                 </span>
               ) : (
                 <>
-                  <Link href={c.path} className={`${muted} transition-colors`}>
+                  <Link href={c.path} className="transition-colors hover:text-ember-ink">
                     {c.name}
                   </Link>
-                  <span aria-hidden="true" className="text-ember">
-                    /
-                  </span>
+                  <ChevronRight aria-hidden="true" className="h-3.5 w-3.5 text-stone" />
                 </>
               )}
             </li>

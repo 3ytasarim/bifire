@@ -116,7 +116,7 @@ export default async function ProjectPage({ params }: Props) {
       ) : null}
 
       {others.length ? (
-        <section aria-labelledby="diger-projeler" className="bg-anthracite py-16 text-white sm:py-24">
+        <section aria-labelledby="diger-projeler" className="bg-paper py-16 sm:py-24">
           <div className="shell">
             <h2 id="diger-projeler" className="display-3">
               Diğer projeler

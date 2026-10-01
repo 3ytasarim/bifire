@@ -9,9 +9,9 @@ export function FeaturedProjects({ projects }: { projects: ProjectCardData[] }) 
   const p = HOME.projects;
   const [lead, ...rest] = projects;
   return (
-    <section aria-labelledby="home-projects" className="bg-anthracite py-20 text-white sm:py-28 lg:py-36">
+    <section aria-labelledby="home-projects" className="bg-white py-20 sm:py-28 lg:py-36">
       <div className="shell">
-        <SectionHeading id="home-projects" tone="light" eyebrow={p.eyebrow} title={p.title} intro={p.intro} action={{ label: "Tüm projeler", href: "/projeler" }} />
+        <SectionHeading id="home-projects" eyebrow={p.eyebrow} title={p.title} intro={p.intro} action={{ label: "Tüm projeler", href: "/projeler" }} />
         <div className="mt-14 grid gap-5 sm:mt-20 lg:grid-cols-12">
           {lead ? (
             <div className="reveal lg:col-span-5">

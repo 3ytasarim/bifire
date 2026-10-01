@@ -15,7 +15,7 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
   const toCard = (x: Category) => ({ ...x, count: x._count.products });
 
   return (
-    <section aria-labelledby="home-categories" className="bg-paper py-20 sm:py-28 lg:py-36">
+    <section aria-labelledby="home-categories" className="bg-white py-20 sm:py-28 lg:py-36">
       <div className="shell">
         <SectionHeading id="home-categories" eyebrow={c.eyebrow} title={c.title} intro={c.intro} action={{ label: "Tüm ürünler", href: "/urunler" }} />
         <div className="mt-14 grid gap-4 sm:mt-20 sm:gap-5 lg:grid-cols-12">

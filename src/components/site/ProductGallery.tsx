@@ -24,7 +24,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
       <button
         type="button"
         onClick={() => setLightbox(active)}
-        className="group relative block aspect-[4/5] w-full overflow-hidden bg-linen sm:aspect-[5/5]"
+        className="group relative block aspect-[4/5] w-full overflow-hidden rounded-2xl bg-bone sm:aspect-[5/5]"
         aria-label={`${name} görselini büyüt`}
       >
         <Image
@@ -52,7 +52,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
                 }}
                 aria-label={`${i + 1}. görseli göster`}
                 aria-current={i === active ? "true" : undefined}
-                className={`relative block aspect-square w-full overflow-hidden bg-linen outline-offset-2 transition-opacity ${i === active ? "ring-2 ring-ember" : "opacity-70 hover:opacity-100"}`}
+                className={`relative block aspect-square w-full overflow-hidden rounded-xl bg-bone outline-offset-2 transition-opacity ${i === active ? "ring-2 ring-ember" : "opacity-70 hover:opacity-100"}`}
               >
                 <Image src={img.url} alt={img.alt} fill sizes="120px" className="object-cover" />
               </button>

@@ -17,10 +17,10 @@ export default function SiteError({ error, reset }: { error: Error & { digest?: 
         <p className="lead mt-6 text-steel">Geçici bir hata olabilir. Lütfen tekrar deneyin; sorun sürerse bizimle iletişime geçin.</p>
         {error.digest ? <p className="mt-4 text-sm text-stone">Hata kodu: {error.digest}</p> : null}
         <div className="mt-10 flex flex-col gap-3 sm:flex-row">
-          <button type="button" onClick={reset} className="btn btn-dark">
+          <button type="button" onClick={reset} className="inline-flex min-h-12 items-center rounded-full bg-ink px-7 text-sm font-semibold text-white hover:bg-graphite">
             Tekrar dene
           </button>
-          <Link href="/" className="btn btn-ghost-dark">
+          <Link href="/" className="inline-flex min-h-12 items-center rounded-full border border-sand px-7 text-sm font-semibold text-ink hover:border-ink">
             Ana sayfa
           </Link>
         </div>

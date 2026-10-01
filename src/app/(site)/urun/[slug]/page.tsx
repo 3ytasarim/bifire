@@ -7,6 +7,7 @@ import { ProductCard, ProjectCard } from "@/components/site/Cards";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { JsonLd } from "@/components/site/JsonLd";
 import { ProductGallery } from "@/components/site/ProductGallery";
+import { Button3D } from "@/components/ui/button-3d";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
 import { keyFacts, routes, technicalRows, type TechRow } from "@/lib/catalog";
@@ -116,9 +117,9 @@ export default async function ProductPage({ params }: Props) {
                 {product.shortDescription ? <p className="lead mt-6 text-steel">{product.shortDescription}</p> : null}
 
                 {facts.length ? (
-                  <dl className="mt-8 grid grid-cols-2 border-t border-l border-sand">
+                  <dl className="mt-8 grid grid-cols-2 gap-3">
                     {facts.map((f) => (
-                      <div key={f.label} className="border-r border-b border-sand p-5">
+                      <div key={f.label} className="rounded-2xl bg-paper p-5">
                         <dt className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">{f.label}</dt>
                         <dd className="mt-2 font-display text-xl font-semibold text-ink">{f.value}</dd>
                       </div>
@@ -127,17 +128,17 @@ export default async function ProductPage({ params }: Props) {
                 ) : null}
 
                 <div className="mt-8 flex flex-col gap-3">
-                  <a href="#teklif" className="btn btn-ember">
-                    Bu ürün için teklif al <ArrowRight aria-hidden="true" className="btn-arrow h-4 w-4" />
-                  </a>
+                  <Button3D href="#teklif" tone="ember" size="lg" fullWidth>
+                    Bu ürün için teklif al <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                  </Button3D>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {wa ? (
-                      <a href={wa} target="_blank" rel="noopener noreferrer" className="btn btn-ghost-dark">
+                      <a href={wa} target="_blank" rel="noopener noreferrer" className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-sand bg-white px-6 text-sm font-semibold text-ink transition-colors hover:border-[#1f7a4a] hover:text-[#1f7a4a]">
                         <WhatsappIcon className="h-4 w-4" /> WhatsApp
                       </a>
                     ) : null}
                     {settings.phone ? (
-                      <a href={telHref(settings.phone)} className="btn btn-ghost-dark">
+                      <a href={telHref(settings.phone)} className="inline-flex min-h-12 items-center justify-center gap-2 rounded-full border border-sand bg-white px-6 text-sm font-semibold text-ink transition-colors hover:border-ink">
                         <Phone aria-hidden="true" className="h-4 w-4" /> Hemen ara
                       </a>
                     ) : null}
@@ -226,7 +227,7 @@ export default async function ProductPage({ params }: Props) {
       </article>
 
       {product.projects.length ? (
-        <section aria-labelledby="uygulamalar" className="bg-anthracite py-16 text-white sm:py-24">
+        <section aria-labelledby="uygulamalar" className="bg-paper py-16 sm:py-24">
           <div className="shell">
             <h2 id="uygulamalar" className="display-3">
               Bu ürünün kullanıldığı projeler

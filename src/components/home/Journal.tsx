@@ -7,7 +7,7 @@ export function Journal({ posts }: { posts: PostCardData[] }) {
   if (!posts.length) return null;
   const j = HOME.journal;
   return (
-    <section aria-labelledby="home-journal" className="border-t border-sand bg-bone py-20 sm:py-28 lg:py-36">
+    <section aria-labelledby="home-journal" className="bg-white py-20 sm:py-28 lg:py-36">
       <div className="shell">
         <SectionHeading id="home-journal" eyebrow={j.eyebrow} title={j.title} intro={j.intro} action={{ label: "Tüm yazılar", href: "/blog" }} />
         <ul className="mt-14 grid gap-12 sm:mt-20 sm:grid-cols-2 sm:gap-8 lg:grid-cols-3">

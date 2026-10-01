@@ -1,9 +1,9 @@
 "use client";
 
 import { getImageProps } from "next/image";
-import Link from "next/link";
 import { useCallback, useRef, useState, useSyncExternalStore } from "react";
-import { ArrowRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 
 export type HeroSlideData = {
   id: string;
@@ -31,10 +31,10 @@ function subscribeReducedMotion(cb: () => void) {
 }
 
 const POSITION: Record<HeroSlideData["textPosition"], { wrap: string; text: string; gradient: string }> = {
-  LEFT: { wrap: "items-center justify-start", text: "text-left", gradient: "bg-gradient-to-r from-black/70 via-black/25 to-transparent" },
+  LEFT: { wrap: "items-center justify-start", text: "text-left", gradient: "bg-gradient-to-r from-black/55 via-black/15 to-transparent" },
   CENTER: { wrap: "items-center justify-center", text: "text-center items-center", gradient: "bg-radial from-black/45 to-transparent" },
-  RIGHT: { wrap: "items-center justify-end", text: "text-right items-end", gradient: "bg-gradient-to-l from-black/70 via-black/25 to-transparent" },
-  BOTTOM_LEFT: { wrap: "items-end justify-start pb-36 sm:pb-40", text: "text-left", gradient: "bg-gradient-to-t from-black/80 via-black/20 to-transparent" },
+  RIGHT: { wrap: "items-center justify-end", text: "text-right items-end", gradient: "bg-gradient-to-l from-black/55 via-black/15 to-transparent" },
+  BOTTOM_LEFT: { wrap: "items-end justify-start pb-36 sm:pb-40", text: "text-left", gradient: "bg-gradient-to-t from-black/65 via-black/10 to-transparent" },
 };
 
 /** Masaüstü + mobil görsel (art direction) — <picture>, Next görsel optimizasyonu korunur. */
@@ -122,7 +122,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
       ))}
       <span aria-hidden="true" className="absolute inset-0 -z-10 bg-black transition-opacity duration-700" style={{ opacity: Math.min(90, Math.max(0, slide.overlay)) / 100 }} />
       <span aria-hidden="true" className={`absolute inset-0 -z-10 ${pos.gradient}`} />
-      <span aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-black/60 to-transparent" />
+      <span aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-black/45 to-transparent" />
 
       <div className={`shell flex h-full pt-28 lg:pt-32 ${pos.wrap}`}>
         <div className={`flex max-w-3xl flex-col ${pos.text}`} aria-live={autoplay ? "off" : "polite"}>
@@ -143,18 +143,17 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
           {slide.ctaUrl || slide.secondaryCtaUrl ? (
             <div
               key={`c-${current}`}
-              className={`mt-10 flex flex-col gap-3 sm:flex-row ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "sm:justify-center" : ""} ${slide.textPosition === "RIGHT" ? "sm:justify-end" : ""}`}
+              className={`mt-10 flex flex-col gap-3 sm:flex-row ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "items-center sm:justify-center" : slide.textPosition === "RIGHT" ? "items-end sm:justify-end" : "items-start"}`}
             >
               {slide.ctaUrl ? (
-                <Link href={slide.ctaUrl} className="btn btn-ember">
+                <ArrowFillButton href={slide.ctaUrl} tone="ember" size="lg">
                   {slide.ctaText || "Ürünleri keşfet"}
-                  <ArrowRight aria-hidden="true" className="btn-arrow h-4 w-4" />
-                </Link>
+                </ArrowFillButton>
               ) : null}
               {slide.secondaryCtaUrl ? (
-                <Link href={slide.secondaryCtaUrl} className="btn btn-ghost-light">
+                <ArrowFillButton href={slide.secondaryCtaUrl} tone="glass" size="lg">
                   {slide.secondaryCtaText || "Projenizi konuşalım"}
-                </Link>
+                </ArrowFillButton>
               ) : null}
             </div>
           ) : null}
@@ -208,7 +207,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                 type="button"
                 onClick={() => setPlaying((p) => !p)}
                 aria-label={autoplay ? "Otomatik geçişi durdur" : "Otomatik geçişi başlat"}
-                className="flex h-12 w-12 items-center justify-center border border-white/25 transition-colors hover:border-ember hover:bg-ember hover:text-ink"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
               >
                 {autoplay ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </button>
@@ -219,7 +218,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                   go(current - 1);
                 }}
                 aria-label="Önceki slayt"
-                className="flex h-12 w-12 items-center justify-center border border-white/25 transition-colors hover:border-ember hover:bg-ember hover:text-ink"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
               >
                 <ChevronLeft className="h-5 w-5" />
               </button>
@@ -230,7 +229,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                   go(current + 1);
                 }}
                 aria-label="Sonraki slayt"
-                className="flex h-12 w-12 items-center justify-center border border-white/25 transition-colors hover:border-ember hover:bg-ember hover:text-ink"
+                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>

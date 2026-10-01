@@ -26,14 +26,14 @@ export async function Footer() {
   const year = new Date().getFullYear();
 
   return (
-    <footer className="bg-ink text-white/70" aria-labelledby="footer-title">
+    <footer className="border-t border-linen bg-paper text-steel" aria-labelledby="footer-title">
       <h2 id="footer-title" className="sr-only">
         Site bilgileri
       </h2>
       <div className="shell grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-24">
         <div className="sm:col-span-2 lg:col-span-4">
           <Link href="/" aria-label={`${s.companyName} ana sayfa`} className="inline-block">
-            <Wordmark logoUrl={s.logoUrl} name={s.companyName} />
+            <Wordmark logoUrl={s.logoUrl} name={s.companyName} tone="dark" />
           </Link>
           <p className="mt-6 max-w-sm text-[15px] leading-relaxed">
             {s.footerDescription ||
@@ -50,7 +50,7 @@ export async function Footer() {
                       target="_blank"
                       rel="noopener noreferrer"
                       aria-label={`${s.companyName} ${x.label} hesabı`}
-                      className="flex h-12 w-12 items-center justify-center border border-white/15 transition-colors hover:border-ember hover:text-white"
+                      className="flex h-12 w-12 items-center justify-center rounded-full border border-sand bg-white transition-colors hover:border-ember hover:text-ember-ink"
                     >
                       <Icon className="h-[18px] w-[18px]" />
                     </a>
@@ -62,17 +62,17 @@ export async function Footer() {
         </div>
 
         <nav aria-label="Ürün kategorileri" className="lg:col-span-3">
-          <p className="eyebrow text-amber">Ürünler</p>
+          <p className="eyebrow text-ember-ink">Ürünler</p>
           <ul className="mt-6 space-y-1">
             {categories.map((c) => (
               <li key={c.id}>
-                <Link href={routes.category(c.slug)} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-white">
+                <Link href={routes.category(c.slug)} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-ink">
                   {c.name}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href={routes.products} className="inline-flex min-h-10 items-center gap-1 text-[15px] text-white hover:text-amber">
+              <Link href={routes.products} className="inline-flex min-h-10 items-center gap-1 text-[15px] font-semibold text-ink hover:text-ember-ink">
                 Tüm ürünler <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </Link>
             </li>
@@ -80,11 +80,11 @@ export async function Footer() {
         </nav>
 
         <nav aria-label="Kurumsal" className="lg:col-span-2">
-          <p className="eyebrow text-amber">Bifire</p>
+          <p className="eyebrow text-ember-ink">Bifire</p>
           <ul className="mt-6 space-y-1">
             {CORPORATE.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-white">
+                <Link href={l.href} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-ink">
                   {l.label}
                 </Link>
               </li>
@@ -93,16 +93,16 @@ export async function Footer() {
         </nav>
 
         <div className="lg:col-span-3">
-          <p className="eyebrow text-amber">İletişim</p>
+          <p className="eyebrow text-ember-ink">İletişim</p>
           <address className="mt-6 space-y-4 text-[15px] not-italic">
             {s.phone ? (
-              <a href={telHref(s.phone)} className="flex items-start gap-3 transition-colors hover:text-white">
+              <a href={telHref(s.phone)} className="flex items-start gap-3 transition-colors hover:text-ink">
                 <Phone aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-ember" />
                 {s.phone}
               </a>
             ) : null}
             {s.email ? (
-              <a href={`mailto:${s.email}`} className="flex items-start gap-3 break-all transition-colors hover:text-white">
+              <a href={`mailto:${s.email}`} className="flex items-start gap-3 break-all transition-colors hover:text-ink">
                 <Mail aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-ember" />
                 {s.email}
               </a>
@@ -115,7 +115,7 @@ export async function Footer() {
                   {s.mapsUrl ? (
                     <>
                       <br />
-                      <a href={s.mapsUrl} target="_blank" rel="noopener noreferrer" className="link-underline text-white">
+                      <a href={s.mapsUrl} target="_blank" rel="noopener noreferrer" className="link-underline font-semibold text-ink">
                         Yol tarifi al
                       </a>
                     </>
@@ -124,7 +124,7 @@ export async function Footer() {
               </p>
             ) : null}
             {!s.phone && !s.email && !s.address ? (
-              <Link href={routes.contact} className="link-underline text-white">
+              <Link href={routes.contact} className="link-underline font-semibold text-ink">
                 İletişim sayfası
               </Link>
             ) : null}
@@ -132,15 +132,15 @@ export async function Footer() {
         </div>
       </div>
 
-      <div className="border-t border-white/10">
-        <div className="shell flex flex-col gap-4 py-6 text-[13px] text-white/50 md:flex-row md:items-center md:justify-between">
+      <div className="border-t border-linen">
+        <div className="shell flex flex-col gap-4 py-6 text-[13px] text-stone md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {s.companyName}. Tüm hakları saklıdır.
           </p>
           <ul className="flex flex-wrap gap-x-6 gap-y-1">
             {LEGAL.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="inline-flex min-h-10 items-center transition-colors hover:text-white">
+                <Link href={l.href} className="inline-flex min-h-10 items-center transition-colors hover:text-ink">
                   {l.label}
                 </Link>
               </li>

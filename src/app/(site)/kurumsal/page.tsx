@@ -49,7 +49,7 @@ export default async function AboutPage() {
         imageAlt={s.aboutImageAlt}
       />
 
-      <section aria-labelledby="yaklasim" className="bg-paper py-20 sm:py-28">
+      <section aria-labelledby="yaklasim" className="bg-white py-20 sm:py-28">
         <div className="shell grid gap-14 lg:grid-cols-12 lg:gap-20">
           <div className="lg:col-span-5">
             <p className="eyebrow text-ember-ink">Yaklaşımımız</p>
@@ -74,23 +74,23 @@ export default async function AboutPage() {
       </section>
 
       {s.featureImage ? (
-        <div className="relative aspect-[21/9] min-h-72 bg-smoke">
+        <div className="shell"><div className="relative aspect-[21/9] min-h-72 overflow-hidden rounded-[1.75rem] bg-bone">
           <Image src={s.featureImage} alt={s.featureImageAlt || ""} fill sizes="100vw" className="object-cover" />
-        </div>
+        </div></div>
       ) : null}
 
-      <section aria-labelledby="surec" className="bg-anthracite py-20 text-white sm:py-28">
+      <section aria-labelledby="surec" className="bg-paper py-20 sm:py-28">
         <div className="shell">
-          <p className="eyebrow text-amber">Süreç</p>
-          <h2 id="surec" className="display-2 mt-5 max-w-3xl">
+          <p className="eyebrow text-ember-ink">Süreç</p>
+          <h2 id="surec" className="display-2 mt-5 max-w-3xl text-ink">
             Keşiften ilk ateşe kadar tek elden.
           </h2>
-          <ol className="mt-14 grid gap-px bg-white/10 sm:grid-cols-2 lg:grid-cols-5">
+          <ol className="mt-14 grid gap-4 sm:grid-cols-2 lg:grid-cols-5">
             {PROCESS.map((step, i) => (
-              <li key={step.title} className="bg-anthracite p-8">
+              <li key={step.title} className="lift-card p-8">
                 <span className="font-display text-sm font-semibold text-ember tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-                <h3 className="mt-4 font-display text-xl font-semibold">{step.title}</h3>
-                <p className="mt-3 text-[15px] leading-relaxed text-white/65">{step.text}</p>
+                <h3 className="mt-4 font-display text-xl font-semibold text-ink">{step.title}</h3>
+                <p className="mt-3 text-[15px] leading-relaxed text-steel">{step.text}</p>
               </li>
             ))}
           </ol>

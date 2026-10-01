@@ -1,43 +1,50 @@
 import Image from "next/image";
-import Link from "next/link";
-import { ArrowRight } from "lucide-react";
+import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { HOME } from "@/content/home";
 
-/** Büyük görsel + içerik: tam genişlikte mimari görsel, üzerinde çözüm tipleri paneli. */
+/** Büyük görsel + içerik (açık tema): solda yuvarlak geniş mimari görsel, sağda çözüm tipleri. */
 export function ArchitectureFeature({ image, imageAlt }: { image: string | null; imageAlt: string | null }) {
   const a = HOME.architecture;
   return (
-    <section aria-labelledby="home-architecture" className="relative isolate overflow-hidden bg-ink text-white">
-      <div className="absolute inset-0 -z-10">
-        {image ? (
-          <Image src={image} alt={imageAlt || ""} fill sizes="100vw" className="object-cover" />
-        ) : (
-          <span aria-hidden="true" className="ember-placeholder absolute inset-0" />
-        )}
-        <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-r from-ink via-ink/80 to-ink/20" />
-      </div>
-      <div className="shell grid gap-14 py-24 sm:py-32 lg:grid-cols-12 lg:py-44">
-        <div className="lg:col-span-6">
-          <p className="eyebrow reveal text-amber">{a.eyebrow}</p>
-          <h2 id="home-architecture" className="display-2 reveal mt-5">
+    <section aria-labelledby="home-architecture" className="bg-paper py-20 sm:py-28 lg:py-36">
+      <div className="shell grid items-center gap-14 lg:grid-cols-12 lg:gap-16">
+        <div className="reveal relative lg:col-span-7">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] bg-bone lg:aspect-[5/4]">
+            {image ? (
+              <Image src={image} alt={imageAlt || ""} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+            ) : (
+              <span aria-hidden="true" className="ember-placeholder absolute inset-0" />
+            )}
+          </div>
+          <div className="absolute -bottom-6 left-6 hidden max-w-xs rounded-2xl bg-white p-6 shadow-[0_24px_48px_-24px_rgb(12_12_13/0.35)] sm:block">
+            <p className="eyebrow text-ember-ink">{a.eyebrow}</p>
+            <p className="mt-3 text-[15px] leading-relaxed text-steel">{a.intro}</p>
+          </div>
+        </div>
+        <div className="lg:col-span-5">
+          <p className="eyebrow reveal text-ember-ink sm:hidden">{a.eyebrow}</p>
+          <h2 id="home-architecture" className="display-2 reveal mt-5 text-ink sm:mt-0">
             {a.title}
           </h2>
-          <p className="lead reveal mt-7 max-w-xl text-white/75">{a.intro}</p>
-          <Link href={a.cta.href} className="btn btn-ember reveal mt-10">
-            {a.cta.label} <ArrowRight aria-hidden="true" className="btn-arrow h-4 w-4" />
-          </Link>
+          <ul className="mt-10 space-y-3">
+            {a.solutions.map((s, i) => (
+              <li key={s.title} className="reveal group flex gap-5 rounded-2xl border border-linen bg-white p-5 transition-colors hover:border-ember/40">
+                <span className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-paper font-display text-sm font-semibold text-ember-ink transition-colors group-hover:bg-ember group-hover:text-ink">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <div>
+                  <h3 className="font-display text-lg font-semibold text-ink">{s.title}</h3>
+                  <p className="mt-1 text-[15px] leading-relaxed text-steel">{s.text}</p>
+                </div>
+              </li>
+            ))}
+          </ul>
+          <div className="reveal mt-10">
+            <ArrowFillButton href={a.cta.href} tone="ember">
+              {a.cta.label}
+            </ArrowFillButton>
+          </div>
         </div>
-        <ul className="self-end border-t border-white/15 lg:col-span-5 lg:col-start-8">
-          {a.solutions.map((s) => (
-            <li key={s.title} className="reveal group border-b border-white/15 py-6">
-              <h3 className="flex items-center gap-4 font-display text-xl font-semibold">
-                <span aria-hidden="true" className="h-px w-6 bg-ember transition-all duration-500 group-hover:w-10" />
-                {s.title}
-              </h3>
-              <p className="mt-2 pl-10 text-[15px] leading-relaxed text-white/65">{s.text}</p>
-            </li>
-          ))}
-        </ul>
       </div>
     </section>
   );

@@ -8,7 +8,7 @@ export function FeaturedProducts({ products }: { products: ProductCardData[] }) 
   if (!products.length) return null;
   const f = HOME.featured;
   return (
-    <section aria-labelledby="home-featured" className="bg-paper py-20 sm:py-28 lg:py-36">
+    <section aria-labelledby="home-featured" className="bg-white py-20 sm:py-28 lg:py-36">
       <div className="shell">
         <SectionHeading id="home-featured" eyebrow={f.eyebrow} title={f.title} intro={f.intro} action={{ label: "Tüm modeller", href: "/urunler" }} />
       </div>
