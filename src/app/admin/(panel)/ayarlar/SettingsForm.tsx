@@ -22,6 +22,14 @@ export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
           </Section>
           <Section title="Ana sayfa görselleri">
             <ImagePicker name="aboutImage" label="“Bifire” manifesto görseli" defaultValue={s.aboutImage} altName="aboutImageAlt" altDefault={s.aboutImageAlt} aspect="aspect-[4/5] max-w-xs" nameHint="bifire somine yasam alani" />
+            <TextArea
+              name="aboutImageCaption"
+              label="Görsel açıklaması (görselin altında görünür)"
+              rows={2}
+              maxLength={300}
+              defaultValue={s.aboutImageCaption ?? ""}
+              hint="İlk satır başlık olarak gösterilir (ör. ürün adı), sonraki satır kısa açıklama. Boşsa açıklama gösterilmez."
+            />
             <ImagePicker name="featureImage" label="“Mimari ateş çözümleri” büyük görseli" defaultValue={s.featureImage} altName="featureImageAlt" altDefault={s.featureImageAlt} aspect="aspect-[21/9]" nameHint="mimari somine" />
           </Section>
         </div>

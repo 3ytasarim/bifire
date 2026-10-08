@@ -73,7 +73,7 @@ export default async function HomePage() {
         <HeroFallback />
       )}
       <CategoryShowcase categories={categories} />
-      <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} />
+      <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} caption={settings.aboutImageCaption} />
       <FeaturedProducts products={featured} />
       <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} />
       <FeaturedProjects projects={projects} />

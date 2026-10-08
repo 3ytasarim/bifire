@@ -123,6 +123,8 @@ model SiteSetting {
   /// Ana sayfa "Bifire" manifesto bölümü görseli.
   aboutImage         String?
   aboutImageAlt      String?
+  /// Manifesto görselinin altındaki görünür açıklama (ör. ürün/model adı).
+  aboutImageCaption  String?
   /// Ana sayfa "Mimari Ateş Çözümleri" büyük görseli.
   featureImage       String?
   featureImageAlt    String?

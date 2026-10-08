@@ -46,6 +46,7 @@ const schema = z.object({
   defaultOgImage: optionalImage,
   aboutImage: optionalImage,
   aboutImageAlt: optional(250),
+  aboutImageCaption: optional(300),
   featureImage: optionalImage,
   featureImageAlt: optional(250),
 });

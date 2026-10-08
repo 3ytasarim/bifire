@@ -3,13 +3,19 @@ import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { DecoratedImage } from "@/components/ui/decorated-image";
 import { HOME } from "@/content/home";
 
-export function Manifesto({ image, imageAlt }: { image: string | null; imageAlt: string | null }) {
+export function Manifesto({ image, imageAlt, caption }: { image: string | null; imageAlt: string | null; caption: string | null }) {
   const m = HOME.manifesto;
   return (
     <section aria-labelledby="home-manifesto" className="overflow-hidden bg-paper py-20 sm:py-28 lg:py-36">
       <div className="shell grid items-center gap-14 lg:grid-cols-12 lg:gap-20">
         <div className="reveal lg:col-span-5">
-          <DecoratedImage src={image} alt={imageAlt || "Bifire şömine uygulaması"} icons={[Flame, Ruler, Wrench, Gem]} />
+          <DecoratedImage
+            src={image}
+            alt={imageAlt || "Bifire şömine uygulaması"}
+            caption={caption}
+            position="50% 60%"
+            icons={[Flame, Ruler, Wrench, Gem]}
+          />
         </div>
         <div className="lg:col-span-7">
           <p className="eyebrow reveal text-ember-ink">{m.eyebrow}</p>
