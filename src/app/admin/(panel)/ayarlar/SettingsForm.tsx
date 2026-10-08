@@ -43,8 +43,8 @@ export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
               name="featureVideo"
               label="“Mimari ateş çözümleri” videosu (opsiyonel)"
               defaultValue={s.featureVideo}
-              aspect="aspect-[4/3] max-w-sm"
-              hint="Görselin yerinde sessiz ve sürekli döngüde oynar; bölüm ekrana gelince yüklenir. Görsel kapak ve SEO alt metni olarak kalır. Yatay (4:3) video önerilir."
+              aspect="aspect-video max-w-md"
+              hint="Görselin yerinde sessiz ve sürekli döngüde oynar; bölüm ekrana gelince yüklenir. Görsel kapak ve SEO alt metni olarak kalır. Yatay 16:9 video önerilir (ör. 1920×1080); masaüstünde kırpılmadan tam gösterilir."
             />
           </Section>
         </div>

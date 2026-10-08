@@ -15,7 +15,7 @@ const itemVariants = {
 
 /**
  * Greek Harmony "AboutUsSection" deseninin birebir Bifire uyarlaması: ortalı başlık + ayraç, ortada
- * dikey çerçeveli video/görsel, iki yanında çözüm maddeleri, altta CTA kartı. Parallax arka plan
+ * geniş (3:2) çerçevede video/görsel, iki yanında çözüm maddeleri, altta CTA kartı. Parallax arka plan
  * lekeleri ve yüzen rozetler; `MotionConfig reducedMotion="user"` ile hareket azaltma tercihine uyar.
  * (İstatistik sayaçları gerçek veri olmadan uydurulmaması için alınmadı.)
  */
@@ -67,7 +67,7 @@ export function ArchitectureFeature({ image, imageAlt, video }: { image: string 
             </motion.p>
           </motion.div>
 
-          <div className="mt-16 grid grid-cols-1 items-center gap-10 lg:grid-cols-3 lg:gap-8">
+          <div className="mt-16 grid grid-cols-1 items-center gap-10 lg:grid-cols-[minmax(0,1fr)_minmax(0,2fr)_minmax(0,1fr)] lg:gap-10">
             {/* Sol sütun */}
             <div className="order-2 space-y-10 lg:order-1">
               {left.map((s, i) => (
@@ -75,19 +75,13 @@ export function ArchitectureFeature({ image, imageAlt, video }: { image: string 
               ))}
             </div>
 
-            {/* Orta: video / görsel */}
-            <motion.div
-              initial={{ opacity: 0, scale: 0.94 }}
-              whileInView={{ opacity: 1, scale: 1 }}
-              viewport={{ once: true, amount: 0.3 }}
-              transition={{ duration: 0.7, ease: "easeOut" }}
-              className="relative order-1 mx-auto w-[calc(100%-2.5rem)] max-w-sm lg:order-2 lg:w-full lg:max-w-none"
-            >
+            {/* Orta: video / görsel — giriş/ölçek animasyonu yok; yalnızca video otomatik oynar */}
+            <div className="relative order-1 mx-auto w-[calc(100%-2.5rem)] max-w-2xl lg:order-2 lg:w-full lg:max-w-none">
               <div className="relative">
                 <div aria-hidden="true" className="absolute -inset-3 -z-10 rounded-[2rem] border border-ember/25" />
-                <div className="relative aspect-[4/5] overflow-hidden rounded-[1.75rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)]">
+                <div className="relative aspect-[3/2] overflow-hidden rounded-[1.75rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)]">
                   {image ? (
-                    <Image src={image} alt={imageAlt || ""} fill sizes="(min-width: 1024px) 30vw, 90vw" className="object-cover" />
+                    <Image src={image} alt={imageAlt || ""} fill sizes="(min-width: 1024px) 50vw, 90vw" className="object-cover" />
                   ) : (
                     <span aria-hidden="true" className="ember-placeholder absolute inset-0" />
                   )}
@@ -110,7 +104,7 @@ export function ArchitectureFeature({ image, imageAlt, video }: { image: string 
                   <Award className="h-7 w-7" strokeWidth={1.6} />
                 </motion.div>
               </div>
-            </motion.div>
+            </div>
 
             {/* Sağ sütun */}
             <div className="order-3 space-y-10">

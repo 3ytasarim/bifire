@@ -6,7 +6,7 @@ import { useEffect, useRef, useState } from "react";
 const SAFETY_MS = 12_000;
 
 /**
- * Sayfalar arası geçiş göstergesi: site içi bir bağlantıya tıklanınca hareketli Bifire şömine ikonu.
+ * Sayfalar arası geçiş göstergesi: site içi bir bağlantıya tıklanınca yalnızca hareketli Bifire şömine ikonu (yazı yok).
  * 150 ms gecikmeyle belirir — hızlı geçişlerde hiç görünmez, yanıp sönme olmaz. Hedef sayfa (pathname)
  * render edilince kendiliğinden kapanır. Yalnızca sorgu/hash değişen bağlantılarda (filtreler, çapalar) gösterilmez.
  * Hareket SVG içindeki `prefers-reduced-motion` kuralıyla durur.
@@ -52,10 +52,6 @@ export function RouteLoader() {
     >
       {/* eslint-disable-next-line @next/next/no-img-element -- animasyonlu SVG: next/image animasyonu dondurur */}
       <img src="/brand/bifire-flame.svg" alt="" width={112} height={112} className="h-24 w-24 drop-shadow-[0_18px_30px_rgb(255_106_26/0.35)] sm:h-28 sm:w-28" />
-      <span className="mt-5 font-display text-sm font-semibold tracking-[0.5em] text-ink">BİFİRE</span>
-      <span aria-hidden="true" className="relative mt-4 block h-px w-28 overflow-hidden bg-linen">
-        <span className="route-loader-bar absolute inset-y-0 left-0 w-1/2 bg-ember" />
-      </span>
       <span className="sr-only">{loading ? "Sayfa yükleniyor" : ""}</span>
     </div>
   );
