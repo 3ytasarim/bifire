@@ -3,6 +3,7 @@ import { prisma } from "@/lib/db";
 import { routes } from "@/lib/catalog";
 import { publishedWhere } from "@/lib/queries";
 import { absoluteUrl, canonicalUrl } from "@/lib/seo/site";
+import { FEATURES } from "@/lib/features";
 
 export const revalidate = 3600;
 
@@ -27,7 +28,7 @@ export default async function sitemap(): Promise<Entry[]> {
       orderBy: { sortOrder: "asc" },
     }),
     prisma.project.findMany({
-      where: { active: true, noIndex: false },
+      where: FEATURES.projects ? { active: true, noIndex: false } : { id: { in: [] } },
       select: { slug: true, updatedAt: true, coverImage: true, images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 6 } },
     }),
     prisma.blogPost.findMany({ where: { ...publishedWhere(), noIndex: false }, select: { slug: true, updatedAt: true, coverImage: true } }),
@@ -49,7 +50,7 @@ export default async function sitemap(): Promise<Entry[]> {
   return [
     ...page("home", "/", { lastModified: latest(products, projects, posts), changeFrequency: "weekly", priority: 1 }),
     ...page("urunler", routes.products, { lastModified: latest(products, categories), changeFrequency: "weekly", priority: 0.9 }),
-    ...page("projeler", routes.projects, { lastModified: latest(projects), changeFrequency: "weekly", priority: 0.8 }),
+    ...(FEATURES.projects ? page("projeler", routes.projects, { lastModified: latest(projects), changeFrequency: "weekly", priority: 0.8 }) : []),
     ...page("blog", routes.blog, { lastModified: latest(posts), changeFrequency: "weekly", priority: 0.7 }),
     ...page("kurumsal", routes.about, { changeFrequency: "yearly", priority: 0.5 }),
     ...page("iletisim", routes.contact, { changeFrequency: "yearly", priority: 0.5 }),

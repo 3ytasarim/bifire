@@ -2,6 +2,7 @@ import { prisma } from "@/lib/db";
 import { routes } from "@/lib/catalog";
 import { getSiteSettings } from "@/lib/settings";
 import { canonicalUrl } from "@/lib/seo/site";
+import { FEATURES } from "@/lib/features";
 
 export const revalidate = 3600;
 
@@ -25,7 +26,7 @@ export async function GET() {
     "",
     "## Sayfalar",
     `- [Ürünler](${canonicalUrl(routes.products)})`,
-    `- [Projeler](${canonicalUrl(routes.projects)})`,
+    ...(FEATURES.projects ? [`- [Projeler](${canonicalUrl(routes.projects)})`] : []),
     `- [Blog](${canonicalUrl(routes.blog)})`,
     `- [Kurumsal](${canonicalUrl(routes.about)})`,
     `- [İletişim](${canonicalUrl(routes.contact)})`,

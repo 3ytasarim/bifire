@@ -9,6 +9,7 @@ import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { FlowButton } from "@/components/ui/flow-button";
 import { SOCIAL_ICONS } from "./Icons";
 import { Wordmark } from "./Wordmark";
+import { FEATURES } from "@/lib/features";
 
 export type NavCategory = {
   id: string;
@@ -36,7 +37,7 @@ const NAV_LEFT = [
   { label: "Kurumsal", href: "/kurumsal" },
 ];
 const NAV_RIGHT = [
-  { label: "Projeler", href: "/projeler" },
+  ...(FEATURES.projects ? [{ label: "Projeler", href: "/projeler" }] : []),
   { label: "Blog", href: "/blog" },
   { label: "İletişim", href: "/iletisim" },
 ];

@@ -17,6 +17,7 @@ import { buildStaticPageMetadata } from "@/lib/seo/metadata";
 import { STATIC_PAGES } from "@/lib/seo/static-pages";
 import { graph, ids, imageNode, webPageNode } from "@/lib/seo/json-ld";
 import { getImageMeta } from "@/lib/seo/image-meta";
+import { FEATURES } from "@/lib/features";
 
 export const revalidate = 300;
 
@@ -29,7 +30,7 @@ export default async function HomePage() {
     getHeroSlides(),
     getNavCategories(),
     getFeaturedProducts(8),
-    getProjects({ featured: true, take: 5 }),
+    FEATURES.projects ? getProjects({ featured: true, take: 5 }) : Promise.resolve([]),
     getHomePosts(3),
     getSiteSettings(),
   ]);
@@ -79,7 +80,7 @@ export default async function HomePage() {
       <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} caption={settings.aboutImageCaption} video={settings.aboutVideo} />
       <FeaturedProducts products={featured} />
       <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} video={settings.featureVideo} />
-      <FeaturedProjects projects={projects} />
+      {FEATURES.projects ? <FeaturedProjects projects={projects} /> : null}
       <WhyBifire />
       <Journal posts={posts} />
       <FinalCta />

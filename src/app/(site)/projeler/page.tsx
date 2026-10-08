@@ -1,10 +1,12 @@
 import type { Metadata } from "next";
+import { notFound } from "next/navigation";
 import { ProjectCard } from "@/components/site/Cards";
 import { EmptyState } from "@/components/site/EmptyState";
 import { FinalCta } from "@/components/site/FinalCta";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { routes } from "@/lib/catalog";
+import { FEATURES } from "@/lib/features";
 import { getProjects } from "@/lib/queries";
 import { breadcrumbNode, graph, itemListNode, webPageNode } from "@/lib/seo/json-ld";
 import { buildStaticPageMetadata } from "@/lib/seo/metadata";
@@ -12,7 +14,8 @@ import { STATIC_PAGES } from "@/lib/seo/static-pages";
 
 export const revalidate = 300;
 
-export function generateMetadata(): Promise<Metadata> {
+export async function generateMetadata(): Promise<Metadata> {
+  if (!FEATURES.projects) return {};
   return buildStaticPageMetadata("projeler");
 }
 
@@ -22,6 +25,7 @@ const CRUMBS = [
 ];
 
 export default async function ProjectsPage() {
+  if (!FEATURES.projects) notFound();
   const projects = await getProjects();
   return (
     <>

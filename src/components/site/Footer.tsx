@@ -5,10 +5,11 @@ import { getNavCategories } from "@/lib/queries";
 import { getSiteSettings, socialLinks, telHref } from "@/lib/settings";
 import { SOCIAL_ICONS } from "./Icons";
 import { Wordmark } from "./Wordmark";
+import { FEATURES } from "@/lib/features";
 
 const CORPORATE = [
   { label: "Kurumsal", href: routes.about },
-  { label: "Projeler", href: routes.projects },
+  ...(FEATURES.projects ? [{ label: "Projeler", href: routes.projects }] : []),
   { label: "Blog", href: routes.blog },
   { label: "Teklif Al", href: routes.quote },
   { label: "İletişim", href: routes.contact },

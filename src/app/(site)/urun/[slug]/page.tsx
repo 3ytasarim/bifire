@@ -17,6 +17,7 @@ import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, graph, ids, imageNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/seo/site";
+import { FEATURES } from "@/lib/features";
 
 export const revalidate = 300;
 
@@ -226,7 +227,7 @@ export default async function ProductPage({ params }: Props) {
         ) : null}
       </article>
 
-      {product.projects.length ? (
+      {FEATURES.projects && product.projects.length ? (
         <section aria-labelledby="uygulamalar" className="bg-paper py-16 sm:py-24">
           <div className="shell">
             <h2 id="uygulamalar" className="display-3">

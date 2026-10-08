@@ -7,6 +7,7 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { RichText } from "@/components/site/RichText";
 import { formatDate, routes } from "@/lib/catalog";
+import { FEATURES } from "@/lib/features";
 import { getOtherProjects, getProjectBySlug } from "@/lib/queries";
 import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, graph, imageNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
@@ -21,6 +22,7 @@ export function generateStaticParams() {
 type Props = { params: Promise<{ slug: string }> };
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
+  if (!FEATURES.projects) return {};
   const { slug } = await params;
   const p = await getProjectBySlug(slug);
   if (!p) return {};
@@ -35,6 +37,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function ProjectPage({ params }: Props) {
+  if (!FEATURES.projects) notFound();
   const { slug } = await params;
   const project = await getProjectBySlug(slug);
   if (!project) notFound();
