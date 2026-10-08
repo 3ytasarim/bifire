@@ -48,6 +48,8 @@ export const HOME = {
       { title: "Bacasız çözümler", text: "Baca imkânı olmayan mekânlar için bioethanol ve elektrikli modeller." },
     ],
     cta: { label: "Projenizi konuşalım", href: "/teklif-al" },
+    ctaTitle: "Mekânınıza uygun yerleşimi birlikte seçelim",
+    ctaText: "Mimari çiziminizi ya da mekân fotoğraflarınızı paylaşın; hazne, cam tipi ve baca çözümünü birlikte belirleyelim.",
   },
   projects: {
     eyebrow: "Projelerimiz",
