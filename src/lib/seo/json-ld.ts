@@ -205,8 +205,11 @@ export function articleNode(input: {
     mainEntityOfPage: { "@id": ids.webpage(input.path) },
     isPartOf: { "@id": ids.website() },
     ...(input.image ? { image: { "@id": ids.primaryImage(input.path) } } : {}),
-    // Yazar adı girilmişse kişi, girilmemişse kurum (uydurma yazar yok).
-    author: input.authorName ? { "@type": "Person", name: input.authorName } : { "@id": ids.organization() },
+    // Yazar adı girilmişse kişi; boşsa ya da marka adıyla başlıyorsa ("Bifire Şömine") kurum (uydurma yazar yok).
+    author:
+      input.authorName && !input.authorName.trim().toLocaleLowerCase("tr").startsWith(SITE_NAME.toLocaleLowerCase("tr"))
+        ? { "@type": "Person", name: input.authorName }
+        : { "@id": ids.organization() },
     publisher: { "@id": ids.organization() },
     ...(input.datePublished ? { datePublished: input.datePublished.toISOString() } : {}),
     dateModified: input.dateModified.toISOString(),
