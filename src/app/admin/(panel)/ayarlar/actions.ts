@@ -50,6 +50,7 @@ const schema = z.object({
   aboutVideo: optionalVideo,
   featureImage: optionalImage,
   featureImageAlt: optional(250),
+  featureVideo: optionalVideo,
 });
 
 export async function saveSettings(_prev: ActionState, formData: FormData): Promise<ActionState> {

@@ -78,7 +78,7 @@ export default async function HomePage() {
       <CategoryShowcase categories={categories} />
       <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} caption={settings.aboutImageCaption} video={settings.aboutVideo} />
       <FeaturedProducts products={featured} />
-      <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} />
+      <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} video={settings.featureVideo} />
       <FeaturedProjects projects={projects} />
       <WhyBifire />
       <Journal posts={posts} />

@@ -31,6 +31,7 @@ const EMPTY: Omit<SiteSetting, "updatedAt"> = {
   aboutVideo: null,
   featureImage: null,
   featureImageAlt: null,
+  featureVideo: null,
 };
 
 /** İstek başına tek sorgu. Kayıt yoksa (ilk kurulum) boş varsayılanlar döner — sayfa asla kırılmaz. */

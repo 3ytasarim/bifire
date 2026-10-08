@@ -1,0 +1,92 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 120 120" width="120" height="120" role="img" aria-labelledby="bifireTitle">
+  <title id="bifireTitle">BIFIRE</title>
+  <defs>
+    <linearGradient id="bfOuter" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#D93A1B"/>
+      <stop offset="1" stop-color="#FF7A1A"/>
+    </linearGradient>
+    <linearGradient id="bfMid" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FF8C1F"/>
+      <stop offset="1" stop-color="#FFC233"/>
+    </linearGradient>
+    <linearGradient id="bfCore" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#FFE07A"/>
+      <stop offset="1" stop-color="#FFF7DC"/>
+    </linearGradient>
+    <linearGradient id="bfSide" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#B3261A"/>
+      <stop offset="1" stop-color="#F0561A"/>
+    </linearGradient>
+    <radialGradient id="bfGlow" cx="60" cy="100" r="44" gradientUnits="userSpaceOnUse">
+      <stop offset="0" stop-color="#FF8A2A" stop-opacity="0.75"/>
+      <stop offset="1" stop-color="#FF5A1A" stop-opacity="0"/>
+    </radialGradient>
+    <linearGradient id="bfEmber" x1="0" y1="0" x2="120" y2="0" gradientUnits="userSpaceOnUse" spreadMethod="reflect">
+      <stop offset="0" stop-color="#FF4D1A"/>
+      <stop offset="1" stop-color="#FFB22E"/>
+      <animateTransform attributeName="gradientTransform" type="translate" values="0 0;240 0" dur="6s" repeatCount="indefinite"/>
+    </linearGradient>
+    <clipPath id="bfOpening">
+      <path d="M30 106 V54 A30 30 0 0 1 90 54 V106 Z"/>
+    </clipPath>
+  </defs>
+  <style>
+    .bf-anim { transform-box: view-box; }
+    .bf-glow { animation: bfGlow 2.2s ease-in-out infinite alternate; }
+    .bf-outer { transform-origin: 60px 104px; animation: bfFlickA 1.7s ease-in-out infinite; }
+    .bf-mid { transform-origin: 60px 104px; animation: bfFlickB 1.3s ease-in-out infinite; }
+    .bf-core { transform-origin: 60px 101px; animation: bfFlickC 0.9s ease-in-out infinite; }
+    .bf-side-l { transform-origin: 44px 101px; animation: bfFlickB 1.5s ease-in-out infinite -0.4s; }
+    .bf-side-r { transform-origin: 76px 101px; animation: bfFlickA 1.9s ease-in-out infinite -0.8s; }
+    .bf-spark { animation: bfRise 2.6s ease-out infinite; opacity: 0; }
+    .bf-spark.s2 { animation-delay: -0.9s; animation-duration: 2.2s; }
+    .bf-spark.s3 { animation-delay: -1.7s; animation-duration: 3s; }
+    @keyframes bfFlickA {
+      0%, 100% { transform: scale(1, 1) skewX(0deg); }
+      25% { transform: scale(0.96, 1.06) skewX(2.5deg); }
+      50% { transform: scale(1.03, 0.95) skewX(-2deg); }
+      75% { transform: scale(0.98, 1.04) skewX(1.5deg); }
+    }
+    @keyframes bfFlickB {
+      0%, 100% { transform: scale(1, 1) skewX(0deg); }
+      30% { transform: scale(1.04, 0.93) skewX(-3deg); }
+      60% { transform: scale(0.95, 1.08) skewX(2deg); }
+    }
+    @keyframes bfFlickC {
+      0%, 100% { transform: scale(1, 1); }
+      50% { transform: scale(0.92, 1.1); }
+    }
+    @keyframes bfGlow {
+      from { opacity: 0.55; }
+      to { opacity: 1; }
+    }
+    @keyframes bfRise {
+      0% { transform: translate(0, 0); opacity: 0; }
+      15% { opacity: 1; }
+      100% { transform: translate(5px, -48px); opacity: 0; }
+    }
+    @media (prefers-reduced-motion: reduce) {
+      .bf-anim { animation: none !important; }
+      .bf-spark { opacity: 0.8; }
+    }
+  </style>
+
+  <!-- Şömine ikonu -->
+  <g>
+    <path d="M30 106 V54 A30 30 0 0 1 90 54 V106 Z" fill="#160D09"/>
+    <g clip-path="url(#bfOpening)">
+      <circle class="bf-anim bf-glow" cx="60" cy="100" r="44" fill="url(#bfGlow)"/>
+      <path class="bf-anim bf-side-l" d="M44 70 C47 78 52 82 52 90 C52 96 48.4 101 44 101 C39.6 101 36 96 36 90 C36 83 41 79 44 70 Z" fill="url(#bfSide)"/>
+      <path class="bf-anim bf-side-r" d="M76 66 C79 75 84 80 84 88 C84 95 80.4 101 76 101 C71.6 101 68 95 68 88 C68 81 73 76 76 66 Z" fill="url(#bfSide)"/>
+      <path class="bf-anim bf-outer" d="M60 34 C65 48 82 57 82 78 C82 92.4 72.2 104 60 104 C47.8 104 38 92.4 38 78 C38 66 45 59 48 50 C51.5 56 53.5 60 56 63 C58.5 54 59.5 44 60 34 Z" fill="url(#bfOuter)"/>
+      <path class="bf-anim bf-mid" d="M60 56 C63.5 65 73 71 73 84 C73 94.5 67.2 103 60 103 C52.8 103 47 94.5 47 84 C47 76 51 72 53.5 66 C55.5 70 57 72 58 74 C59.5 68 60 62 60 56 Z" fill="url(#bfMid)"/>
+      <path class="bf-anim bf-core" d="M60 72 C62.5 78 67 82 67 89 C67 95 63.9 100 60 100 C56.1 100 53 95 53 89 C53 83 57 79 60 72 Z" fill="url(#bfCore)"/>
+      <circle class="bf-anim bf-spark" cx="52" cy="80" r="1.4" fill="#FFC94D"/>
+      <circle class="bf-anim bf-spark s2" cx="65" cy="76" r="1.2" fill="#FFD66B"/>
+      <circle class="bf-anim bf-spark s3" cx="70" cy="84" r="1.6" fill="#FFB238"/>
+      <rect x="36" y="98" width="48" height="8" rx="4" fill="#3B2418"/>
+    </g>
+    <path d="M22 106 V54 A38 38 0 0 1 98 54 V106" fill="none" stroke="#1E1714" stroke-width="6"/>
+    <rect x="10" y="106" width="100" height="7" rx="2" fill="#1E1714"/>
+  </g>
+</svg>

@@ -39,6 +39,13 @@ export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
               hint="Görselin yerinde sessiz ve sürekli döngüde oynar; bölüm ekrana gelince yüklenir. Görsel, video yüklenene kadar kapak olarak görünür ve alt metni SEO için kullanılır. Dikey (4:5 veya 9:16) video önerilir."
             />
             <ImagePicker name="featureImage" label="“Mimari ateş çözümleri” büyük görseli" defaultValue={s.featureImage} altName="featureImageAlt" altDefault={s.featureImageAlt} aspect="aspect-[21/9]" nameHint="mimari somine" />
+            <VideoPicker
+              name="featureVideo"
+              label="“Mimari ateş çözümleri” videosu (opsiyonel)"
+              defaultValue={s.featureVideo}
+              aspect="aspect-[4/3] max-w-sm"
+              hint="Görselin yerinde sessiz ve sürekli döngüde oynar; bölüm ekrana gelince yüklenir. Görsel kapak ve SEO alt metni olarak kalır. Yatay (4:3) video önerilir."
+            />
           </Section>
         </div>
         <div className="space-y-6">

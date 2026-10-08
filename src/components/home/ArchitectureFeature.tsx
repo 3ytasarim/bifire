@@ -1,9 +1,10 @@
 import Image from "next/image";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
+import { LoopVideo } from "@/components/ui/loop-video";
 import { HOME } from "@/content/home";
 
 /** Büyük görsel + içerik (açık tema): solda yuvarlak geniş mimari görsel, sağda çözüm tipleri. */
-export function ArchitectureFeature({ image, imageAlt }: { image: string | null; imageAlt: string | null }) {
+export function ArchitectureFeature({ image, imageAlt, video }: { image: string | null; imageAlt: string | null; video: string | null }) {
   const a = HOME.architecture;
   return (
     <section aria-labelledby="home-architecture" className="bg-paper py-20 sm:py-28 lg:py-36">
@@ -15,6 +16,7 @@ export function ArchitectureFeature({ image, imageAlt }: { image: string | null;
             ) : (
               <span aria-hidden="true" className="ember-placeholder absolute inset-0" />
             )}
+            {video ? <LoopVideo src={video} /> : null}
           </div>
           <div className="absolute -bottom-6 left-6 hidden max-w-xs rounded-2xl bg-white p-6 shadow-[0_24px_48px_-24px_rgb(12_12_13/0.35)] sm:block">
             <p className="eyebrow text-ember-ink">{a.eyebrow}</p>

@@ -13,7 +13,7 @@ export async function findMediaUsage(url: string): Promise<string[]> {
     prisma.blogPost.count({ where: { OR: [{ coverImage: url }, { ogImage: url }] } }),
     prisma.blogPost.count({ where: { content: inText } }),
     prisma.heroSlide.count({ where: { OR: [{ desktopImage: url }, { mobileImage: url }, { desktopVideo: url }, { mobileVideo: url }] } }),
-    prisma.siteSetting.count({ where: { OR: [{ logoUrl: url }, { faviconUrl: url }, { defaultOgImage: url }, { aboutImage: url }, { aboutVideo: url }, { featureImage: url }] } }),
+    prisma.siteSetting.count({ where: { OR: [{ logoUrl: url }, { faviconUrl: url }, { defaultOgImage: url }, { aboutImage: url }, { aboutVideo: url }, { featureImage: url }, { featureVideo: url }] } }),
     prisma.seoPage.count({ where: { ogImage: url } }),
     prisma.product.count({ where: { description: inText } }),
     prisma.project.count({ where: { content: inText } }),
