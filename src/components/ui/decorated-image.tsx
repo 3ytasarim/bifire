@@ -1,11 +1,13 @@
 import Image from "next/image";
 import type { LucideIcon } from "lucide-react";
+import { LoopVideo } from "@/components/ui/loop-video";
 
 /**
  * SYMC "DecoratedImage" (Greek Harmony deseni) Bifire uyarlaması: yuvarlak çerçeveli fotoğraf, ofset ateş turuncusu
  * çizgi, köşelerde yavaşça süzülen ikon rozetleri. Görsel yoksa sıcak açık yer tutucu.
  * `position`: object-position (uzun dikey fotoğraflarda odak noktası, ör. "50% 62%").
  * `caption`: ilk satır başlık, kalanı açıklama — <figcaption> olarak SSR HTML'inde görünür metin (SEO).
+ * `video`: verilirse görselin üzerinde döngüde oynar; görsel poster/yedek ve alt metin (SEO) olarak kalır.
  * Rozetler dekoratiftir (aria-hidden); hareket `prefers-reduced-motion` ile durur.
  */
 export function DecoratedImage({
@@ -16,8 +18,10 @@ export function DecoratedImage({
   sizes = "(min-width: 1024px) 40vw, 100vw",
   position,
   caption,
+  video,
 }: {
   src: string | null;
+  video?: string | null;
   alt: string;
   icons: LucideIcon[];
   aspect?: string;
@@ -45,6 +49,7 @@ export function DecoratedImage({
           ) : (
             <span aria-hidden="true" className="ember-placeholder absolute inset-0" />
           )}
+          {video ? <LoopVideo src={video} position={position} /> : null}
         </div>
         {icons.slice(0, 4).map((Icon, i) => (
           <span

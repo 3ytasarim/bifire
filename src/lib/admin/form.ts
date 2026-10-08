@@ -74,6 +74,14 @@ export const optionalImage = z
   .refine((v) => v === "" || (v.startsWith("/") && !v.startsWith("//")), "Geçersiz görsel.")
   .transform((v) => (v === "" ? null : v));
 
+/** Yalnızca kendi depomuza yüklenmiş MP4/WebM videolar. */
+export const optionalVideo = z
+  .string()
+  .trim()
+  .max(500)
+  .refine((v) => v === "" || (v.startsWith("/uploads/") && !v.includes("..") && /\.(mp4|m4v|webm)$/i.test(v)), "Geçersiz video.")
+  .transform((v) => (v === "" ? null : v));
+
 export const slugField = z
   .string()
   .trim()

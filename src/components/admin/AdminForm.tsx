@@ -20,6 +20,7 @@ const FIELD_LABELS: Record<string, string> = {
   desktopImage: "Masaüstü görseli",
   desktopVideo: "Masaüstü videosu",
   mobileVideo: "Mobil video",
+  aboutVideo: "Manifesto videosu",
   metaTitle: "Meta başlık",
   metaDescription: "Meta açıklama",
   canonicalUrl: "Canonical URL",

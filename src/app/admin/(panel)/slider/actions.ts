@@ -3,18 +3,10 @@
 import { redirect } from "next/navigation";
 import { z } from "zod";
 import { TextPosition } from "@prisma/client";
-import { bool, fail, formObject, int, optional, optionalImage, optionalUrl, required, zodErrors, type ActionState } from "@/lib/admin/form";
+import { bool, fail, formObject, int, optional, optionalImage, optionalUrl, optionalVideo as videoPath, required, zodErrors, type ActionState } from "@/lib/admin/form";
 import { revalidateSite } from "@/lib/admin/revalidate";
 import { requireAdmin } from "@/lib/auth/guard";
 import { prisma } from "@/lib/db";
-
-/** Yalnızca kendi depomuza yüklenmiş MP4/WebM videolar. */
-const videoPath = z
-  .string()
-  .trim()
-  .max(500)
-  .refine((v) => v === "" || (v.startsWith("/uploads/") && !v.includes("..") && /\.(mp4|m4v|webm)$/i.test(v)), "Geçersiz video.")
-  .transform((v) => (v === "" ? null : v));
 
 const schema = z
   .object({

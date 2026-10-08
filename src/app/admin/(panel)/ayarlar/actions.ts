@@ -1,7 +1,7 @@
 "use server";
 
 import { z } from "zod";
-import { formObject, optional, optionalImage, zodErrors, type ActionState } from "@/lib/admin/form";
+import { formObject, optional, optionalImage, optionalVideo, zodErrors, type ActionState } from "@/lib/admin/form";
 import { revalidateSite } from "@/lib/admin/revalidate";
 import { requireAdmin } from "@/lib/auth/guard";
 import { prisma } from "@/lib/db";
@@ -47,6 +47,7 @@ const schema = z.object({
   aboutImage: optionalImage,
   aboutImageAlt: optional(250),
   aboutImageCaption: optional(300),
+  aboutVideo: optionalVideo,
   featureImage: optionalImage,
   featureImageAlt: optional(250),
 });

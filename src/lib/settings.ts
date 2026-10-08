@@ -28,6 +28,7 @@ const EMPTY: Omit<SiteSetting, "updatedAt"> = {
   aboutImage: null,
   aboutImageAlt: null,
   aboutImageCaption: null,
+  aboutVideo: null,
   featureImage: null,
   featureImageAlt: null,
 };

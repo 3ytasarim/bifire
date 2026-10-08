@@ -4,6 +4,7 @@ import type { SiteSetting } from "@prisma/client";
 import { AdminForm, SaveBar } from "@/components/admin/AdminForm";
 import { Section, TextArea, TextInput } from "@/components/admin/fields";
 import { ImagePicker } from "@/components/admin/ImagePicker";
+import { VideoPicker } from "@/components/admin/VideoPicker";
 import { saveSettings } from "./actions";
 
 export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
@@ -29,6 +30,13 @@ export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
               maxLength={300}
               defaultValue={s.aboutImageCaption ?? ""}
               hint="İlk satır başlık olarak gösterilir (ör. ürün adı), sonraki satır kısa açıklama. Boşsa açıklama gösterilmez."
+            />
+            <VideoPicker
+              name="aboutVideo"
+              label="Manifesto videosu (opsiyonel)"
+              defaultValue={s.aboutVideo}
+              aspect="aspect-[4/5] max-w-xs"
+              hint="Görselin yerinde sessiz ve sürekli döngüde oynar; bölüm ekrana gelince yüklenir. Görsel, video yüklenene kadar kapak olarak görünür ve alt metni SEO için kullanılır. Dikey (4:5 veya 9:16) video önerilir."
             />
             <ImagePicker name="featureImage" label="“Mimari ateş çözümleri” büyük görseli" defaultValue={s.featureImage} altName="featureImageAlt" altDefault={s.featureImageAlt} aspect="aspect-[21/9]" nameHint="mimari somine" />
           </Section>

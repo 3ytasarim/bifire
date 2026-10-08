@@ -3,7 +3,7 @@ import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { DecoratedImage } from "@/components/ui/decorated-image";
 import { HOME } from "@/content/home";
 
-export function Manifesto({ image, imageAlt, caption }: { image: string | null; imageAlt: string | null; caption: string | null }) {
+export function Manifesto({ image, imageAlt, caption, video }: { image: string | null; imageAlt: string | null; caption: string | null; video: string | null }) {
   const m = HOME.manifesto;
   return (
     <section aria-labelledby="home-manifesto" className="overflow-hidden bg-paper py-20 sm:py-28 lg:py-36">
@@ -13,6 +13,7 @@ export function Manifesto({ image, imageAlt, caption }: { image: string | null; 
             src={image}
             alt={imageAlt || "Bifire şömine uygulaması"}
             caption={caption}
+            video={video}
             position="50% 60%"
             icons={[Flame, Ruler, Wrench, Gem]}
           />
