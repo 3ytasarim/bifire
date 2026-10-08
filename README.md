@@ -79,7 +79,7 @@ npm run start          # varsayılan port 3000 — nginx reverse proxy arkasınd
 ```
 
 - `storage/uploads` (veya `UPLOAD_DIR`) kalıcı diskte olmalı ve deploy'larda silinmemeli; yedeklemeye dahil edin.
-- nginx: `client_max_body_size 24m;` (görsel 10 MB, PDF 20 MB), `X-Real-IP` / `X-Forwarded-For` başlıklarını iletin.
+- nginx: `client_max_body_size 48m;` (görsel 10 MB, PDF 20 MB, video 40 MB), `X-Real-IP` / `X-Forwarded-For` başlıklarını iletin.
 - Süreç yöneticisi (pm2/systemd) ile çalıştırın.
 
 ## Yönetim paneli (`/admin`)

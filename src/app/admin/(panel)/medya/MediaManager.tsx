@@ -50,8 +50,15 @@ export function MediaManager({ items }: { items: MediaItem[] }) {
             {items.map((m) => (
               <li key={m.id}>
                 <button type="button" onClick={() => pick(m)} aria-pressed={selected?.id === m.id} className={`relative block aspect-square w-full overflow-hidden bg-neutral-200 ${selected?.id === m.id ? "ring-3 ring-ember" : "hover:ring-2 hover:ring-neutral-400"}`}>
-                  <Image src={m.url} alt={m.alt ?? ""} fill sizes="180px" className="object-cover" />
-                  {!m.alt ? <span className="absolute top-1 left-1 bg-amber-100 px-1.5 text-[10px] font-semibold text-amber-800">alt yok</span> : null}
+                  {m.mimeType.startsWith("video/") ? (
+                    <>
+                      <video src={m.url} muted preload="metadata" playsInline className="h-full w-full object-cover" />
+                      <span className="absolute right-1 bottom-1 rounded bg-black/70 px-1.5 text-[10px] font-semibold text-white">VİDEO</span>
+                    </>
+                  ) : (
+                    <Image src={m.url} alt={m.alt ?? ""} fill sizes="180px" className="object-cover" />
+                  )}
+                  {!m.alt && !m.mimeType.startsWith("video/") ? <span className="absolute top-1 left-1 bg-amber-100 px-1.5 text-[10px] font-semibold text-amber-800">alt yok</span> : null}
                 </button>
               </li>
             ))}
@@ -65,7 +72,11 @@ export function MediaManager({ items }: { items: MediaItem[] }) {
         {selected ? (
           <div className="space-y-4">
             <div className="relative aspect-[4/3] bg-neutral-100">
-              <Image src={selected.url} alt={selected.alt ?? ""} fill sizes="340px" className="object-contain" />
+              {selected.mimeType.startsWith("video/") ? (
+                <video src={selected.url} muted loop autoPlay playsInline controls className="h-full w-full object-contain" />
+              ) : (
+                <Image src={selected.url} alt={selected.alt ?? ""} fill sizes="340px" className="object-contain" />
+              )}
             </div>
             <dl className="grid grid-cols-[90px_1fr] gap-y-1 text-xs">
               <dt className="text-neutral-500">Dosya</dt>

@@ -8,14 +8,20 @@ import { revalidateSite } from "@/lib/admin/revalidate";
 import { requireAdmin } from "@/lib/auth/guard";
 import { prisma } from "@/lib/db";
 
+/** Yalnızca kendi depomuza yüklenmiş MP4/WebM videolar. */
+const videoPath = z
+  .string()
+  .trim()
+  .max(500)
+  .refine((v) => v === "" || (v.startsWith("/uploads/") && !v.includes("..") && /\.(mp4|m4v|webm)$/i.test(v)), "Geçersiz video.")
+  .transform((v) => (v === "" ? null : v));
+
 const schema = z
   .object({
-    desktopImage: z
-      .string()
-      .trim()
-      .min(1, "Masaüstü görseli zorunlu.")
-      .refine((v) => v.startsWith("/") && !v.startsWith("//"), "Geçersiz görsel."),
+    desktopImage: optionalImage,
     mobileImage: optionalImage,
+    desktopVideo: videoPath,
+    mobileVideo: videoPath,
     imageAlt: optional(250),
     eyebrow: optional(80),
     title: required("Başlık", 160),
@@ -26,9 +32,11 @@ const schema = z
     secondaryCtaUrl: optionalUrl,
     textPosition: z.enum(TextPosition),
     overlay: int(0, 90),
+    focalX: int(0, 100),
     sortOrder: int(0, 9999),
     active: bool,
   })
+  .refine((d) => d.desktopImage || d.desktopVideo, { path: ["desktopImage"], message: "Masaüstü görseli veya masaüstü videosundan en az biri gerekli." })
   .refine((d) => !d.ctaText || d.ctaUrl, { path: ["ctaUrl"], message: "Buton metni varsa bağlantı da girin." })
   .refine((d) => !d.secondaryCtaText || d.secondaryCtaUrl, { path: ["secondaryCtaUrl"], message: "Buton metni varsa bağlantı da girin." });
 

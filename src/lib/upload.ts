@@ -93,6 +93,31 @@ export async function uploadDocument(file: File, title: string): Promise<{ url: 
   return { url, mimeType: "application/pdf", size: file.size };
 }
 
+export const MAX_VIDEO_BYTES = 40 * 1024 * 1024;
+
+/**
+ * Arka plan videosu (slider). Yalnızca MP4 ve WebM; içerik imzası doğrulanır (MP4: 4. bayttan itibaren "ftyp",
+ * WebM: EBML başlığı 1A 45 DF A3). Video yeniden kodlanmaz; sıkıştırma yüklemeden önce yapılmalıdır.
+ */
+export async function uploadVideo(file: File, opts: { nameHint?: string } = {}): Promise<Media> {
+  if (!(file instanceof File) || file.size === 0) throw new UploadError("Dosya seçilmedi.");
+  if (file.size > MAX_VIDEO_BYTES) throw new UploadError("Video en fazla 40 MB olabilir. Daha kısa veya daha sıkıştırılmış bir video yükleyin.");
+  const ext = extensionOf(file.name);
+  const kind = ext === "mp4" || ext === "m4v" ? "mp4" : ext === "webm" ? "webm" : null;
+  if (!kind) throw new UploadError("Yalnızca MP4 veya WebM video yüklenebilir.");
+
+  const data = Buffer.from(await file.arrayBuffer());
+  const validMp4 = kind === "mp4" && data.subarray(4, 8).toString("latin1") === "ftyp";
+  const validWebm = kind === "webm" && data.subarray(0, 4).equals(Buffer.from([0x1a, 0x45, 0xdf, 0xa3]));
+  if (!validMp4 && !validWebm) throw new UploadError("Dosya içeriği geçerli bir video değil.");
+
+  const mimeType = kind === "mp4" ? "video/mp4" : "video/webm";
+  const { key, url } = await storage.put(buildKey(`bifire ${opts.nameHint || file.name.replace(/\.[^.]+$/, "")}`, kind), data);
+  return prisma.media.create({
+    data: { url, storageKey: key, filename: key.split("/").pop()!, originalName: file.name.slice(0, 200), mimeType, size: file.size },
+  });
+}
+
 /** URL'ye karşılık gelen Media kaydının ölçülerini döner (ürün/proje galerisine width/height yazmak için). */
 export async function getMediaDimensions(urls: string[]): Promise<Map<string, { width: number | null; height: number | null }>> {
   if (!urls.length) return new Map();

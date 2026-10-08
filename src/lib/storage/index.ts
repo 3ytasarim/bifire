@@ -1,6 +1,8 @@
 import "server-only";
 import { mkdir, readFile, stat, unlink, writeFile } from "node:fs/promises";
+import { createReadStream } from "node:fs";
 import path from "node:path";
+import { Readable } from "node:stream";
 
 /**
  * Merkezi dosya deposu. Şimdilik yerel disk (Hetzner): dosyalar `UPLOAD_DIR` altında (varsayılan
@@ -37,6 +39,28 @@ export const storage = {
       const info = await stat(full);
       if (!info.isFile()) return null;
       return { data: await readFile(full), size: info.size, mtime: info.mtime };
+    } catch {
+      return null;
+    }
+  },
+
+  /** Dosya bilgisi + (opsiyonel bayt aralığı için) akış — büyük dosyalar (video) belleğe alınmadan servis edilir. */
+  async open(key: string, range?: { start: number; end: number }): Promise<{ stream: ReadableStream<Uint8Array>; size: number; mtime: Date } | null> {
+    try {
+      const full = resolveKey(key);
+      const info = await stat(full);
+      if (!info.isFile()) return null;
+      const nodeStream = createReadStream(full, range ? { start: range.start, end: range.end } : undefined);
+      return { stream: Readable.toWeb(nodeStream) as ReadableStream<Uint8Array>, size: info.size, mtime: info.mtime };
+    } catch {
+      return null;
+    }
+  },
+
+  async size(key: string): Promise<{ size: number; mtime: Date } | null> {
+    try {
+      const info = await stat(resolveKey(key));
+      return info.isFile() ? { size: info.size, mtime: info.mtime } : null;
     } catch {
       return null;
     }

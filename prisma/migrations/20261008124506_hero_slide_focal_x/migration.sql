@@ -1,0 +1,2 @@
+-- AlterTable
+ALTER TABLE "HeroSlide" ADD COLUMN     "focalX" INTEGER NOT NULL DEFAULT 50;

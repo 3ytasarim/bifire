@@ -1,15 +1,19 @@
 "use client";
 
 import { getImageProps } from "next/image";
-import { useCallback, useRef, useState, useSyncExternalStore } from "react";
+import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 
 export type HeroSlideData = {
   id: string;
-  desktopImage: string;
+  desktopImage: string | null;
   mobileImage: string | null;
   imageAlt: string | null;
+  desktopVideo: string | null;
+  mobileVideo: string | null;
+  /** Mobilde yatay kırpma odağı (%). */
+  focalX: number;
   eyebrow: string | null;
   title: string;
   description: string | null;
@@ -21,7 +25,8 @@ export type HeroSlideData = {
   overlay: number;
 };
 
-const AUTOPLAY_MS = 6500;
+/** Slayt süresi: 7 sn sonra bir sonraki slayta geçilir (hover/odakta duraklar). */
+const AUTOPLAY_MS = 7000;
 const REDUCED = "(prefers-reduced-motion: reduce)";
 
 function subscribeReducedMotion(cb: () => void) {
@@ -37,8 +42,11 @@ const POSITION: Record<HeroSlideData["textPosition"], { wrap: string; text: stri
   BOTTOM_LEFT: { wrap: "items-end justify-start pb-36 sm:pb-40", text: "text-left", gradient: "bg-gradient-to-t from-black/65 via-black/10 to-transparent" },
 };
 
+/** Mobilde yatay görsel/video bu odakla kırpılır; masaüstünde ortalanır. */
+const FOCAL_CLS = "object-cover [object-position:var(--fx)_50%] md:[object-position:50%_50%]";
+
 /** Masaüstü + mobil görsel (art direction) — <picture>, Next görsel optimizasyonu korunur. */
-function SlidePicture({ slide, first }: { slide: HeroSlideData; first: boolean }) {
+function SlidePicture({ slide, first }: { slide: HeroSlideData & { desktopImage: string }; first: boolean }) {
   const common = { alt: first ? (slide.imageAlt ?? "") : "", sizes: "100vw", fill: true as const, ...(first ? { priority: true } : { loading: "lazy" as const }) };
   const desktop = getImageProps({ ...common, src: slide.desktopImage }).props;
   const mobile = slide.mobileImage ? getImageProps({ ...common, src: slide.mobileImage }).props : null;
@@ -48,8 +56,55 @@ function SlidePicture({ slide, first }: { slide: HeroSlideData; first: boolean }
       {mobile ? <source media="(max-width: 767px)" srcSet={mobile.srcSet} sizes="100vw" /> : null}
       <source media="(min-width: 768px)" srcSet={desktop.srcSet} sizes="100vw" />
       {/* eslint-disable-next-line jsx-a11y/alt-text -- alt getImageProps'tan geliyor */}
-      <img {...img} style={style} className="object-cover" {...(first ? { fetchPriority: "high" as const } : {})} />
+      <img {...img} style={style} className={FOCAL_CLS} {...(first ? { fetchPriority: "high" as const } : {})} />
     </picture>
+  );
+}
+
+const MOBILE = "(max-width: 767px)";
+
+/**
+ * Arka plan videosu. Kaynak yalnızca slayt ilk kez aktif olduğunda atanır (görünmeyen slaytın videosu indirilmez);
+ * mobilde mobil video, yoksa masaüstü videosu. Görsel (kapak) altta durur, video oynamaya başlayınca yumuşakça
+ * üstüne gelir. Hareketi azalt veya veri tasarrufu açıksa video hiç yüklenmez — yalnızca görsel kalır.
+ * Slayt her aktif olduğunda video baştan başlar; pasifken durdurulur.
+ */
+function SlideVideo({ slide, active }: { slide: HeroSlideData; active: boolean }) {
+  const ref = useRef<HTMLVideoElement>(null);
+  const [visible, setVisible] = useState(false);
+
+  // Kaynak React state yerine doğrudan video elemanına atanır (harici sistem senkronizasyonu); ilk aktif olunca bir kez.
+  useEffect(() => {
+    const v = ref.current;
+    if (!v) return;
+    if (!active) {
+      v.pause();
+      return;
+    }
+    if (!v.getAttribute("src")) {
+      const saveData = (navigator as Navigator & { connection?: { saveData?: boolean } }).connection?.saveData;
+      if (saveData || window.matchMedia(REDUCED).matches) return;
+      const mobile = window.matchMedia(MOBILE).matches;
+      const src = (mobile && slide.mobileVideo) || slide.desktopVideo || slide.mobileVideo;
+      if (!src) return;
+      v.src = src;
+    }
+    v.currentTime = 0;
+    v.play().catch(() => {});
+  }, [active, slide.desktopVideo, slide.mobileVideo]);
+
+  return (
+    <video
+      ref={ref}
+      muted
+      loop
+      playsInline
+      preload="auto"
+      aria-hidden="true"
+      tabIndex={-1}
+      onPlaying={() => setVisible(true)}
+      className={`absolute inset-0 h-full w-full transition-opacity duration-700 ${FOCAL_CLS} ${visible ? "opacity-100" : "opacity-0"}`}
+    />
   );
 }
 
@@ -115,8 +170,13 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
           aria-hidden={i !== current}
           className={`absolute inset-0 -z-20 transition-opacity duration-[1400ms] ease-(--ease-soft) ${i === current ? "opacity-100" : "opacity-0"}`}
         >
-          <div className={`absolute inset-0 transition-transform duration-[9000ms] ease-out ${i === current ? "scale-100" : "scale-[1.06]"}`}>
-            <SlidePicture slide={s} first={i === 0} />
+          {/* Ölçek/zoom yok: videolu slaytta dönüşüm, kareyi yeniden örnekleyip titreşime yol açıyordu. */}
+          <div
+            className="absolute inset-0 [filter:saturate(1.18)_contrast(1.06)_brightness(1.04)]"
+            style={{ ["--fx" as string]: `${Math.min(100, Math.max(0, s.focalX))}%` }}
+          >
+            {s.desktopImage ? <SlidePicture slide={{ ...s, desktopImage: s.desktopImage }} first={i === 0} /> : null}
+            {s.desktopVideo || s.mobileVideo ? <SlideVideo slide={s} active={i === current} /> : null}
           </div>
         </div>
       ))}

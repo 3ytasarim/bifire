@@ -184,9 +184,15 @@ model Media {
 
 model HeroSlide {
   id                String       @id @default(cuid())
-  desktopImage      String
+  /// Görsel: video yoksa arka plan; video varsa kapak (poster) — sayfa önce bununla açılır (LCP), video sonra gelir.
+  desktopImage      String?
   mobileImage       String?
   imageAlt          String?
+  /// Arka plan videosu (MP4/WebM, sessiz döngü). Mobil video yoksa masaüstü videosu kullanılır.
+  desktopVideo      String?
+  mobileVideo       String?
+  /// Dar ekranda (mobil) yatay görsel/video kırpılırken odak noktası, yatay % (0 = sol, 50 = orta, 100 = sağ).
+  focalX            Int          @default(50)
   eyebrow           String?
   title             String
   description       String?

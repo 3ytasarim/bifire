@@ -1,6 +1,6 @@
 import Image from "next/image";
 import Link from "next/link";
-import { ArrowDown, ArrowUp } from "lucide-react";
+import { ArrowDown, ArrowUp, Film } from "lucide-react";
 import { ConfirmAction } from "@/components/admin/ConfirmAction";
 import { Badge, EmptyRow, PageHeader, Table } from "@/components/admin/ui";
 import { prisma } from "@/lib/db";
@@ -32,7 +32,16 @@ export default async function SliderAdminPage() {
             </td>
             <td className="w-40 px-4 py-3">
               <div className="relative aspect-video w-32 bg-neutral-100">
-                <Image src={s.desktopImage} alt="" fill sizes="128px" className="object-cover" />
+                {s.desktopImage ? (
+                  <Image src={s.desktopImage} alt="" fill sizes="128px" className="object-cover" />
+                ) : s.desktopVideo ? (
+                  <video src={s.desktopVideo} muted preload="metadata" playsInline className="h-full w-full object-cover" />
+                ) : null}
+                {s.desktopVideo || s.mobileVideo ? (
+                  <span className="absolute right-1 bottom-1 inline-flex items-center gap-1 rounded bg-black/70 px-1.5 py-0.5 text-[10px] font-semibold text-white">
+                    <Film aria-hidden="true" className="h-3 w-3" /> Video
+                  </span>
+                ) : null}
               </div>
             </td>
             <td className="px-4 py-3">
