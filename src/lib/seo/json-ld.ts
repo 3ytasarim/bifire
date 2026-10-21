@@ -41,11 +41,16 @@ export function serializeJsonLd(data: unknown): string {
     .split(PS).join(BS + "u2029");
 }
 
+/** Doğrulanmış firma konumu (fabrika showroom) ve öncelikli hizmet bölgesi — yerel SEO için. */
+const LOCALITY = { locality: "Tuzla", region: "İstanbul", country: "TR" } as const;
+const AREA_SERVED = ["İstanbul", "Tuzla", "Pendik", "Kartal", "Maltepe", "Ataşehir", "Sarıyer"];
+
 export function organizationNode(s: SiteSettings, logo?: { url: string; meta: ImageMeta | null }): Node {
   const site = getSiteUrl();
   const sameAs = socialLinks(s).map((x) => x.url);
   return {
-    "@type": "Organization",
+    // Kendi üretimi ve Tuzla fabrika showroomu olan şömine firması: Organization + yerel işletme alt türü.
+    "@type": ["Organization", "HomeAndConstructionBusiness"],
     "@id": ids.organization(),
     name: s.companyName || SITE_NAME,
     url: `${site}/`,
@@ -64,7 +69,15 @@ export function organizationNode(s: SiteSettings, logo?: { url: string; meta: Im
     ...(s.footerDescription ? { description: s.footerDescription } : {}),
     ...(s.email ? { email: s.email } : {}),
     ...(s.phone ? { telephone: s.phone } : {}),
-    ...(s.address ? { address: { "@type": "PostalAddress", streetAddress: s.address, addressCountry: "TR" } } : {}),
+    address: {
+      "@type": "PostalAddress",
+      ...(s.address ? { streetAddress: s.address } : {}),
+      addressLocality: LOCALITY.locality,
+      addressRegion: LOCALITY.region,
+      addressCountry: LOCALITY.country,
+    },
+    areaServed: AREA_SERVED.map((name) => ({ "@type": "Place", name })),
+    ...(s.mapsUrl ? { hasMap: s.mapsUrl } : {}),
     ...(s.phone || s.email
       ? {
           contactPoint: {

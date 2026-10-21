@@ -3,7 +3,7 @@
  * firma bilgileri netleşince buraya/ilgili admin alanlarına gerçek veriler eklenmelidir.
  */
 export const HOME = {
-  heading: "Bifire — Modern Şömine Sistemleri",
+  heading: "Bifire Şömine · Tuzla şömine üretimi ve montajı",
   fallbackHero: {
     eyebrow: "Mimari şömine çözümleri",
     title: "Ateşin Mimariyle Buluştuğu Nokta",

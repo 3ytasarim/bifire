@@ -5,6 +5,10 @@ import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { HeroFallback } from "@/components/home/HeroFallback";
 import { HeroSlider } from "@/components/home/HeroSlider";
+import { HomeRegions } from "@/components/home/HomeRegions";
+import { TrustBand } from "@/components/home/TrustBand";
+import { ProcessSteps } from "@/components/site/ProcessSteps";
+import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { Journal } from "@/components/home/Journal";
 import { Manifesto } from "@/components/home/Manifesto";
 import { WhyBifire } from "@/components/home/WhyBifire";
@@ -76,12 +80,16 @@ export default async function HomePage() {
       ) : (
         <HeroFallback />
       )}
+      <TrustBand />
       <CategoryShowcase categories={categories} />
       <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} caption={settings.aboutImageCaption} video={settings.aboutVideo} />
       <FeaturedProducts products={featured} />
       <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} video={settings.featureVideo} />
       {FEATURES.projects ? <FeaturedProjects projects={projects} /> : null}
+      <ProcessSteps eyebrow="Projenizin adımları" title="İlk fikirden uygulamaya." id="home-process" />
       <WhyBifire />
+      <ShowroomBlock />
+      <HomeRegions />
       <Journal posts={posts} />
       <FinalCta />
     </>

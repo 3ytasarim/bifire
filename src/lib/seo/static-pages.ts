@@ -20,9 +20,9 @@ export const STATIC_PAGES = {
     label: "Ana Sayfa",
     path: "/",
     defaults: {
-      title: "Bifire | Modern Şömine Sistemleri ve Mimari Şömine Çözümleri",
+      title: "Bifire Şömine | Tuzla Şömine Üretimi, Tasarımı ve Montajı",
       description:
-        "Şömine hazneleri, elektrikli, doğalgazlı ve bioethanol şömineler. Bifire yaşam alanınıza özel modern şömine çözümlerini tasarlar ve uygular.",
+        "Odunlu, elektrikli ve bioethanol şömineler; özel ölçü tasarım, kendi üretimimiz ve montaj ekibimizle İstanbul genelinde uygulama. Tuzla fabrika showroom.",
     },
   },
   kurumsal: {
