@@ -1,7 +1,7 @@
 import Link from "next/link";
 import type { Prisma } from "@prisma/client";
 import { AdminPagination, Badge, EmptyRow, ListToolbar, PageHeader, PAGE_SIZE, pageOf, Table } from "@/components/admin/ui";
-import { REQUEST_STATUS } from "@/lib/admin/labels";
+import { REQUEST_STATUS, REQUEST_TYPE } from "@/lib/admin/labels";
 import { prisma } from "@/lib/db";
 
 export const metadata = { title: "Talepler" };
@@ -17,7 +17,7 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
     AND: [
       q ? { OR: [{ name: { contains: q, mode: "insensitive" } }, { email: { contains: q, mode: "insensitive" } }, { phone: { contains: q } }, { productName: { contains: q, mode: "insensitive" } }] } : {},
       status ? { status } : {},
-      sp.tur === "QUOTE" || sp.tur === "CONTACT" ? { type: sp.tur } : {},
+      sp.tur && sp.tur in REQUEST_TYPE ? { type: sp.tur as keyof typeof REQUEST_TYPE } : {},
       sp.okunma === "okunmamis" ? { isRead: false } : {},
     ],
   };
@@ -34,7 +34,7 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
         placeholder="Ad, telefon, e-posta, ürün…"
         filters={[
           { name: "durum", label: "Durum", value: sp.durum, options: Object.entries(REQUEST_STATUS).map(([value, s]) => ({ value, label: s.label })) },
-          { name: "tur", label: "Tür", value: sp.tur, options: [{ value: "QUOTE", label: "Teklif" }, { value: "CONTACT", label: "İletişim" }] },
+          { name: "tur", label: "Tür", value: sp.tur, options: Object.entries(REQUEST_TYPE).map(([value, t]) => ({ value, label: t.short })) },
           { name: "okunma", label: "Okunma", value: sp.okunma, options: [{ value: "okunmamis", label: "Okunmamış" }] },
         ]}
       />
@@ -48,8 +48,8 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
               </Link>
               <p className="text-xs text-neutral-500">{[r.phone, r.email].filter(Boolean).join(" · ")}</p>
             </td>
-            <td className="px-4 py-3 text-neutral-600">{r.productName || r.categoryName || "—"}</td>
-            <td className="px-4 py-3">{r.type === "QUOTE" ? <Badge tone="ember">Teklif</Badge> : <Badge>İletişim</Badge>}</td>
+            <td className="px-4 py-3 text-neutral-600">{r.productName || r.topic || r.categoryName || "—"}{r.district ? <span className="block text-xs text-neutral-400">{r.district}</span> : null}</td>
+            <td className="px-4 py-3"><Badge tone={REQUEST_TYPE[r.type].tone}>{REQUEST_TYPE[r.type].short}</Badge></td>
             <td className="px-4 py-3">
               <Badge tone={REQUEST_STATUS[r.status].tone}>{REQUEST_STATUS[r.status].label}</Badge>
             </td>

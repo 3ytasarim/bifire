@@ -3,7 +3,7 @@ import { notFound } from "next/navigation";
 import { Mail, Phone } from "lucide-react";
 import { ConfirmAction } from "@/components/admin/ConfirmAction";
 import { Badge, PageHeader } from "@/components/admin/ui";
-import { REQUEST_STATUS } from "@/lib/admin/labels";
+import { REQUEST_STATUS, REQUEST_TYPE } from "@/lib/admin/labels";
 import { prisma } from "@/lib/db";
 import { telHref } from "@/lib/settings";
 import { deleteRequest, markUnread } from "../actions";
@@ -19,12 +19,17 @@ export default async function RequestDetail({ params }: { params: Promise<{ id: 
   if (!r.isRead) await prisma.contactRequest.update({ where: { id }, data: { isRead: true } });
 
   const rows: [string, React.ReactNode][] = [
-    ["Tür", r.type === "QUOTE" ? "Teklif talebi" : "İletişim"],
+    ["Tür", REQUEST_TYPE[r.type].label],
     ["Ad Soyad", r.name],
     ["Telefon", r.phone ? <a href={telHref(r.phone)} className="inline-flex items-center gap-1.5 underline"><Phone aria-hidden="true" className="h-3.5 w-3.5" />{r.phone}</a> : "—"],
     ["E-posta", r.email ? <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1.5 underline"><Mail aria-hidden="true" className="h-3.5 w-3.5" />{r.email}</a> : "—"],
     ["İlgilendiği kategori", r.categoryName ?? "—"],
     ["İlgilendiği ürün", r.product ? <Link href={`/admin/urunler/${r.product.id}`} className="underline">{r.productName}</Link> : (r.productName ?? "—")],
+    ...(r.selection ? [["Seçilen seçenekler", r.selection] as [string, React.ReactNode]] : []),
+    ...(r.topic ? [["İlgilendiği konu", r.topic] as [string, React.ReactNode]] : []),
+    ["Proje ilçesi", r.district ?? "—"],
+    ...(r.projectStage ? [["Proje aşaması", r.projectStage] as [string, React.ReactNode]] : []),
+    ...(r.timeline ? [["Uygulama dönemi", r.timeline] as [string, React.ReactNode]] : []),
     ["Gönderildiği sayfa", r.sourcePath ? <a href={r.sourcePath} target="_blank" className="underline">{r.sourcePath}</a> : "—"],
     ["KVKK onayı", r.kvkkConsent ? `Evet (${r.consentAt?.toLocaleString("tr-TR", { timeZone: "Europe/Istanbul" })})` : "Hayır"],
     ["Tarih", r.createdAt.toLocaleString("tr-TR", { dateStyle: "long", timeStyle: "short", timeZone: "Europe/Istanbul" })],

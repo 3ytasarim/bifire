@@ -64,7 +64,16 @@ const schema = z.object({
   tags: z.string().max(1000),
   gallery: jsonArray(z.object({ url: localPath, alt: z.string().trim().max(250) })),
   specs: jsonArray(z.object({ group: z.string().trim().max(80), label: z.string().trim().max(120), value: z.string().trim().max(160), unit: z.string().trim().max(30) })),
-  features: jsonArray(z.object({ text: z.string().trim().max(300) })),
+  features: jsonArray(
+    z.object({
+      label: z.string().trim().max(60).default(""),
+      title: z.string().trim().max(120).default(""),
+      text: z.string().trim().max(700),
+      note: z.string().trim().max(160).default(""),
+    }),
+  ),
+  options: jsonArray(z.object({ group: z.string().trim().max(60), value: z.string().trim().max(80) })),
+  faqs: jsonArray(z.object({ question: z.string().trim().max(200), answer: z.string().trim().max(1200) })),
   documents: jsonArray(
     z.object({
       title: z.string().trim().min(1, "Doküman başlığı boş olamaz.").max(160),
@@ -79,9 +88,9 @@ const schema = z.object({
 export async function saveProduct(_prev: ActionState, formData: FormData): Promise<ActionState> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "") || null;
-  const parsed = schema.safeParse({ tags: "", gallery: "", specs: "", features: "", documents: "", description: "", ...formObject(formData) });
+  const parsed = schema.safeParse({ tags: "", gallery: "", specs: "", features: "", options: "", faqs: "", documents: "", description: "", ...formObject(formData) });
   if (!parsed.success) return zodErrors(parsed.error);
-  const { gallery, specs, features, documents, tags, ...d } = parsed.data;
+  const { gallery, specs, features, options, faqs, documents, tags, ...d } = parsed.data;
 
   if (!(await prisma.productCategory.findUnique({ where: { id: d.categoryId }, select: { id: true } }))) {
     return fail("Kategori bulunamadı.", { categoryId: "Geçerli bir kategori seçin." });
@@ -105,6 +114,8 @@ export async function saveProduct(_prev: ActionState, formData: FormData): Promi
           tx.productImage.deleteMany({ where: { productId: id } }),
           tx.productSpecification.deleteMany({ where: { productId: id } }),
           tx.productFeature.deleteMany({ where: { productId: id } }),
+          tx.productOption.deleteMany({ where: { productId: id } }),
+          tx.productFaq.deleteMany({ where: { productId: id } }),
           tx.productDocument.deleteMany({ where: { productId: id } }),
         ]);
       } else {
@@ -123,7 +134,13 @@ export async function saveProduct(_prev: ActionState, formData: FormData): Promi
           .filter((s) => s.label && s.value)
           .map((s, i) => ({ productId: pid, group: s.group || null, label: s.label, value: s.value, unit: s.unit || null, sortOrder: i })),
       });
-      await tx.productFeature.createMany({ data: features.filter((f) => f.text).map((f, i) => ({ productId: pid, text: f.text, sortOrder: i })) });
+      await tx.productFeature.createMany({
+        data: features
+          .filter((f) => f.text)
+          .map((f, i) => ({ productId: pid, label: f.label || null, title: f.title || null, text: f.text, note: f.note || null, sortOrder: i })),
+      });
+      await tx.productOption.createMany({ data: options.filter((o) => o.group && o.value).map((o, i) => ({ productId: pid, group: o.group, value: o.value, sortOrder: i })) });
+      await tx.productFaq.createMany({ data: faqs.filter((q) => q.question && q.answer).map((q, i) => ({ productId: pid, question: q.question, answer: q.answer, sortOrder: i })) });
       await tx.productDocument.createMany({ data: documents.map((doc, i) => ({ productId: pid, ...doc, sortOrder: i })) });
       return pid;
     });

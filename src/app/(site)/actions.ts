@@ -4,6 +4,8 @@ import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { getIpHash } from "@/lib/request-meta";
 import { isFormRateLimited } from "@/lib/rate-limit";
+import { PROJECT_STAGES, PROJECT_TIMELINES, PROJECT_TOPICS } from "@/content/company";
+import { DISTRICT_OPTIONS } from "@/content/regions";
 
 export type RequestFormState = {
   status: "idle" | "success" | "error";
@@ -19,8 +21,15 @@ const optionalText = (max: number) =>
     .max(max)
     .transform((v) => v || null);
 
+/** Yalnızca listedeki değerler kabul edilir; boş/yabancı değer null olur (istemciye güvenilmez). */
+const oneOf = (list: readonly string[]) =>
+  z
+    .string()
+    .trim()
+    .transform((v) => (list.includes(v) ? v : null));
+
 const schema = z.object({
-  type: z.enum(["CONTACT", "QUOTE"]),
+  type: z.enum(["CONTACT", "QUOTE", "SHOWROOM"]),
   name: z.string().trim().min(2, "Lütfen adınızı ve soyadınızı yazın.").max(120, "Ad soyad çok uzun."),
   phone: z
     .string()
@@ -39,6 +48,11 @@ const schema = z.object({
   categoryId: optionalText(40),
   message: optionalText(3000),
   sourcePath: optionalText(300),
+  district: oneOf(DISTRICT_OPTIONS),
+  topic: oneOf(PROJECT_TOPICS),
+  projectStage: oneOf(PROJECT_STAGES),
+  timeline: oneOf(PROJECT_TIMELINES),
+  selection: optionalText(200),
   kvkk: z.literal("on", { error: "Devam etmek için KVKK aydınlatma metnini onaylamanız gerekir." }),
 });
 
@@ -50,7 +64,7 @@ const MIN_FILL_MS = 2500;
  */
 export async function submitRequest(_prev: RequestFormState, formData: FormData): Promise<RequestFormState> {
   const raw = Object.fromEntries(
-    ["type", "name", "phone", "email", "productId", "categoryId", "message", "sourcePath", "kvkk"].map((k) => [k, String(formData.get(k) ?? "")]),
+    ["type", "name", "phone", "email", "productId", "categoryId", "message", "sourcePath", "district", "topic", "projectStage", "timeline", "selection", "kvkk"].map((k) => [k, String(formData.get(k) ?? "")]),
   );
   const values = { ...raw };
   delete values.kvkk;
@@ -96,6 +110,12 @@ export async function submitRequest(_prev: RequestFormState, formData: FormData)
         categoryId: category?.id ?? null,
         categoryName: category?.name ?? null,
         sourcePath: d.sourcePath?.startsWith("/") ? d.sourcePath : null,
+        district: d.district,
+        topic: d.topic,
+        projectStage: d.projectStage,
+        timeline: d.timeline,
+        // Seçim yalnızca gerçek bir ürünle birlikte anlamlıdır.
+        selection: product ? d.selection : null,
         kvkkConsent: true,
         consentAt: new Date(),
         ipHash,

@@ -41,7 +41,9 @@ export type ProductFormData = {
   tags: string;
   gallery: GalleryItem[];
   specs: { group: string; label: string; value: string; unit: string }[];
-  features: { text: string }[];
+  features: { label: string; title: string; text: string; note: string }[];
+  options: { group: string; value: string }[];
+  faqs: { question: string; answer: string }[];
   documents: DocItem[];
   metaTitle: string | null;
   metaDescription: string | null;
@@ -113,8 +115,49 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
             />
           </Section>
 
-          <Section title="Öne çıkan özellikler" description="Madde madde kısa özellikler (ör. “Asansörlü giyotin kapak”).">
-            <RowsEditor name="features" addLabel="Madde ekle" defaultValue={p?.features ?? []} columns={[{ key: "text", label: "Özellik" }]} />
+          <Section
+            title="Seçenekler"
+            description="Müşterinin ürün sayfasında seçebileceği seçenekler. Aynı grup adı tek bir seçim satırı oluşturur (ör. Grup “Ölçü” → “70’lik”, “80’lik”; Grup “Cam yönü” → “Sağ açık”, “Sol açık”). Seçim teklif formuna otomatik aktarılır."
+          >
+            <RowsEditor
+              name="options"
+              addLabel="Seçenek ekle"
+              defaultValue={p?.options ?? []}
+              suggestions={{ group: ["Ölçü", "Cam yönü", "Kapak tipi", "Yakıt"] }}
+              columns={[
+                { key: "group", label: "Grup", width: "w-full sm:w-40", maxLength: 60 },
+                { key: "value", label: "Seçenek", maxLength: 80 },
+              ]}
+            />
+          </Section>
+
+          <Section
+            title="Öne çıkan özellikler ve teknik detaylar"
+            description="Yalnızca “Açıklama” doluysa kısa madde olarak listelenir. “Başlık” da doluysa numaralı teknik detay kartı olur: Etiket (ör. “Yanma havası”), Başlık (ör. “Ateşi kontrollü yönetin”), Açıklama ve Alt not (ör. “Klepe sürgüsü · Ayarlanabilir alt hava girişi”)."
+          >
+            <RowsEditor
+              name="features"
+              addLabel="Özellik / detay ekle"
+              defaultValue={p?.features ?? []}
+              columns={[
+                { key: "label", label: "Etiket (ops.)", width: "w-full sm:w-40", maxLength: 60 },
+                { key: "title", label: "Başlık (ops.)", maxLength: 120 },
+                { key: "note", label: "Alt not (ops.)", maxLength: 160 },
+                { key: "text", label: "Açıklama", multiline: true, maxLength: 700 },
+              ]}
+            />
+          </Section>
+
+          <Section title="Sık sorulan sorular" description="Ürün sayfasının altında akordeon olarak gösterilir ve Google için FAQ şeması üretilir. Kısa, net ve doğrulanabilir cevaplar yazın.">
+            <RowsEditor
+              name="faqs"
+              addLabel="Soru ekle"
+              defaultValue={p?.faqs ?? []}
+              columns={[
+                { key: "question", label: "Soru", maxLength: 200 },
+                { key: "answer", label: "Cevap", multiline: true, maxLength: 1200 },
+              ]}
+            />
           </Section>
 
           <Section title="Dokümanlar" description="Katalog, teknik çizim veya montaj kılavuzu (PDF, en fazla 20 MB).">

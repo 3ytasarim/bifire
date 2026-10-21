@@ -1,13 +1,14 @@
 "use client";
 
-import { useState } from "react";
+import { useState, type ChangeEvent } from "react";
 import { ArrowDown, ArrowUp, Plus, Trash2 } from "lucide-react";
 import { useMarkDirty } from "./AdminForm";
 
-type Column = { key: string; label: string; placeholder?: string; width?: string; list?: string };
+type Column = { key: string; label: string; placeholder?: string; width?: string; list?: string; maxLength?: number; multiline?: boolean };
 
 /**
- * Satır tabanlı liste editörü (teknik özellikler: grup/etiket/değer/birim; özellik maddeleri: metin).
+ * Satır tabanlı liste editörü (teknik özellikler: grup/etiket/değer/birim; özellik maddeleri; SSS).
+ * `multiline` sütunlar satırın tam genişliğinde çok satırlı alan olarak gösterilir (ör. SSS cevabı).
  * Değer `name` gizli alanında JSON dizi olarak gönderilir; boş satırlar sunucuda atılır.
  */
 export function RowsEditor({
@@ -23,6 +24,7 @@ export function RowsEditor({
   addLabel?: string;
   suggestions?: Record<string, string[]>;
 }) {
+  const multiline = columns.some((c) => c.multiline);
   const empty = () => Object.fromEntries(columns.map((c) => [c.key, ""]));
   const [rows, setRowsState] = useState<Record<string, string>[]>(defaultValue);
   const markDirty = useMarkDirty();
@@ -54,19 +56,27 @@ export function RowsEditor({
       {rows.length ? (
         <div className="space-y-2">
           {rows.map((row, i) => (
-            <div key={i} className="flex flex-wrap items-center gap-2 border border-neutral-200 bg-white p-2 sm:flex-nowrap">
-              {columns.map((c) => (
-                <input
-                  key={c.key}
-                  aria-label={`${c.label} (${i + 1}. satır)`}
-                  placeholder={c.placeholder ?? c.label}
-                  value={row[c.key] ?? ""}
-                  list={suggestions?.[c.key] ? `${name}-${c.key}-list` : undefined}
-                  maxLength={c.key === "text" ? 300 : 160}
-                  onChange={(e) => setRows((prev) => prev.map((r, n) => (n === i ? { ...r, [c.key]: e.target.value } : r)))}
-                  className={`min-h-10 border border-neutral-300 px-2 text-sm outline-none focus:border-ink ${c.width ?? "min-w-0 flex-1"}`}
-                />
-              ))}
+            <div key={i} className={`flex flex-wrap items-center gap-2 border border-neutral-200 bg-white p-2 ${multiline ? "" : "sm:flex-nowrap"}`}>
+              {columns.map((c) => {
+                const common = {
+                  "aria-label": `${c.label} (${i + 1}. satır)`,
+                  placeholder: c.placeholder ?? c.label,
+                  value: row[c.key] ?? "",
+                  maxLength: c.maxLength ?? (c.key === "text" ? 300 : 160),
+                  onChange: (e: ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) =>
+                    setRows((prev) => prev.map((r, n) => (n === i ? { ...r, [c.key]: e.target.value } : r))),
+                };
+                return c.multiline ? (
+                  <textarea key={c.key} rows={3} {...common} className="order-last min-h-20 w-full basis-full border border-neutral-300 px-2 py-2 text-sm outline-none focus:border-ink" />
+                ) : (
+                  <input
+                    key={c.key}
+                    {...common}
+                    list={suggestions?.[c.key] ? `${name}-${c.key}-list` : undefined}
+                    className={`min-h-10 border border-neutral-300 px-2 text-sm outline-none focus:border-ink ${c.width ?? "min-w-0 flex-1"}`}
+                  />
+                );
+              })}
               <div className="flex">
                 <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Yukarı taşı" className="flex h-10 w-9 items-center justify-center hover:bg-neutral-100 disabled:opacity-30">
                   <ArrowUp className="h-4 w-4" />

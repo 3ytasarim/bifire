@@ -1,7 +1,7 @@
 import Link from "next/link";
 import { ArrowRight } from "lucide-react";
 import { Badge } from "@/components/admin/ui";
-import { REQUEST_STATUS } from "@/lib/admin/labels";
+import { REQUEST_STATUS, REQUEST_TYPE } from "@/lib/admin/labels";
 import { prisma } from "@/lib/db";
 
 export const metadata = { title: "Panel" };
@@ -72,7 +72,7 @@ export default async function Dashboard({ searchParams }: { searchParams: Promis
                     {!r.isRead ? <span aria-label="Okunmamış" className="h-2 w-2 shrink-0 rounded-full bg-ember" /> : <span className="h-2 w-2 shrink-0" />}
                     <span className="min-w-0 flex-1">
                       <span className={`block truncate text-sm ${r.isRead ? "" : "font-semibold"}`}>{r.name}</span>
-                      <span className="block truncate text-xs text-neutral-500">{r.productName || r.categoryName || (r.type === "QUOTE" ? "Teklif talebi" : "İletişim")}</span>
+                      <span className="block truncate text-xs text-neutral-500">{r.productName || r.topic || r.categoryName || REQUEST_TYPE[r.type].label}</span>
                     </span>
                     <Badge tone={REQUEST_STATUS[r.status].tone}>{REQUEST_STATUS[r.status].label}</Badge>
                     <span className="hidden text-xs text-neutral-400 sm:inline">{when(r.createdAt)}</span>

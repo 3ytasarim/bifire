@@ -1,11 +1,14 @@
 "use client";
 
 import Link from "next/link";
-import { useActionState, useEffect, useRef, useState } from "react";
+import { useActionState, useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { useFormStatus } from "react-dom";
 import { ArrowRight, CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
 import { submitRequest, type RequestFormState } from "@/app/(site)/actions";
 import { Button3D } from "@/components/ui/button-3d";
+import { PROJECT_STAGES, PROJECT_TIMELINES, PROJECT_TOPICS } from "@/content/company";
+import { DISTRICT_OPTIONS } from "@/content/regions";
+import { selectionStore } from "@/lib/selection-store";
 
 type Option = { id: string; name: string };
 
@@ -23,8 +26,32 @@ function Submit({ label }: { label: string }) {
 const inputCls =
   "mt-2 block min-h-12 w-full rounded-xl border border-sand bg-white px-4 text-[16px] text-ink transition-colors outline-none placeholder:text-stone/70 focus:border-ink aria-[invalid=true]:border-red-700";
 
+function Select({ id, name, label, options, defaultValue, placeholder = "Seçiniz" }: { id: string; name: string; label: string; options: readonly string[]; defaultValue?: string; placeholder?: string }) {
+  return (
+    <div>
+      <label htmlFor={id} className="text-sm font-semibold text-ink">
+        {label}
+      </label>
+      <div className="relative">
+        <select id={id} name={name} defaultValue={defaultValue ?? ""} className={`${inputCls} appearance-none pr-10`}>
+          <option value="">{placeholder}</option>
+          {options.map((o) => (
+            <option key={o} value={o}>
+              {o}
+            </option>
+          ))}
+        </select>
+        <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-4 mt-1 h-4 w-4 -translate-y-1/2 text-steel" />
+      </div>
+    </div>
+  );
+}
+
 /**
- * İletişim + teklif formu (ürün detay, iletişim ve teklif sayfalarında ortak).
+ * İletişim + teklif + showroom randevusu + proje başvurusu formu (tüm sayfalarda ortak).
+ * - `showroomToggle`: "Proje teklifi / Showroom randevusu" seçimi (talep türünü değiştirir).
+ * - `district`: proje ilçesi; `project`: konu, proje aşaması ve uygulama dönemi alanları.
+ * - Ürün sayfasında seçilen seçenekler (selectionStore) gizli alanla gönderilir ve formda gösterilir.
  * Durumlar: yükleniyor (buton kilitli → çift gönderim yok), alan hataları, sunucu hatası, başarı.
  */
 export function RequestForm({
@@ -36,8 +63,16 @@ export function RequestForm({
   sourcePath,
   submitLabel = "Gönder",
   compact,
+  showroomToggle,
+  district,
+  defaultDistrict,
+  project,
 }: {
-  type: "CONTACT" | "QUOTE";
+  type: "CONTACT" | "QUOTE" | "SHOWROOM";
+  showroomToggle?: boolean;
+  district?: boolean;
+  defaultDistrict?: string;
+  project?: boolean;
   categories: Option[];
   products: (Option & { categoryId: string })[];
   defaultProductId?: string;
@@ -49,6 +84,8 @@ export function RequestForm({
   const [state, action] = useActionState<RequestFormState, FormData>(submitRequest, { status: "idle" });
   const startedAt = useRef(0);
   const [categoryId, setCategoryId] = useState(defaultCategoryId ?? "");
+  const [reqType, setReqType] = useState(type);
+  const selection = useSyncExternalStore(selectionStore.subscribe, selectionStore.get, selectionStore.getServer);
   const statusRef = useRef<HTMLDivElement>(null);
 
   // Formun açılış zamanı (bot tuzağı) ref'te tutulur ve gönderim anında FormData'ya eklenir. DOM alanı
@@ -79,11 +116,14 @@ export function RequestForm({
   const err = state.errors ?? {};
   const visibleProducts = categoryId ? products.filter((p) => p.categoryId === categoryId) : products;
   const fieldId = (n: string) => `${type.toLowerCase()}-${n}`;
+  // Yarım genişlikli alan sayısı tekse son seçim kutusu tam genişliğe yayılır (boş hücre kalmasın).
+  const oddHalf = [district, project, project, project].filter(Boolean).length % 2 === 1;
 
   return (
     <form action={submit} noValidate className="space-y-6">
-      <input type="hidden" name="type" value={type} />
+      <input type="hidden" name="type" value={reqType} />
       <input type="hidden" name="sourcePath" value={sourcePath} />
+      <input type="hidden" name="selection" value={selection} />
       {/* Honeypot: insanlar görmez/doldurmaz */}
       <div aria-hidden="true" className="absolute -left-[9999px] h-px w-px overflow-hidden">
         <label htmlFor={fieldId("website")}>Web siteniz</label>
@@ -97,6 +137,35 @@ export function RequestForm({
           </p>
         ) : null}
       </div>
+
+      {showroomToggle ? (
+        <fieldset>
+          <legend className="text-sm font-semibold text-ink">Talebiniz</legend>
+          <div className="mt-2 grid grid-cols-2 gap-2 rounded-2xl bg-bone p-1.5">
+            {(
+              [
+                ["QUOTE", "Proje teklifi"],
+                ["SHOWROOM", "Showroom randevusu"],
+              ] as const
+            ).map(([value, label]) => (
+              <label
+                key={value}
+                className={`flex min-h-12 cursor-pointer items-center justify-center rounded-xl px-3 text-center text-[14px] font-semibold transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-ember ${reqType === value ? "bg-white text-ink shadow-sm" : "text-steel hover:text-ink"}`}
+              >
+                <input type="radio" name="_reqType" value={value} checked={reqType === value} onChange={() => setReqType(value)} className="sr-only" />
+                {label}
+              </label>
+            ))}
+          </div>
+        </fieldset>
+      ) : null}
+
+      {selection ? (
+        <p className="flex flex-wrap items-center gap-2 rounded-2xl border border-ember/30 bg-ember/5 px-4 py-3 text-[14px] text-ink">
+          <span className="text-[11px] font-semibold tracking-[0.18em] text-ember-ink uppercase">Seçiminiz</span>
+          <span className="font-semibold">{selection}</span>
+        </p>
+      ) : null}
 
       <div className={`grid gap-6 ${compact ? "" : "sm:grid-cols-2"}`}>
         <div className={compact ? "" : "sm:col-span-2"}>
@@ -151,6 +220,14 @@ export function RequestForm({
           />
           {err.email ? <p id={fieldId("email-err")} className="mt-1.5 text-sm text-red-800">{err.email}</p> : null}
         </div>
+        {district ? <Select id={fieldId("district")} name="district" label="Proje ilçesi" options={DISTRICT_OPTIONS} defaultValue={v.district ?? defaultDistrict} /> : null}
+        {project ? (
+          <>
+            <Select id={fieldId("topic")} name="topic" label="İlgilendiğiniz konu" options={PROJECT_TOPICS} defaultValue={v.topic} />
+            <Select id={fieldId("stage")} name="projectStage" label="Proje aşaması" options={PROJECT_STAGES} defaultValue={v.projectStage} />
+            <Select id={fieldId("timeline")} name="timeline" label="Uygulama dönemi" options={PROJECT_TIMELINES} defaultValue={v.timeline} />
+          </>
+        ) : null}
         <div>
           <label htmlFor={fieldId("category")} className="text-sm font-semibold text-ink">
             İlgilendiğiniz kategori
@@ -173,7 +250,7 @@ export function RequestForm({
             <ChevronDown aria-hidden="true" className="pointer-events-none absolute top-1/2 right-4 mt-1 h-4 w-4 -translate-y-1/2 text-steel" />
           </div>
         </div>
-        <div>
+        <div className={oddHalf && !compact ? "sm:col-span-2" : undefined}>
           <label htmlFor={fieldId("product")} className="text-sm font-semibold text-ink">
             İlgilendiğiniz ürün
           </label>
@@ -205,7 +282,13 @@ export function RequestForm({
             rows={compact ? 4 : 5}
             maxLength={3000}
             defaultValue={v.message}
-            placeholder={type === "QUOTE" ? "Mekân ölçüleri, şömine yerleşimi, baca durumu ve beklentileriniz…" : "Size nasıl yardımcı olabiliriz?"}
+            placeholder={
+              reqType === "SHOWROOM"
+                ? "Görmek istediğiniz model veya malzeme, size uygun gün ve saat…"
+                : reqType === "QUOTE"
+                  ? "Mekân ölçüleri, şömine yerleşimi, baca durumu ve beklentileriniz…"
+                  : "Size nasıl yardımcı olabiliriz?"
+            }
             className={`${inputCls} min-h-32 py-3`}
           />
         </div>
