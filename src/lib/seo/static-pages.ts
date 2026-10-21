@@ -1,3 +1,16 @@
+import { serviceBySlug } from "@/content/company";
+import { districtBySlug } from "@/content/regions";
+
+/** İçerik dosyasındaki hizmet / ilçe sayfası için varsayılan SEO (tek kaynak: content/*). */
+function serviceEntry(slug: string) {
+  const s = serviceBySlug(slug)!;
+  return { label: `Hizmet: ${s.name}`, path: `/hizmetler/${slug}`, defaults: { title: `${s.metaTitle} | Bifire`, description: s.metaDescription } };
+}
+function districtEntry(slug: string) {
+  const d = districtBySlug(slug)!;
+  return { label: `Hizmet bölgesi: ${d.name}`, path: `/hizmet-bolgeleri/${slug}`, defaults: { title: `${d.page.title} | Bifire`, description: d.page.metaDescription } };
+}
+
 /**
  * Admin > SEO menüsünde yönetilen statik sayfalar. `defaults` admin alanları boş bırakıldığında kullanılan
  * otomatik SEO'dur — sayfa hiçbir zaman SEO'suz kalmaz.
@@ -54,13 +67,45 @@ export const STATIC_PAGES = {
     },
   },
   "teklif-al": {
-    label: "Teklif Al",
+    label: "Teklif Al / Proje başvurusu",
     path: "/teklif-al",
     defaults: {
-      title: "Şömine Teklifi Al | Bifire",
-      description: "Mekânınıza uygun şömine için ölçü ve beklentilerinizi paylaşın, Bifire size özel teklif hazırlasın.",
+      title: "Şömine Teklifi ve Proje Başvurusu | Bifire",
+      description: "Şömine projeniz için ilçe, ölçü ve beklentilerinizi paylaşın; kendi üretimimiz ve montaj ekibimizle size özel teklif hazırlayalım. Tuzla fabrika showroom.",
     },
   },
+  hizmetler: {
+    label: "Hizmetler",
+    path: "/hizmetler",
+    defaults: {
+      title: "Şömine Tasarımı ve Montajı Hizmetleri | Bifire",
+      description: "Özel ölçü şömine tasarımı ve kendi montaj ekibimizle şömine montajı. Tasarımı uygulamayla birlikte ele alıyoruz; Tuzla fabrika showroom.",
+    },
+  },
+  "hizmet-ozel-olcu": serviceEntry("ozel-olcu-somine-tasarimi"),
+  "hizmet-montaj": serviceEntry("somine-montaji"),
+  showroom: {
+    label: "Fabrika Showroom",
+    path: "/fabrika-showroom",
+    defaults: {
+      title: "Tuzla Şömine Showroom | Fabrika Showroom Ziyareti | Bifire",
+      description: "Tuzla fabrika showroomumuzda şömine modellerini, kapak mekanizmalarını ve kaplama malzemelerini yerinde görün. Ziyaretinizi önceden planlayın.",
+    },
+  },
+  "hizmet-bolgeleri": {
+    label: "Hizmet Bölgeleri",
+    path: "/hizmet-bolgeleri",
+    defaults: {
+      title: "İstanbul Şömine Hizmet Bölgeleri | Bifire",
+      description: "Tuzla fabrika showroomumuzdan İstanbul'un 39 ilçesindeki şömine projelerine: keşif, özel ölçü üretim ve montaj. İlçenizi seçin, projenizi konuşalım.",
+    },
+  },
+  "bolge-tuzla": districtEntry("tuzla"),
+  "bolge-pendik": districtEntry("pendik"),
+  "bolge-kartal": districtEntry("kartal"),
+  "bolge-maltepe": districtEntry("maltepe"),
+  "bolge-atasehir": districtEntry("atasehir"),
+  "bolge-sariyer": districtEntry("sariyer"),
 } as const;
 
 export type StaticPageKey = keyof typeof STATIC_PAGES;

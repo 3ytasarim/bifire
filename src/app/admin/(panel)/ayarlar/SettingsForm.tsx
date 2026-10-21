@@ -46,6 +46,16 @@ export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
               aspect="aspect-video max-w-md"
               hint="Görselin yerinde sessiz ve sürekli döngüde oynar; bölüm ekrana gelince yüklenir. Görsel kapak ve SEO alt metni olarak kalır. Yatay 16:9 video önerilir (ör. 1920×1080); masaüstünde kırpılmadan tam gösterilir."
             />
+            <ImagePicker
+              name="showroomImage"
+              label="Fabrika showroom görseli"
+              defaultValue={s.showroomImage}
+              altName="showroomImageAlt"
+              altDefault={s.showroomImageAlt}
+              aspect="aspect-[4/3] max-w-sm"
+              hint="Fabrika showroom sayfası ve sitedeki showroom bölümlerinde kullanılır. Gerçek showroom fotoğrafı önerilir; boşsa manifesto görseli gösterilir."
+              nameHint="bifire tuzla fabrika showroom"
+            />
           </Section>
         </div>
         <div className="space-y-6">

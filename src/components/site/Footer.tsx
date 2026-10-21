@@ -9,9 +9,12 @@ import { FEATURES } from "@/lib/features";
 
 const CORPORATE = [
   { label: "Kurumsal", href: routes.about },
+  { label: "Hizmetler", href: routes.services },
+  { label: "Fabrika Showroom", href: routes.showroom },
+  { label: "Hizmet Bölgeleri", href: routes.regions },
   ...(FEATURES.projects ? [{ label: "Projeler", href: routes.projects }] : []),
-  { label: "Blog", href: routes.blog },
-  { label: "Teklif Al", href: routes.quote },
+  { label: "Şömine Rehberi", href: routes.blog },
+  { label: "Proje Başvurusu", href: routes.quote },
   { label: "İletişim", href: routes.contact },
 ];
 

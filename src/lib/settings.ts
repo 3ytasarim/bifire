@@ -32,6 +32,8 @@ const EMPTY: Omit<SiteSetting, "updatedAt"> = {
   featureImage: null,
   featureImageAlt: null,
   featureVideo: null,
+  showroomImage: null,
+  showroomImageAlt: null,
 };
 
 /** İstek başına tek sorgu. Kayıt yoksa (ilk kurulum) boş varsayılanlar döner — sayfa asla kırılmaz. */
@@ -62,4 +64,9 @@ export function socialLinks(s: SiteSettings): { kind: "instagram" | "facebook" |
     { kind: "pinterest" as const, url: s.pinterestUrl, label: "Pinterest" },
   ];
   return list.filter((x): x is typeof x & { url: string } => Boolean(x.url));
+}
+
+/** Showroom görseli: özel showroom fotoğrafı yoksa manifesto görseline düşer. */
+export function showroomImageOf(s: SiteSettings): { url: string | null; alt: string | null } {
+  return s.showroomImage ? { url: s.showroomImage, alt: s.showroomImageAlt } : { url: s.aboutImage, alt: s.aboutImageAlt };
 }

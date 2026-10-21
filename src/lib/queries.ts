@@ -91,8 +91,13 @@ export const getProductBySlug = cache((slug: string) =>
       images: { orderBy: { sortOrder: "asc" } },
       specifications: { orderBy: { sortOrder: "asc" } },
       features: { orderBy: { sortOrder: "asc" } },
+      options: { orderBy: { sortOrder: "asc" } },
+      faqs: { orderBy: { sortOrder: "asc" } },
       documents: { orderBy: { sortOrder: "asc" } },
       tags: { select: { name: true, slug: true } },
+      // Ürünle ilişkilendirilmiş rehber yazıları (iç linkleme). postCardSelect/publishedWhere aşağıda tanımlı;
+      // sorgu çalışma anında kurulduğu için sıralama sorun değildir.
+      blogPosts: { where: publishedWhere(), orderBy: { publishedAt: "desc" }, take: 3, select: postCardSelect },
       projects: {
         where: { active: true },
         orderBy: { sortOrder: "asc" },

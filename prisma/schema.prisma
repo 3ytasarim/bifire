@@ -133,6 +133,9 @@ model SiteSetting {
   featureImageAlt   String?
   /// "Mimari Ateş Çözümleri" görselinin yerinde döngüde oynayan video (görsel poster/yedek olarak kalır).
   featureVideo      String?
+  /// Fabrika showroom sayfası ve showroom bölümleri görseli (boşsa manifesto görseli kullanılır).
+  showroomImage     String?
+  showroomImageAlt  String?
   updatedAt         DateTime @updatedAt
 }
 

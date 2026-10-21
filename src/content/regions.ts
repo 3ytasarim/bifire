@@ -12,6 +12,8 @@ export type Side = "Anadolu Yakası" | "Avrupa Yakası";
 export type DistrictPage = {
   /** <title> ve H1 için. */
   title: string;
+  /** Bulunma ekiyle ilçe adı (ör. "Pendik'teki") — Türkçe ek uyumu elle verilir. */
+  locative: string;
   metaDescription: string;
   intro: string;
   /** Bu ilçedeki projelerde öne çıkan konular (ilçeye özgü). */
@@ -40,6 +42,7 @@ export const DISTRICTS: District[] = [
     priority: true,
     page: {
       title: "Tuzla Şömine Üretimi ve Montajı",
+      locative: "Tuzla'daki",
       metaDescription:
         "Tuzla'daki fabrika showroomumuzda şömine modellerini ve kaplama malzemelerini yerinde görün. Kendi üretimimiz ve montaj ekibimizle Tuzla'da şömine projeleri.",
       intro:
@@ -78,6 +81,7 @@ export const DISTRICTS: District[] = [
     priority: true,
     page: {
       title: "Pendik Şömine Projeleri",
+      locative: "Pendik'teki",
       metaDescription:
         "Pendik'te şömine yaptırmak isteyenler için Tuzla fabrika showroomumuzda ön görüşme, yerinde keşif, özel ölçü üretim ve montaj. Projenizi birlikte planlayalım.",
       intro:
@@ -116,6 +120,7 @@ export const DISTRICTS: District[] = [
     priority: true,
     page: {
       title: "Kartal Şömine Tasarımı ve Montajı",
+      locative: "Kartal'daki",
       metaDescription:
         "Kartal'da şömine projeleri: yerinde keşif, ölçü onayı, özel ölçü üretim ve kendi montaj ekibimizle uygulama. Tuzla fabrika showroomumuzda malzemeleri görün.",
       intro:
@@ -154,6 +159,7 @@ export const DISTRICTS: District[] = [
     priority: true,
     page: {
       title: "Maltepe Şömine Modelleri ve Uygulama",
+      locative: "Maltepe'deki",
       metaDescription:
         "Maltepe'de şömine yaptırmak için hazne ve kaplama seçimi, malzeme onayı ve montaj. Traverten, mermer ve doğal taş seçeneklerini Tuzla showroomumuzda görün.",
       intro:
@@ -192,6 +198,7 @@ export const DISTRICTS: District[] = [
     priority: true,
     page: {
       title: "Ataşehir Şömine Çözümleri",
+      locative: "Ataşehir'deki",
       metaDescription:
         "Ataşehir'deki daire ve rezidanslar için şömine çözümleri: bacasız elektrikli ve bioethanol seçenekler, yerleşim planlaması ve montaj. Projenizi birlikte değerlendirelim.",
       intro:
@@ -230,6 +237,7 @@ export const DISTRICTS: District[] = [
     priority: true,
     page: {
       title: "Sarıyer Özel Tasarım Şömine",
+      locative: "Sarıyer'deki",
       metaDescription:
         "Sarıyer'deki villa ve konut projeleri için özel ölçü şömine tasarımı, mimar ve iç mimarla koordinasyon, kendi üretimimiz ve montaj ekibimizle uygulama.",
       intro:

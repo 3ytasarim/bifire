@@ -3,7 +3,12 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, FileText, Phone } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
-import { ProductCard, ProjectCard } from "@/components/site/Cards";
+import { PostCard, ProductCard, ProjectCard } from "@/components/site/Cards";
+import { FaqList } from "@/components/site/FaqList";
+import { ProcessSteps } from "@/components/site/ProcessSteps";
+import { ProductOptions } from "@/components/site/ProductOptions";
+import { ShowroomBlock } from "@/components/site/ShowroomBlock";
+import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { JsonLd } from "@/components/site/JsonLd";
 import { ProductGallery } from "@/components/site/ProductGallery";
@@ -14,7 +19,7 @@ import { keyFacts, routes, technicalRows, type TechRow } from "@/lib/catalog";
 import { getFormOptions, getProductBySlug, getRelatedProducts } from "@/lib/queries";
 import { getSiteSettings, telHref, whatsappHref } from "@/lib/settings";
 import { getImageMeta } from "@/lib/seo/image-meta";
-import { breadcrumbNode, graph, ids, imageNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
+import { breadcrumbNode, faqNode, graph, ids, imageNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/seo/site";
 import { FEATURES } from "@/lib/features";
@@ -39,6 +44,13 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     image: p.coverImage,
     imageAlt: p.coverImageAlt || p.name,
   });
+}
+
+/** Seçenek satırlarını grup adına göre toplar (sıra korunur). */
+function groupOptions(options: { group: string; value: string }[]) {
+  const groups = new Map<string, string[]>();
+  for (const o of options) groups.set(o.group, [...(groups.get(o.group) ?? []), o.value]);
+  return [...groups.entries()].map(([name, values]) => ({ name, values }));
 }
 
 function groupRows(rows: TechRow[]) {
@@ -79,6 +91,10 @@ export default async function ProductPage({ params }: Props) {
   const primary = gallery[0];
   const primaryMeta = primary ? await getImageMeta(primary.url) : null;
   const wa = whatsappHref(settings, `Ürün: ${product.name} — ${absoluteUrl(path)}`);
+  const optionGroups = groupOptions(product.options);
+  const bullets = product.features.filter((f) => !f.title);
+  const details = product.features.filter((f) => f.title);
+  const faqs = product.faqs.map((f) => ({ q: f.question, a: f.answer }));
 
   return (
     <>
@@ -97,6 +113,7 @@ export default async function ProductPage({ params }: Props) {
             brand: product.brand,
             properties: rows.filter((r) => r.label !== "Marka" && r.label !== "Model kodu").map((r) => ({ name: r.label, value: r.raw ?? r.value, unitText: r.unit })),
           }),
+          faqNode(path, faqs),
         )}
       />
 
@@ -128,9 +145,11 @@ export default async function ProductPage({ params }: Props) {
                   </dl>
                 ) : null}
 
+                {optionGroups.length ? <ProductOptions groups={optionGroups} /> : null}
+
                 <div className="mt-8 flex flex-col gap-3">
                   <Button3D href="#teklif" tone="ember" size="lg" fullWidth>
-                    Bu ürün için teklif al <ArrowRight aria-hidden="true" className="h-4 w-4" />
+                    {optionGroups.length ? "Seçtiğim model için teklif al" : "Bu ürün için teklif al"} <ArrowRight aria-hidden="true" className="h-4 w-4" />
                   </Button3D>
                   <div className="grid gap-3 sm:grid-cols-2">
                     {wa ? (
@@ -144,6 +163,11 @@ export default async function ProductPage({ params }: Props) {
                       </a>
                     ) : null}
                   </div>
+                  <p className="text-[13px] leading-relaxed text-stone">Hazne, kaplama, baca ve montaj kapsamı projenize göre birlikte netleştirilir.</p>
+                </div>
+
+                <div className="mt-8 border-t border-sand pt-6">
+                  <TrustPoints compact />
                 </div>
 
                 {product.documents.length ? (
@@ -167,7 +191,7 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
 
-        {product.description || product.features.length ? (
+        {product.description || bullets.length ? (
           <section aria-labelledby="urun-aciklama" className="border-t border-sand bg-bone py-16 sm:py-24">
             <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
               <div className="lg:col-span-7">
@@ -176,11 +200,11 @@ export default async function ProductPage({ params }: Props) {
                 </h2>
                 <RichText html={product.description} className="mt-8" />
               </div>
-              {product.features.length ? (
+              {bullets.length ? (
                 <div className="lg:col-span-5">
                   <h2 className="display-3">Öne çıkan özellikler</h2>
                   <ul className="mt-8 space-y-4">
-                    {product.features.map((f) => (
+                    {bullets.map((f) => (
                       <li key={f.id} className="flex gap-4 border-b border-sand pb-4 text-[16px] text-ink">
                         <Check aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-ember" />
                         {f.text}
@@ -189,6 +213,37 @@ export default async function ProductPage({ params }: Props) {
                   </ul>
                 </div>
               ) : null}
+            </div>
+          </section>
+        ) : null}
+
+        {details.length ? (
+          <section aria-labelledby="detaylar" className="bg-ink py-16 text-white sm:py-24">
+            <div className="shell">
+              <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
+                <div className="lg:col-span-7">
+                  <p className="eyebrow text-ember">Görünmeyen detayların uzmanlığı</p>
+                  <h2 id="detaylar" className="display-3 mt-5 text-balance text-white">
+                    Ateşin ardında, düşünülmüş bir yapı.
+                  </h2>
+                </div>
+                <p className="text-[16px] leading-relaxed text-white/70 lg:col-span-5">
+                  Şöminenin karakterini yalnızca dış görünümü belirlemez. Yanma havasından kapak hareketine, camdan hazne malzemelerine kadar her bileşen kullanım deneyiminin bir parçasıdır.
+                </p>
+              </div>
+              <ol className="mt-12 grid gap-4 md:grid-cols-2">
+                {details.map((f, i) => (
+                  <li key={f.id} className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
+                    <p className="text-[11px] font-semibold tracking-[0.2em] text-ember uppercase tabular-nums">
+                      {String(i + 1).padStart(2, "0")}
+                      {f.label ? ` / ${f.label}` : ""}
+                    </p>
+                    <h3 className="mt-4 font-display text-xl font-semibold text-white sm:text-2xl">{f.title}</h3>
+                    <p className="mt-3 text-[15px] leading-relaxed text-white/70">{f.text}</p>
+                    {f.note ? <p className="mt-auto border-t border-white/10 pt-4 text-[13px] font-medium text-white/55">{f.note}</p> : null}
+                  </li>
+                ))}
+              </ol>
             </div>
           </section>
         ) : null}
@@ -244,6 +299,22 @@ export default async function ProductPage({ params }: Props) {
         </section>
       ) : null}
 
+      <ProcessSteps />
+
+      {faqs.length ? (
+        <section aria-labelledby="urun-sss" className="bg-paper py-16 sm:py-24">
+          <div className="shell grid gap-10 lg:grid-cols-12">
+            <div className="lg:col-span-4">
+              <p className="eyebrow text-ember-ink">Seçim yaparken</p>
+              <h2 id="urun-sss" className="display-3 mt-5">
+                Aklınızdaki sorular.
+              </h2>
+            </div>
+            <FaqList items={faqs} className="lg:col-span-8" />
+          </div>
+        </section>
+      ) : null}
+
       <section id="teklif" aria-labelledby="teklif-baslik" className="scroll-mt-28 border-t border-sand bg-bone py-16 sm:py-24">
         <div className="shell grid gap-12 lg:grid-cols-12">
           <div className="lg:col-span-5">
@@ -251,7 +322,7 @@ export default async function ProductPage({ params }: Props) {
             <h2 id="teklif-baslik" className="display-2 mt-5">
               {product.name} için teklif alın
             </h2>
-            <p className="lead mt-6 text-steel">Mekân ölçülerinizi ve beklentinizi paylaşın; uygulama detaylarıyla birlikte size özel teklif hazırlayalım.</p>
+            <p className="lead mt-6 text-steel">Mekân ölçülerinizi ve beklentinizi paylaşın; uygulama detaylarıyla birlikte size özel teklif hazırlayalım ya da Tuzla fabrika showroomumuzda görüşelim.</p>
           </div>
           <div className="lg:col-span-7">
             <RequestForm
@@ -261,11 +332,40 @@ export default async function ProductPage({ params }: Props) {
               defaultCategoryId={product.categoryId}
               defaultProductId={product.id}
               sourcePath={path}
-              submitLabel="Teklif iste"
+              submitLabel="Talebimi gönder"
+              showroomToggle
+              district
             />
           </div>
         </div>
       </section>
+
+      <ShowroomBlock />
+
+      {product.blogPosts.length ? (
+        <section aria-labelledby="rehber" className="bg-white py-16 sm:py-24">
+          <div className="shell">
+            <div className="flex flex-wrap items-end justify-between gap-6">
+              <div>
+                <p className="eyebrow text-ember-ink">Bifire Şömine Rehberi</p>
+                <h2 id="rehber" className="display-3 mt-5">
+                  Kararınızı bilgiyle destekleyin.
+                </h2>
+              </div>
+              <Link href={routes.blog} className="link-underline text-[13px] font-semibold tracking-[0.16em] text-ember-ink uppercase">
+                Tüm rehberler
+              </Link>
+            </div>
+            <ul className="mt-10 grid gap-6 sm:grid-cols-2 lg:grid-cols-3">
+              {product.blogPosts.map((post) => (
+                <li key={post.id}>
+                  <PostCard post={post} />
+                </li>
+              ))}
+            </ul>
+          </div>
+        </section>
+      ) : null}
 
       {related.length ? (
         <section aria-labelledby="benzer" className="bg-paper py-16 sm:py-24">

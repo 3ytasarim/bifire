@@ -32,15 +32,18 @@ type Props = {
   categories: NavCategory[];
 };
 
-const NAV_LEFT = [
-  { label: "Ana Sayfa", href: "/" },
-  { label: "Kurumsal", href: "/kurumsal" },
-];
+// Masaüstü: sol = Kurumsal · Ürünler (mega) · Hizmetler; sağ = Showroom · Rehber · İletişim (logo ana sayfaya gider).
+const NAV_LEFT = [{ label: "Kurumsal", href: "/kurumsal" }];
+const NAV_AFTER_PRODUCTS = [{ label: "Hizmetler", href: "/hizmetler" }];
 const NAV_RIGHT = [
   ...(FEATURES.projects ? [{ label: "Projeler", href: "/projeler" }] : []),
-  { label: "Blog", href: "/blog" },
+  { label: "Showroom", href: "/fabrika-showroom" },
+  { label: "Rehber", href: "/blog" },
   { label: "İletişim", href: "/iletisim" },
 ];
+// Mobil panelde ek olarak gösterilenler.
+const NAV_MOBILE_FIRST = [{ label: "Ana Sayfa", href: "/" }];
+const NAV_MOBILE_EXTRA = [{ label: "Hizmet Bölgeleri", href: "/hizmet-bolgeleri" }];
 
 /**
  * Norm Yacht header mantığı (üst bilgi bandı + sticky ana menü, ikiye bölünmüş menü, ortada logo,
@@ -236,6 +239,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                     </div>
                   ) : null}
                 </li>
+                {renderLinks(NAV_AFTER_PRODUCTS)}
               </ul>
             </nav>
 
@@ -271,7 +275,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
         >
           <nav aria-label="Mobil menü" className="shell flex min-h-full flex-col py-6">
             <ul className="divide-y divide-linen border-y border-linen">
-              {NAV_LEFT.map((item) => (
+              {[...NAV_MOBILE_FIRST, ...NAV_LEFT].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={`flex min-h-14 items-center font-display text-2xl font-semibold ${isActive(item.href) ? "text-ember-ink" : "text-ink"}`}>
                     {item.label}
@@ -317,7 +321,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                   ))}
                 </ul>
               </li>
-              {NAV_RIGHT.map((item) => (
+              {[...NAV_AFTER_PRODUCTS, ...NAV_RIGHT, ...NAV_MOBILE_EXTRA].map((item) => (
                 <li key={item.href}>
                   <Link href={item.href} className={`flex min-h-14 items-center font-display text-2xl font-semibold ${isActive(item.href) ? "text-ember-ink" : "text-ink"}`}>
                     {item.label}

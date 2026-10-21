@@ -226,3 +226,28 @@ export function itemListNode(path: string, items: { name: string; path: string }
     itemListElement: items.map((it, i) => ({ "@type": "ListItem", position: i + 1, name: it.name, url: canonicalUrl(it.path) })),
   };
 }
+
+/** Sayfadaki görünür SSS'ler için FAQPage (yalnızca sayfada gerçekten gösterilen soru/cevaplar verilir). */
+export function faqNode(path: string, items: { q: string; a: string }[]): Node | null {
+  const list = items.filter((i) => i.q.trim() && i.a.trim());
+  if (!list.length) return null;
+  return {
+    "@type": "FAQPage",
+    "@id": `${canonicalUrl(path)}#faq`,
+    mainEntity: list.map((i) => ({ "@type": "Question", name: i.q, acceptedAnswer: { "@type": "Answer", text: i.a } })),
+  };
+}
+
+/** Hizmet sayfaları: sağlayıcı Organization; hizmet bölgesi verilen il/ilçeler. */
+export function serviceNode(input: { path: string; name: string; description: string; serviceType?: string; areaServed?: string[] }): Node {
+  return {
+    "@type": "Service",
+    "@id": `${canonicalUrl(input.path)}#service`,
+    name: input.name,
+    description: input.description,
+    url: canonicalUrl(input.path),
+    ...(input.serviceType ? { serviceType: input.serviceType } : {}),
+    provider: { "@id": ids.organization() },
+    areaServed: (input.areaServed?.length ? input.areaServed : ["İstanbul"]).map((name) => ({ "@type": "Place", name })),
+  };
+}
