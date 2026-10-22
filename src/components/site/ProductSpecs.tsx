@@ -7,6 +7,8 @@ import { selectionStore } from "@/lib/selection-store";
 
 export type VariantRow = { label: string; unit: string | null; values: Record<string, string> };
 export type SpecRow = { label: string; value: string; unit?: string | null };
+/** Ana tablo satırı: ölçüye göre değişen (v) veya tüm ölçüler için sabit (c); veri sırasıyla karışık listelenir. */
+export type SpecItem = ({ kind: "v" } & VariantRow) | ({ kind: "c" } & SpecRow);
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 
@@ -84,11 +86,13 @@ export function ProductSpecs({
   group,
   variants,
   rows,
+  items,
   common,
 }: {
   group: string | null;
   variants: string[];
   rows: VariantRow[];
+  items: SpecItem[];
   common: [string, SpecRow[]][];
 }) {
   const fallback = variants[0] ?? "";
@@ -117,17 +121,21 @@ export function ProductSpecs({
             <table className="w-full border-collapse text-left text-[15px]">
               <caption className="sr-only">{variant} için teknik özellikler</caption>
               <tbody>
-                {rows.map((r) => (
+                {items.map((r) => (
                   <tr key={r.label} className="border-t border-sand">
                     <th scope="row" className="w-1/2 py-4 pr-4 font-medium text-steel">
                       {r.label}
                     </th>
                     <td className="py-4 font-semibold text-ink tabular-nums">
-                      <AnimatePresence mode="wait" initial={false}>
-                        <motion.span key={variant} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.25, ease: EASE }} className="inline-block">
-                          {r.values[variant] ? formatValue(r.values[variant]!, r.unit) : "—"}
-                        </motion.span>
-                      </AnimatePresence>
+                      {r.kind === "v" ? (
+                        <AnimatePresence mode="wait" initial={false}>
+                          <motion.span key={variant} initial={{ opacity: 0, y: 6 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, y: -6 }} transition={{ duration: 0.25, ease: EASE }} className="inline-block">
+                            {r.values[variant] ? formatValue(r.values[variant]!, r.unit) : "—"}
+                          </motion.span>
+                        </AnimatePresence>
+                      ) : (
+                        formatValue(r.value, r.unit)
+                      )}
                     </td>
                   </tr>
                 ))}

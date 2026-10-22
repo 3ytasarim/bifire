@@ -10,7 +10,7 @@ import { FaqList } from "@/components/site/FaqList";
 import { MobileCta } from "@/components/site/MobileCta";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { ProductOptions } from "@/components/site/ProductOptions";
-import { ProductSpecs, VariantHighlights, type VariantRow } from "@/components/site/ProductSpecs";
+import { ProductSpecs, VariantHighlights, type SpecItem, type VariantRow } from "@/components/site/ProductSpecs";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
@@ -107,6 +107,20 @@ export default async function ProductPage({ params }: Props) {
   const optionGroups = groupOptions(product.options);
   const variantGroup = optionGroups.find((g) => g.values.some((v) => variantSpecs.some((sp) => sp.variant === v))) ?? null;
   const variants = variantGroup ? variantGroup.values.filter((v) => variantSpecs.some((sp) => sp.variant === v)) : [];
+  // Ölçü seçimi olan üründe teknik tablo tek parça ve veri sırasıyla: ölçüye bağlı + sabit satırlar karışık.
+  // Marka/Yakıt gibi ürün alanları ayrıca küçük "Genel" tablosunda kalır.
+  const specItems: SpecItem[] = [];
+  if (variantGroup) {
+    for (const sp of product.specifications) {
+      if (sp.variant) {
+        const row = variantRows.find((r) => r.label === sp.label);
+        if (row && !specItems.some((it) => it.kind === "v" && it.label === sp.label)) specItems.push({ kind: "v", ...row });
+      } else {
+        specItems.push({ kind: "c", label: sp.label, value: sp.value, unit: sp.unit });
+      }
+    }
+  }
+  const specCommon = variantGroup ? groupRows(technicalRows(product, [])) : groupRows(rows);
   const bullets = product.features.filter((f) => !f.title);
   const details = product.features.filter((f) => f.title);
   const faqs = product.faqs.map((f) => ({ q: f.question, a: f.answer }));
@@ -241,16 +255,18 @@ export default async function ProductPage({ params }: Props) {
           <section aria-labelledby="teknik" className="bg-paper py-16 sm:py-24">
             <div className="shell grid gap-10 lg:grid-cols-12">
               <Reveal className="lg:col-span-4">
-                <p className="eyebrow text-ember-ink">Ölçüye göre değişen detaylar</p>
-                <h2 id="teknik" className="display-3 mt-5">
-                  Teknik özellikler
+                <p className="eyebrow text-ember-ink">{variantGroup ? "Ölçüye göre değişen detaylar" : "Teknik bilgiler"}</p>
+                <h2 id="teknik" className="display-3 mt-5 text-balance">
+                  {variantGroup ? "Seçiminizin teknik karşılığı." : "Teknik özellikler"}
                 </h2>
-                <p className="mt-4 max-w-sm text-[15px] text-steel">
-                  {variantRows.length ? "Ölçüyü değiştirerek teknik bilgileri karşılaştırabilirsiniz. " : ""}Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir.
+                <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-steel">
+                  {variantGroup
+                    ? "Bir modelin görünümü kadar, projenize nasıl yerleşeceği de önemlidir. Ölçüyü değiştirerek teknik bilgileri karşılaştırabilirsiniz."
+                    : "Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir."}
                 </p>
               </Reveal>
               <div className="lg:col-span-8">
-                <ProductSpecs group={variantGroup?.name ?? null} variants={variants} rows={variantRows} common={groupRows(rows)} />
+                <ProductSpecs group={variantGroup?.name ?? null} variants={variants} rows={variantRows} items={specItems} common={specCommon} />
               </div>
             </div>
           </section>
