@@ -9,6 +9,7 @@ import { routes } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { recordSlugChange } from "@/lib/redirects";
 import { sanitizeRichText } from "@/lib/sanitize";
+import { GUIDE_CATEGORIES } from "@/content/guide";
 
 const schema = z.object({
   title: required("Başlık", 200),
@@ -27,13 +28,18 @@ const schema = z.object({
     .refine((v) => v === "" || /^\d{4}-\d{2}-\d{2}T\d{2}:\d{2}$/.test(v), "Geçerli bir tarih/saat girin.")
     .transform((v) => (v ? new Date(`${v}:00+03:00`) : null)),
   tags: z.string().max(1000),
+  // Yalnızca tanımlı rehber kategorileri kabul edilir; boş/yabancı değer → kategorisiz.
+  category: z
+    .string()
+    .trim()
+    .transform((v) => (GUIDE_CATEGORIES.some((c) => c.slug === v) ? v : null)),
   ...seoShape,
 });
 
 export async function savePost(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const user = await requireAdmin();
   const id = String(formData.get("id") ?? "") || null;
-  const parsed = schema.safeParse({ content: "", tags: "", publishedAt: "", ...formObject(formData) });
+  const parsed = schema.safeParse({ content: "", tags: "", publishedAt: "", category: "", ...formObject(formData) });
   if (!parsed.success) return zodErrors(parsed.error);
   const { tags, ...d } = parsed.data;
   const content = sanitizeRichText(d.content);

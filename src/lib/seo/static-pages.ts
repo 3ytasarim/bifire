@@ -54,11 +54,11 @@ export const STATIC_PAGES = {
     },
   },
   blog: {
-    label: "Blog",
+    label: "Şömine Rehberi",
     path: "/blog",
     defaults: {
-      title: "Şömine Rehberi ve İlham | Bifire Blog",
-      description: "Şömine seçimi, yakıt türleri, bakım ve tasarım üzerine rehber içerikler.",
+      title: "Şömine Rehberi | Seçim, Montaj, Baca ve Bakım | Bifire",
+      description: "Şömine seçiminden montaj ve bacaya, yalıtımdan kullanım ve bakıma: konulara ayrılmış rehberlerle evinize uygun şömineyi doğru sorularla keşfedin.",
     },
   },
   iletisim: {

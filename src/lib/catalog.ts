@@ -47,6 +47,7 @@ export const routes = {
   blog: "/blog",
   post: (slug: string) => `/blog/${slug}`,
   blogTag: (slug: string) => `/blog/etiket/${slug}`,
+  blogCategory: (slug: string) => `/blog/kategori/${slug}`,
   contact: "/iletisim",
   quote: "/teklif-al",
   services: "/hizmetler",

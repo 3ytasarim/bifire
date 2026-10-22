@@ -186,6 +186,8 @@ const postCardSelect = {
   coverImage: true,
   coverImageAlt: true,
   publishedAt: true,
+  category: true,
+  featured: true,
   tags: { select: { name: true, slug: true } },
 } satisfies Prisma.BlogPostSelect;
 
@@ -216,6 +218,15 @@ export async function getPosts(opts: { page?: number; tagSlug?: string } = {}) {
   ]);
   return { posts, total, page, pages: Math.max(1, Math.ceil(total / BLOG_PAGE_SIZE)) };
 }
+
+/** Şömine Rehberi: yayındaki tüm yazılar (kart verisi) — rehber ana sayfası kütüphanesi ve kategori sayfaları. */
+export const getGuidePosts = cache((category?: string) =>
+  prisma.blogPost.findMany({
+    where: { ...publishedWhere(), ...(category ? { category } : {}) },
+    orderBy: [{ featured: "desc" }, { publishedAt: "desc" }, { createdAt: "desc" }],
+    select: postCardSelect,
+  }),
+);
 
 /** Ana sayfa: önce öne çıkanlar, sonra en yeniler. */
 export async function getHomePosts(take = 3) {

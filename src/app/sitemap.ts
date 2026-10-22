@@ -1,4 +1,5 @@
 import type { MetadataRoute } from "next";
+import { GUIDE_CATEGORIES } from "@/content/guide";
 import { prisma } from "@/lib/db";
 import { routes } from "@/lib/catalog";
 import { publishedWhere } from "@/lib/queries";
@@ -53,6 +54,7 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("urunler", routes.products, { lastModified: latest(products, categories), changeFrequency: "weekly", priority: 0.9 }),
     ...(FEATURES.projects ? page("projeler", routes.projects, { lastModified: latest(projects), changeFrequency: "weekly", priority: 0.8 }) : []),
     ...page("blog", routes.blog, { lastModified: latest(posts), changeFrequency: "weekly", priority: 0.7 }),
+    ...GUIDE_CATEGORIES.map((c) => ({ url: canonicalUrl(routes.blogCategory(c.slug)), lastModified: latest(posts), changeFrequency: "weekly" as const, priority: 0.6 })),
     ...page("kurumsal", routes.about, { changeFrequency: "yearly", priority: 0.5 }),
     ...page("iletisim", routes.contact, { changeFrequency: "yearly", priority: 0.5 }),
     ...page("teklif-al", routes.quote, { changeFrequency: "yearly", priority: 0.6 }),

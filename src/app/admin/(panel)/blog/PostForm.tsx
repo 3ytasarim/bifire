@@ -1,7 +1,8 @@
 "use client";
 
 import { AdminForm, SaveBar } from "@/components/admin/AdminForm";
-import { Checkbox, Section, TextArea, TextInput } from "@/components/admin/fields";
+import { Checkbox, Section, SelectInput, TextArea, TextInput } from "@/components/admin/fields";
+import { GUIDE_CATEGORIES } from "@/content/guide";
 import { ImagePicker } from "@/components/admin/ImagePicker";
 import { MultiPicker } from "@/components/admin/MultiPicker";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
@@ -22,6 +23,7 @@ export type PostFormData = {
   featured: boolean;
   publishedAt: string;
   tags: string;
+  category: string | null;
   productIds: string[];
   metaTitle: string | null;
   metaDescription: string | null;
@@ -57,6 +59,9 @@ export function PostForm({ post, products, knownTags }: { post?: PostFormData | 
           </Section>
           <Section title="Kapak görseli">
             <ImagePicker name="coverImage" label="Kapak" defaultValue={p?.coverImage} altName="coverImageAlt" altDefault={p?.coverImageAlt} nameHint={p?.title ?? "blog"} aspect="aspect-[3/2]" />
+          </Section>
+          <Section title="Rehber kategorisi">
+            <SelectInput name="category" label="Kategori" placeholder="— Kategorisiz —" defaultValue={p?.category ?? ""} options={GUIDE_CATEGORIES.map((c) => ({ value: c.slug, label: c.name }))} hint="Şömine Rehberi ana sayfasında ve kategori sayfasında bu başlık altında listelenir." />
           </Section>
           <Section title="Etiketler">
             <TextInput name="tags" label="Etiketler" defaultValue={p?.tags ?? ""} list="blog-tags" hint="Virgülle ayırın." maxLength={1000} />

@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { guideCategoryBySlug } from "@/content/guide";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
@@ -49,7 +50,8 @@ export default async function PostPage({ params }: Props) {
   const path = routes.post(post.slug);
   const crumbs: Crumb[] = [
     { name: "Ana Sayfa", path: "/" },
-    { name: "Blog", path: routes.blog },
+    { name: "Şömine Rehberi", path: routes.blog },
+    ...(guideCategoryBySlug(post.category) ? [{ name: guideCategoryBySlug(post.category)!.name, path: routes.blogCategory(post.category!) }] : []),
     { name: post.title, path },
   ];
   const text = htmlToText(post.content);

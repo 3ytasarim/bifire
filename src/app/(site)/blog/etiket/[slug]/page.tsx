@@ -34,7 +34,7 @@ export default async function TagPage({ params, searchParams }: Props) {
       <PageHero
         crumbs={[
           { name: "Ana Sayfa", path: "/" },
-          { name: "Blog", path: routes.blog },
+          { name: "Şömine Rehberi", path: routes.blog },
           { name: tag.name, path: routes.blogTag(tag.slug) },
         ]}
         eyebrow="Etiket"

@@ -1,4 +1,5 @@
 import Image from "next/image";
+import { guideCategoryBySlug } from "@/content/guide";
 import Link from "next/link";
 import { ArrowRight, ArrowUpRight, MapPin } from "lucide-react";
 import { formatDate, keyFacts, routes } from "@/lib/catalog";
@@ -95,12 +96,12 @@ export function PostCard({ post, sizes = "(min-width: 1024px) 33vw, (min-width: 
   return (
     <article className="lift-card group relative flex h-full flex-col">
       <div className="zoom-media relative aspect-[16/10] bg-bone">
-        {post.coverImage ? <Image src={post.coverImage} alt={post.coverImageAlt || post.title} fill sizes={sizes} className="object-cover" /> : <Placeholder label="Blog" />}
+        {post.coverImage ? <Image src={post.coverImage} alt={post.coverImageAlt || post.title} fill sizes={sizes} className="object-cover" /> : <Placeholder label="Rehber" />}
       </div>
       <div className="flex flex-1 flex-col p-6">
         <p className="flex flex-wrap items-center gap-x-3 gap-y-1 text-[12px] text-stone">
           {post.publishedAt ? <time dateTime={post.publishedAt.toISOString()}>{formatDate(post.publishedAt)}</time> : null}
-          {post.tags[0] ? <span className="rounded-full bg-paper px-2.5 py-0.5 font-medium text-ember-ink">{post.tags[0].name}</span> : null}
+          {guideCategoryBySlug(post.category)?.name ?? post.tags[0]?.name ? <span className="rounded-full bg-paper px-2.5 py-0.5 font-medium text-ember-ink">{guideCategoryBySlug(post.category)?.name ?? post.tags[0]?.name}</span> : null}
         </p>
         <h3 className="mt-3 font-display text-xl leading-snug font-semibold text-ink transition-colors duration-300 group-hover:text-ember-ink">
           <Link href={routes.post(post.slug)} className="after:absolute after:inset-0">
