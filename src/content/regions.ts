@@ -308,3 +308,108 @@ export const DISTRICT_PAGES = DISTRICTS.filter((d): d is District & { page: Dist
 export const districtBySlug = (slug: string) => DISTRICT_PAGES.find((d) => d.slug === slug);
 /** Form seçenekleri: alfabetik İstanbul ilçeleri + İstanbul dışı. */
 export const DISTRICT_OPTIONS = [...DISTRICTS.map((d) => d.name).sort((a, b) => a.localeCompare(b, "tr")), "İstanbul dışı"];
+
+/**
+ * Öncelikli ilçe sayfalarının ek içeriği (ilçeye özgü). `products` → bu tür projelerde öne çıkan ürün sayfaları
+ * (slug); yalnızca var olan, aktif ürünler gösterilir. İstatistik veya "X proje yaptık" gibi doğrulanamayan iddia yok.
+ */
+export type DistrictExtra = {
+  body: string[];
+  focus: { title: string; text: string }[];
+  products: string[];
+  faqs: { q: string; a: string }[];
+};
+
+export const DISTRICT_EXTRA: Record<string, DistrictExtra> = {
+  tuzla: {
+    body: [
+      "Showroomun ilçede olması, karar sürecini somutlaştırır: kaplama numunelerini gün ışığında görebilir, kapak mekanizmalarını yakından inceleyebilir ve ölçü sorularınızı ekibimizle aynı masada konuşabilirsiniz.",
+      "Tuzla'da sahil tarafındaki konutlardan site içi villalara kadar farklı yapı tipleri bulunur. Her projede baca durumu, yerleşim ve kaplama kararı mekânın kendi koşullarına göre ele alınır.",
+    ],
+    focus: [{ title: "Numuneyle karar", text: "Traverten, mermer ve doğal taş numunelerini showroomda karşılaştırıp mekânınızın tonlarına göre seçim yapabilirsiniz." }],
+    products: ["l-tipi-odunlu-somine", "cift-yonlu-odunlu-somine", "orta-odunlu-somine", "bioethanol-somine"],
+    faqs: [
+      { q: "Showroom ziyareti için randevu almalı mıyım?", a: "Görmek istediğiniz örneğin hazır olmasını teyit edebilmek için ziyaretinizi önceden planlamanızı öneririz." },
+      { q: "Tuzla'daki projem için süreç nasıl başlar?", a: "Mekân fotoğrafları, yaklaşık ölçüler ve baca bilgisiyle ön görüşme yapılır; ardından showroom ziyareti ve gerekirse yerinde keşif planlanır." },
+    ],
+  },
+  pendik: {
+    body: [
+      "Pendik'te yeni konut projelerinden müstakil yapılara kadar farklı mekânlarda şömine talebi oluşur. Yeni yapılarda şöminenin inşaat iş programına göre planlanması, sonradan yapılacak değişiklikleri azaltır.",
+      "Showroomun yakın olması sayesinde ön görüşmeyi yüz yüze yapıp malzeme ve model seçimini somutlaştırabilir, ardından keşif ve teklif adımlarına geçebilirsiniz.",
+    ],
+    focus: [{ title: "Yeni yapıda erken planlama", text: "İnşaat sürerken baca güzergâhı ve hazne boşluğunun planlanması, uygulamayı kolaylaştırır ve sonradan yapılacak tadilatı azaltır." }],
+    products: ["duz-odunlu-somine", "l-tipi-odunlu-somine", "elektrikli-somine", "bioethanol-somine"],
+    faqs: [
+      { q: "Yeni yapılan evime şömine ne zaman planlanmalı?", a: "Mümkünse inşaat aşamasında. Baca güzergâhı, hazne boşluğu ve elektrik altyapısı erken planlandığında uygulama daha sorunsuz ilerler." },
+      { q: "Teklif ne zaman netleşir?", a: "Model, nihai ölçü, saha koşulları ve iş kapsamı netleştiğinde yazılı teklif hazırlanır." },
+    ],
+  },
+  kartal: {
+    body: [
+      "Kartal'daki projelerde süreç çoğunlukla ölçü sorularıyla başlar: hazne ölçüsü, cam oranı ve tamamlanmış kaplamanın duvardaki yeri. Bu soruların yanıtı keşifte alınan ölçülerle netleşir.",
+      "Onaylanmış ölçüler üretimin temelidir. Ölçü onayı tamamlandıktan sonra üretim ve montaj takvimi birlikte belirlenir; kendi montaj ekibimiz baca, yalıtım ve kaplama işlerini tek elden koordine eder.",
+    ],
+    focus: [{ title: "Tek elden koordinasyon", text: "Hazne montajı, baca bağlantısı, yalıtım ve kaplama işleri aynı ekip tarafından sırasıyla yürütülür." }],
+    products: ["duz-odunlu-somine", "epi-odunlu-somine", "u-tipi-odunlu-somine", "elektrikli-somine"],
+    faqs: [
+      { q: "Keşifte neler yapılır?", a: "Uygulama yerinin ölçüsü, erişimi ve mevcut durumu incelenir; baca ve yanma havası koşulları değerlendirilir." },
+      { q: "Montaj sırasında başka ekiplerle çalışılabilir mi?", a: "Evet. İş sırası, ölçüler ve sorumluluklar proje özelinde diğer ekiplerle birlikte netleştirilir." },
+    ],
+  },
+  maltepe: {
+    body: [
+      "Maltepe'deki projelerde kaplama seçimi genellikle kararın merkezindedir. Aynı hazne, farklı bir kaplamayla bambaşka bir karakter kazanabilir; bu yüzden numune üzerinden onay önemlidir.",
+      "Kaplama kararı verilirken yalnızca görünüm değil; ısıya dayanım, bakım ihtiyacı ve zemin, mobilya, aydınlatma tonlarıyla uyum da birlikte değerlendirilir.",
+    ],
+    focus: [{ title: "Isıya dayanım ve bakım", text: "Haznenin çevresindeki yüzeyler ısıya dayanıklı malzemelerle yalıtılır; seçilen taşın bakım ihtiyacı teslimde paylaşılır." }],
+    products: ["prizma-odunlu-somine", "duz-odunlu-somine", "l-tipi-odunlu-somine", "epi-odunlu-somine"],
+    faqs: [
+      { q: "Kaplama numunelerini nerede görebilirim?", a: "Tuzla fabrika showroomumuzda kaplama malzemelerini ve numuneleri yerinde inceleyebilirsiniz." },
+      { q: "Mevcut şöminemin kaplamasını yeniletebilir miyim?", a: "Mevcut hazne ve gövdenin durumu incelendikten sonra kaplama yenileme kapsamı değerlendirilebilir." },
+    ],
+  },
+  atasehir: {
+    body: [
+      "Ataşehir'deki daire ve rezidanslarda şömine kararı çoğunlukla bina koşullarıyla başlar: baca imkânı, yönetim kuralları ve çalışma saatleri. Bu koşullar yakıt seçimini ve montaj planını doğrudan etkiler.",
+      "Baca imkânı olmayan mekânlarda elektrikli şömineler pratik bir çözüm sunar; gerçek alev isteniyorsa bioethanol modeller düzenli havalandırma koşuluyla değerlendirilebilir.",
+    ],
+    focus: [{ title: "Televizyon duvarıyla bütünlük", text: "Gömme elektrikli şömine, televizyon ve sabit mobilyalarla aynı duvar tasarımında planlanarak bütüncül bir görünüm elde edilir." }],
+    products: ["elektrikli-somine", "bioethanol-somine", "duz-odunlu-somine", "l-tipi-odunlu-somine"],
+    faqs: [
+      { q: "Bina yönetiminden izin gerekir mi?", a: "Binanın kurallarına bağlıdır. Çalışma saatleri, malzeme taşıma ve olası izinleri bina yönetiminden önceden öğrenmenizi öneririz." },
+      { q: "Rezidansta hangi şömine tipi daha uygun?", a: "Baca yoksa elektrikli veya bioethanol şömineler değerlendirilir. Seçim, kullanım beklentinize ve havalandırma koşullarına göre yapılır." },
+    ],
+  },
+  sariyer: {
+    body: [
+      "Sarıyer'de manzara çoğu zaman yerleşimi belirler. Şöminenin konumu, oturma grubunun hem ateşe hem manzaraya bakabileceği şekilde planlandığında mekân en iyi şekilde kullanılır.",
+      "Villa projelerinde şömine mimari projenin bir parçası olarak ele alınır. Hazne teknik bilgileri, baca ve yalıtım detayları mimar veya iç mimarla erken aşamada paylaşılarak çizimlere işlenir.",
+    ],
+    focus: [{ title: "Manzarayla birlikte yerleşim", text: "Şöminenin konumu, oturma grubunun hem ateşe hem manzaraya bakabileceği şekilde planlanır." }],
+    products: ["orta-odunlu-somine", "u-tipi-odunlu-somine", "cift-yonlu-odunlu-somine", "prizma-odunlu-somine"],
+    faqs: [
+      { q: "Mimari projeye şömine nasıl işlenir?", a: "Hazne teknik bilgileri, baca güzergâhı ve yalıtım detayları mimar veya iç mimarınızla paylaşılır ve çizimlere birlikte işlenir." },
+      { q: "Bahçe şöminesi de planlayabilir misiniz?", a: "Evet. Bahçe şömineleri, ateş çukurları ve bahçe mutfakları da açık alan projesinin parçası olarak planlanabilir." },
+    ],
+  },
+};
+
+/** Bölgeler sayfası: yaka özetleri ve SSS. */
+export const SIDES: { side: Side; text: string }[] = [
+  {
+    side: "Anadolu Yakası",
+    text: "Tuzla fabrika showroomumuz Anadolu Yakası'ndadır. Tuzla, Pendik, Kartal, Maltepe ve Ataşehir gibi ilçelerde ön görüşmeyi showroomda yapıp malzemeleri yerinde görerek ilerlemek daha kolaydır.",
+  },
+  {
+    side: "Avrupa Yakası",
+    text: "Avrupa Yakası'ndaki projelerde ön görüşme fotoğraf, plan ve ölçülerle uzaktan yapılabilir. Malzeme ve model seçimini yerinde görmek isterseniz showroom ziyaretini, ardından yerinde keşif ve montaj takvimini birlikte planlarız.",
+  },
+];
+
+export const REGION_FAQS = [
+  { q: "İlçemde şubeniz var mı?", a: "Hayır. Tüm projeler Tuzla'daki fabrika showroomumuz ve kendi montaj ekibimizle yürütülür. İlçe sayfaları, o bölgedeki projelere nasıl yaklaştığımızı anlatır." },
+  { q: "İstanbul dışındaki projelere hizmet veriyor musunuz?", a: "Proje konumuna göre değerlendirilir. Formda “İstanbul dışı” seçeneğini işaretleyerek projenizi paylaşabilirsiniz; kapsam ve takvim uygunluğu ön görüşmede netleşir." },
+  { q: "Ön görüşme için showroom ziyareti şart mı?", a: "Şart değildir. Ön görüşme fotoğraf, plan ve ölçülerle uzaktan yapılabilir; malzemeleri yerinde görmek isterseniz showroom ziyaretini birlikte planlarız." },
+  { q: "Keşif ve montaj takvimi nasıl belirlenir?", a: "Model, nihai ölçü ve iş kapsamı netleştikten sonra proje konumu ve iş programına göre birlikte planlanır." },
+];

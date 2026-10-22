@@ -15,7 +15,7 @@ export function ProductGallery({ images, name }: { images: GalleryImage[]; name:
   const [lightbox, setLightbox] = useState<number | null>(null);
 
   if (!images.length) {
-    return <div aria-hidden="true" className="ember-placeholder aspect-[4/5] w-full" />;
+    return <div aria-hidden="true" className="ember-placeholder aspect-[4/5] w-full rounded-[1.5rem]" />;
   }
   const main = images[active] ?? images[0]!;
 

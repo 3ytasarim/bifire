@@ -407,3 +407,10 @@
   }
 }
 
+
+/* Mobil sabit çağrı çubuğu görünürken WhatsApp düğmesi çubuğun üstüne kalkar (MobileCta). */
+@media (width < 64rem) {
+  html[data-mobile-cta] .wa-float {
+    bottom: 6.5rem;
+  }
+}

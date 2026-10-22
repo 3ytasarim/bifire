@@ -244,3 +244,10 @@ export function getFormOptions() {
     prisma.product.findMany({ where: activeProduct, orderBy: { name: "asc" }, select: { id: true, name: true, categoryId: true } }),
   ]);
 }
+
+/** Verilen slug sırasıyla aktif ürün kartları (ilçe/hizmet sayfalarındaki önerilen ürünler). Olmayanlar atlanır. */
+export async function getProductsBySlugs(slugs: string[]): Promise<ProductCardData[]> {
+  if (!slugs.length) return [];
+  const rows = await prisma.product.findMany({ where: { ...activeProduct, slug: { in: slugs } }, select: cardProductSelect });
+  return slugs.map((s) => rows.find((r) => r.slug === s)).filter((r): r is ProductCardData => Boolean(r));
+}

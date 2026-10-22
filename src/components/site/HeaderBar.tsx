@@ -77,6 +77,15 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
     setMegaDismissed(true);
   }
 
+  // Menüdeki bir bağlantıya tıklanınca menüler HEMEN kapanır: yeni sayfanın yüklenmesi beklenirse (veya aynı
+  // sayfaya tıklanırsa) menü açık kalıyordu. Odak bırakılır ki focus-within mega menüyü tekrar açmasın.
+  const closeOnLinkClick = (e: React.MouseEvent) => {
+    if (!(e.target as HTMLElement).closest("a")) return;
+    setMegaDismissed(true);
+    setOpen(false);
+    (document.activeElement as HTMLElement | null)?.blur();
+  };
+
   useEffect(() => {
     if (!open) return;
     const onKey = (e: KeyboardEvent) => e.key === "Escape" && setOpen(false);
@@ -179,12 +188,13 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
               <ul className="flex h-full items-center gap-7 xl:gap-10">
                 {renderLinks(NAV_LEFT)}
                 <li className="group/mega h-full" onMouseEnter={() => setMegaDismissed(false)} onFocus={() => setMegaDismissed(false)}>
-                  <Link href="/urunler" className={linkClass(productsActive)} aria-current={pathname === "/urunler" ? "page" : undefined}>
+                  <Link href="/urunler" onClick={closeOnLinkClick} className={linkClass(productsActive)} aria-current={pathname === "/urunler" ? "page" : undefined}>
                     Ürünler
                     <ChevronDown aria-hidden="true" className="h-3.5 w-3.5 transition-transform duration-300 group-hover/mega:rotate-180" />
                   </Link>
                   {categories.length ? (
                     <div
+                      onClick={closeOnLinkClick}
                       className={`invisible absolute inset-x-0 top-full translate-y-2 opacity-0 transition-all duration-300 ease-(--ease-premium) ${
                         megaDismissed
                           ? ""
@@ -273,7 +283,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
           hidden={!open}
           className={`fixed inset-x-0 top-[72px] bottom-0 overflow-y-auto overscroll-contain border-t border-linen bg-white lg:hidden ${hasTopbar ? "md:top-[112px]" : ""}`}
         >
-          <nav aria-label="Mobil menü" className="shell flex min-h-full flex-col py-6">
+          <nav aria-label="Mobil menü" onClick={closeOnLinkClick} className="shell flex min-h-full flex-col py-6">
             <ul className="divide-y divide-linen border-y border-linen">
               {[...NAV_MOBILE_FIRST, ...NAV_LEFT].map((item) => (
                 <li key={item.href}>

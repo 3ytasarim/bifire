@@ -1,10 +1,13 @@
 import type { Metadata } from "next";
+import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
 import { ArrowRight, Check, FileText, Phone } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { PostCard, ProductCard, ProjectCard } from "@/components/site/Cards";
+import { CountUp, ParallaxFrame, Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { FaqList } from "@/components/site/FaqList";
+import { MobileCta } from "@/components/site/MobileCta";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { ProductOptions } from "@/components/site/ProductOptions";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
@@ -22,6 +25,7 @@ import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, faqNode, graph, ids, imageNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/seo/site";
+import { splitHtmlSections } from "@/lib/html-sections";
 import { FEATURES } from "@/lib/features";
 
 export const revalidate = 300;
@@ -95,6 +99,14 @@ export default async function ProductPage({ params }: Props) {
   const bullets = product.features.filter((f) => !f.title);
   const details = product.features.filter((f) => f.title);
   const faqs = product.faqs.map((f) => ({ q: f.question, a: f.answer }));
+  const story = splitHtmlSections(product.description);
+  // Açıklamanın yanında gösterilecek ikinci görsel (kapaktan farklı ilk galeri görseli).
+  const bandImage = gallery.find((g, i) => i > 0) ?? null;
+  // Sayfadaki gerçek veriden türetilen sayılar (uydurma istatistik yok).
+  const stats = [
+    ...optionGroups.map((g) => ({ value: g.values.length, label: `${g.name} seçeneği` })),
+    ...(details.length ? [{ value: details.length, label: "Teknik detay" }] : []),
+  ].slice(0, 4);
 
   return (
     <>
@@ -121,12 +133,12 @@ export default async function ProductPage({ params }: Props) {
         <div className="shell pt-8 pb-16 sm:pt-10 lg:pb-24">
           <Breadcrumbs items={crumbs} />
           <div className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-16">
-            <div className="lg:col-span-7">
+            <Reveal className="lg:col-span-7" y={20}>
               <ProductGallery images={gallery} name={product.name} />
-            </div>
+            </Reveal>
 
             <div className="lg:col-span-5">
-              <div className="lg:sticky lg:top-32">
+              <Reveal className="lg:sticky lg:top-32" delay={0.12} y={20}>
                 <Link href={routes.category(category.slug)} className="eyebrow text-ember-ink hover:text-ink">
                   {category.name}
                 </Link>
@@ -186,31 +198,74 @@ export default async function ProductPage({ params }: Props) {
                     </ul>
                   </div>
                 ) : null}
-              </div>
+              </Reveal>
             </div>
           </div>
         </div>
 
+        {stats.length >= 2 ? (
+          <section aria-label="Model özeti" className="border-y border-sand bg-white">
+            <div className="shell">
+              <dl className={`grid grid-cols-2 divide-sand sm:divide-x ${stats.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
+                {stats.map((st, i) => (
+                  <Reveal key={st.label} delay={i * 0.08} y={16} className="px-2 py-8 sm:px-8 sm:py-10">
+                    <dt className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">{st.label}</dt>
+                    <dd className="mt-3 font-display text-5xl leading-none font-semibold tracking-[-0.03em] text-ink sm:text-6xl">
+                      <CountUp value={st.value} />
+                      <span className="text-ember">.</span>
+                    </dd>
+                  </Reveal>
+                ))}
+              </dl>
+            </div>
+          </section>
+        ) : null}
+
         {product.description || bullets.length ? (
-          <section aria-labelledby="urun-aciklama" className="border-t border-sand bg-bone py-16 sm:py-24">
-            <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
-              <div className="lg:col-span-7">
-                <h2 id="urun-aciklama" className="display-3">
-                  Ürün hakkında
-                </h2>
-                <RichText html={product.description} className="mt-8" />
+          <section aria-labelledby="urun-aciklama" className="relative overflow-hidden bg-bone py-20 sm:py-28">
+            <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.14),transparent_65%)]" />
+            <div className="shell relative">
+              <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
+                <Reveal className={bandImage ? "lg:col-span-5" : "lg:col-span-8"}>
+                  <p className="eyebrow text-ember-ink">Ürün hakkında</p>
+                  <h2 id="urun-aciklama" className="display-2 mt-5 text-balance">
+                    {product.name}
+                  </h2>
+                  {story.lead ? <RichText html={story.lead} className="lead mt-6 text-steel" /> : null}
+                </Reveal>
+                {bandImage ? (
+                  <ParallaxFrame className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)] lg:col-span-7">
+                    <Image src={bandImage.url} alt={bandImage.alt} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
+                  </ParallaxFrame>
+                ) : null}
               </div>
+
+              {story.sections.length ? (
+                <Stagger className="mt-16 grid gap-4 md:grid-cols-2" as="ol">
+                  {story.sections.map((sec, i) => (
+                    <StaggerItem key={sec.title} className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-white p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] sm:p-9">
+                      <span aria-hidden="true" className="absolute top-5 right-6 font-display text-6xl leading-none font-semibold tracking-[-0.04em] text-sand transition-colors duration-500 group-hover:text-ember/40">
+                        {String(i + 1).padStart(2, "0")}
+                      </span>
+                      <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-ember transition-transform duration-700 ease-(--ease-premium) group-hover:scale-x-100" />
+                      <h3 className="max-w-[80%] font-display text-2xl font-semibold text-ink">{sec.title}</h3>
+                      <RichText html={sec.html} className="mt-4 text-[15px]" />
+                    </StaggerItem>
+                  ))}
+                </Stagger>
+              ) : null}
+
               {bullets.length ? (
-                <div className="lg:col-span-5">
+                <div className="mt-16">
                   <h2 className="display-3">Öne çıkan özellikler</h2>
-                  <ul className="mt-8 space-y-4">
+                  <Stagger className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {bullets.map((f) => (
-                      <li key={f.id} className="flex gap-4 border-b border-sand pb-4 text-[16px] text-ink">
+                      <StaggerItem key={f.id} className="flex gap-3 rounded-2xl border border-linen bg-white p-5 text-[15px] font-medium text-ink">
                         <Check aria-hidden="true" className="mt-0.5 h-5 w-5 shrink-0 text-ember" />
                         {f.text}
-                      </li>
+                      </StaggerItem>
                     ))}
-                  </ul>
+                  </Stagger>
                 </div>
               ) : null}
             </div>
@@ -222,18 +277,22 @@ export default async function ProductPage({ params }: Props) {
             <div className="shell">
               <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
                 <div className="lg:col-span-7">
-                  <p className="eyebrow text-ember">Görünmeyen detayların uzmanlığı</p>
+                  <p className="eyebrow text-ember">Detayların uzmanlığı</p>
                   <h2 id="detaylar" className="display-3 mt-5 text-balance text-white">
                     Ateşin ardında, düşünülmüş bir yapı.
                   </h2>
                 </div>
                 <p className="text-[16px] leading-relaxed text-white/70 lg:col-span-5">
-                  Şöminenin karakterini yalnızca dış görünümü belirlemez. Yanma havasından kapak hareketine, camdan hazne malzemelerine kadar her bileşen kullanım deneyiminin bir parçasıdır.
+                  Şöminenin karakterini yalnızca dış görünümü belirlemez. Seçimden uygulamaya kadar her detay, kullanım deneyiminin bir parçasıdır.
                 </p>
               </div>
-              <ol className="mt-12 grid gap-4 md:grid-cols-2">
+              <Stagger as="ol" className="mt-12 grid gap-4 md:grid-cols-2">
                 {details.map((f, i) => (
-                  <li key={f.id} className="flex flex-col rounded-2xl border border-white/10 bg-white/[0.04] p-6 sm:p-8">
+                  <StaggerItem
+                    key={f.id}
+                    className="group relative flex flex-col overflow-hidden rounded-2xl border border-white/10 bg-white/[0.04] p-6 transition-colors duration-500 hover:border-ember/50 hover:bg-white/[0.07] sm:p-8"
+                  >
+                    <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-48 w-48 rounded-full bg-ember/0 blur-3xl transition-colors duration-700 group-hover:bg-ember/25" />
                     <p className="text-[11px] font-semibold tracking-[0.2em] text-ember uppercase tabular-nums">
                       {String(i + 1).padStart(2, "0")}
                       {f.label ? ` / ${f.label}` : ""}
@@ -241,9 +300,9 @@ export default async function ProductPage({ params }: Props) {
                     <h3 className="mt-4 font-display text-xl font-semibold text-white sm:text-2xl">{f.title}</h3>
                     <p className="mt-3 text-[15px] leading-relaxed text-white/70">{f.text}</p>
                     {f.note ? <p className="mt-auto border-t border-white/10 pt-4 text-[13px] font-medium text-white/55">{f.note}</p> : null}
-                  </li>
+                  </StaggerItem>
                 ))}
-              </ol>
+              </Stagger>
             </div>
           </section>
         ) : null}
@@ -366,6 +425,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </section>
       ) : null}
+
+      <MobileCta label={optionGroups.length ? "Seçtiğim model için teklif al" : "Bu ürün için teklif al"} />
 
       {related.length ? (
         <section aria-labelledby="benzer" className="bg-paper py-16 sm:py-24">

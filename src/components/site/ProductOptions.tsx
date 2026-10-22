@@ -1,6 +1,7 @@
 "use client";
 
 import { useEffect, useState } from "react";
+import { motion, MotionConfig } from "motion/react";
 import { selectionStore } from "@/lib/selection-store";
 
 type Group = { name: string; values: string[] };
@@ -25,6 +26,7 @@ export function ProductOptions({ groups }: { groups: Group[] }) {
   }, [summary]);
 
   return (
+    <MotionConfig reducedMotion="user">
     <div className="mt-8 space-y-6">
       {groups.map((g, gi) => (
         <fieldset key={g.name}>
@@ -37,12 +39,13 @@ export function ProductOptions({ groups }: { groups: Group[] }) {
               return (
                 <label
                   key={v}
-                  className={`inline-flex min-h-12 cursor-pointer items-center rounded-full border px-5 text-[15px] font-semibold transition-colors has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ember ${
-                    on ? "border-ink bg-ink text-white" : "border-sand bg-white text-ink hover:border-ink"
+                  className={`relative isolate inline-flex min-h-12 cursor-pointer items-center rounded-full border px-5 text-[15px] font-semibold transition-colors duration-300 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ember ${
+                    on ? "border-ink text-white" : "border-sand bg-white text-ink hover:border-ink"
                   }`}
                 >
                   <input type="radio" name={`opt-${gi}`} value={v} checked={on} onChange={() => setPicked((p) => ({ ...p, [g.name]: v }))} className="sr-only" />
-                  {v}
+                  {on ? <motion.span layoutId={`opt-pill-${gi}`} transition={{ type: "spring", stiffness: 420, damping: 34 }} aria-hidden="true" className="absolute inset-0 -z-10 rounded-full bg-ink" /> : null}
+                  <span className="relative">{v}</span>
                 </label>
               );
             })}
@@ -50,5 +53,6 @@ export function ProductOptions({ groups }: { groups: Group[] }) {
         </fieldset>
       ))}
     </div>
+    </MotionConfig>
   );
 }
