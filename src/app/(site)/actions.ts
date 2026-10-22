@@ -5,7 +5,7 @@ import { prisma } from "@/lib/db";
 import { getIpHash } from "@/lib/request-meta";
 import { isFormRateLimited } from "@/lib/rate-limit";
 import { PROJECT_STAGES, PROJECT_TIMELINES, PROJECT_TOPICS } from "@/content/company";
-import { DISTRICT_OPTIONS } from "@/content/regions";
+import { DISTRICT_OPTIONS } from "@/content/service-areas/names";
 
 export type RequestFormState = {
   status: "idle" | "success" | "error";

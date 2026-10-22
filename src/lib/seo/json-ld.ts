@@ -1,4 +1,5 @@
 import "server-only";
+import { PROVINCE_NAMES } from "@/content/service-areas/names";
 import type { SiteSettings } from "@/lib/settings";
 import { socialLinks } from "@/lib/settings";
 import type { ImageMeta } from "./image-meta";
@@ -43,7 +44,8 @@ export function serializeJsonLd(data: unknown): string {
 
 /** Doğrulanmış firma konumu (fabrika showroom) ve öncelikli hizmet bölgesi — yerel SEO için. */
 const LOCALITY = { locality: "Tuzla", region: "İstanbul", country: "TR" } as const;
-const AREA_SERVED = ["İstanbul", "Tuzla", "Pendik", "Kartal", "Maltepe", "Ataşehir", "Sarıyer"];
+/** Hizmet bölgesi illeri (content/service-areas; Bilecik hariç Marmara'daki 10 il + Ankara). */
+const AREA_SERVED = PROVINCE_NAMES.map((p) => p.name);
 
 export function organizationNode(s: SiteSettings, logo?: { url: string; meta: ImageMeta | null }): Node {
   const site = getSiteUrl();

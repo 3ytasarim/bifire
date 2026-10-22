@@ -15,7 +15,8 @@
     "admin:create": "tsx scripts/create-admin.ts",
     "demo:clear": "tsx scripts/demo-clear.ts",
     "postinstall": "prisma generate",
-    "brand:assets": "tsx scripts/generate-brand-assets.ts"
+    "brand:assets": "tsx scripts/generate-brand-assets.ts",
+    "areas:names": "tsx scripts/generate-area-names.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.1",

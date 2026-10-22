@@ -5,7 +5,7 @@ import { routes } from "@/lib/catalog";
 import { publishedWhere } from "@/lib/queries";
 import { absoluteUrl, canonicalUrl } from "@/lib/seo/site";
 import { FEATURES } from "@/lib/features";
-import { DISTRICTS } from "@/content/regions";
+import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 
 export const revalidate = 3600;
 
@@ -64,7 +64,11 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("showroom", routes.showroom, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("mekan-tasarim", routes.design, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-bolgeleri", routes.regions, { changeFrequency: "monthly", priority: 0.7 }),
-    ...DISTRICTS.flatMap((d) => page(`bolge-${d.slug}`, routes.region(d.slug), { changeFrequency: "monthly", priority: 0.6 })),
+    // İl sayfaları + indekslenen ilçeler (yerel bilgisi eklenmemiş ilçe taslakları noindex, site haritasında yok).
+    ...PROVINCES.flatMap((p) => [
+      ...page(`il-${p.slug}`, routes.province(p.slug), { changeFrequency: "monthly", priority: 0.65 }),
+      ...(isDistrictIndexable(p.slug) ? p.districts.flatMap((d) => page(`bolge-${d.slug}`, routes.region(p.slug, d.slug), { changeFrequency: "monthly", priority: 0.6 })) : []),
+    ]),
     ...categories.map((c) => ({ url: canonicalUrl(routes.category(c.slug)), lastModified: c.updatedAt, changeFrequency: "weekly" as const, priority: 0.8, ...images(c.image) })),
     ...products.map((p) => ({
       url: canonicalUrl(routes.product(p.slug)),

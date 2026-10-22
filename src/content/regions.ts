@@ -1,8 +1,7 @@
 /**
- * Hizmet bölgeleri (yerel SEO). Tek kaynak: form ilçe listesi, /hizmet-bolgeleri sayfası, ana sayfa bölümü.
- * İlçe sayfalarının metinleri `content/districts/` altındadır (39 ilçenin her biri için özgün içerik, kaynak:
- * kullanıcının "Hizmet Bölgeleri" sunumu). İlçe sayfası o ilçede şube olduğu anlamına gelmez; metinlerde de
- * böyle bir iddia yoktur — fabrika showroom Tuzla'dadır.
+ * İstanbul ilçelerinin ek bilgileri (yaka, öncelik, kart cümlesi, önerilen ürünler) ve bölge sayfası ortak metinleri.
+ * Tüm il/ilçe sayfa metinleri `content/service-areas` altındadır (11 il, 175 ilçe). İlçe sayfası o ilçede şube
+ * olduğu anlamına gelmez; metinlerde de böyle bir iddia yoktur — fabrika showroom Tuzla'dadır.
  */
 
 export type Side = "Anadolu Yakası" | "Avrupa Yakası";
@@ -16,8 +15,6 @@ export type District = {
   /** Öncelikli görüşme bölgesi (Tuzla, çevre ilçeler, Sarıyer). */
   priority?: boolean;
 };
-
-export const SHOWROOM_DISTRICT = "Tuzla";
 
 export const DISTRICTS: District[] = [
   { name: "Tuzla", slug: "tuzla", side: "Anadolu Yakası", hint: "Üretim ve fabrika showroom", priority: true },
@@ -62,9 +59,6 @@ export const DISTRICTS: District[] = [
 ];
 
 export const PRIORITY_DISTRICTS = DISTRICTS.filter((d) => d.priority);
-export const districtBySlug = (slug: string) => DISTRICTS.find((d) => d.slug === slug);
-/** Form seçenekleri: alfabetik İstanbul ilçeleri + İstanbul dışı. */
-export const DISTRICT_OPTIONS = [...DISTRICTS.map((d) => d.name).sort((a, b) => a.localeCompare(b, "tr")), "İstanbul dışı"];
 
 /**
  * İlçe sayfasında "bu tür projelerde öne çıkan şömine tipleri" (ürün slug'ları). Yalnızca aktif ürünler gösterilir.
@@ -87,18 +81,6 @@ const DISTRICT_PRODUCTS: Record<string, string[]> = {
 };
 export const districtProducts = (slug: string) => DISTRICT_PRODUCTS[slug] ?? DEFAULT_PRODUCTS;
 
-/** Bölgeler sayfası: yaka özetleri. */
-export const SIDES: { side: Side; text: string }[] = [
-  {
-    side: "Anadolu Yakası",
-    text: "Tuzla fabrika showroomumuz Anadolu Yakası'ndadır. Tuzla, Pendik, Kartal, Maltepe ve Ataşehir gibi ilçelerde ön görüşmeyi showroomda yapıp malzemeleri yerinde görerek ilerlemek daha kolaydır.",
-  },
-  {
-    side: "Avrupa Yakası",
-    text: "Avrupa Yakası'ndaki projelerde ön görüşme fotoğraf, plan ve ölçülerle uzaktan yapılabilir. Malzeme ve model seçimini yerinde görmek isterseniz showroom ziyaretini, ardından yerinde keşif ve montaj takvimini birlikte planlarız.",
-  },
-];
-
 /** Bölgeler sayfası SSS (kaynak: Hizmet Bölgeleri sunumu "Başlamadan önce" + İstanbul dışı). */
 export const REGION_FAQS = [
   {
@@ -115,7 +97,7 @@ export const REGION_FAQS = [
   },
   {
     q: "İstanbul dışındaki projelere hizmet veriyor musunuz?",
-    a: "Proje konumuna göre değerlendirilir. Formda “İstanbul dışı” seçeneğini işaretleyerek projenizi paylaşabilirsiniz; kapsam ve takvim uygunluğu ön görüşmede netleşir.",
+    a: "Bilecik hariç Marmara’daki 10 il ile Ankara’dan gelen talepler proje bazında değerlendirilir. Keşif, sevkiyat, montaj ve satış sonrası kapsamı konum ve ekip uygunluğuyla netleşir. Fabrika showroomumuz Tuzla’dadır.",
   },
 ];
 

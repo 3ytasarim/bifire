@@ -1,18 +1,24 @@
 import { serviceBySlug } from "@/content/company";
-import { DISTRICT_CONTENT } from "@/content/districts";
+import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 
-/** İçerik dosyasındaki hizmet / ilçe sayfası için varsayılan SEO (tek kaynak: content/*). */
+/** İçerik dosyasındaki hizmet sayfası için varsayılan SEO (tek kaynak: content/*). */
 function serviceEntry(slug: string) {
   const s = serviceBySlug(slug)!;
   return { label: `Hizmet: ${s.name}`, path: `/hizmetler/${slug}`, defaults: { title: `${s.metaTitle} | Bifire`, description: s.metaDescription } };
 }
-/** 39 ilçe sayfası: anahtar "bolge-<slug>"; varsayılan başlık H1, açıklama girişin ilk cümleleri. */
-const DISTRICT_ENTRIES = Object.fromEntries(
-  DISTRICT_CONTENT.map((d) => [
-    `bolge-${d.slug}`,
-    { label: `Hizmet bölgesi: ${d.name}`, path: `/hizmet-bolgeleri/${d.slug}`, defaults: { title: `${d.h1} | Bifire`, description: d.metaDescription } },
+type AreaEntry = { label: string; path: string; defaults: { title: string; description: string } };
+/**
+ * Hizmet bölgeleri: 11 il sayfası ("il-<il>") ve indekslenen ilçe sayfaları ("bolge-<ilçe>", şimdilik İstanbul).
+ * Varsayılanlar Word paketindeki SEO başlığı ve meta açıklamasıdır. noindex ilçe taslakları burada değildir.
+ */
+const AREA_ENTRIES = Object.fromEntries(
+  PROVINCES.flatMap((p) => [
+    [`il-${p.slug}`, { label: `Hizmet bölgesi (il): ${p.name}`, path: `/hizmet-bolgeleri/${p.slug}`, defaults: { title: p.page.seoTitle, description: p.page.meta } }],
+    ...(isDistrictIndexable(p.slug)
+      ? p.districts.map((d) => [`bolge-${d.slug}`, { label: `Hizmet bölgesi: ${d.name} (${p.name})`, path: `/hizmet-bolgeleri/${p.slug}/${d.slug}`, defaults: { title: d.seoTitle, description: d.meta } }])
+      : []),
   ]),
-) as Record<`bolge-${string}`, { label: string; path: string; defaults: { title: string; description: string } }>;
+) as Record<`il-${string}` | `bolge-${string}`, AreaEntry>;
 
 /**
  * Admin > SEO menüsünde yönetilen statik sayfalar. `defaults` admin alanları boş bırakıldığında kullanılan
@@ -107,11 +113,11 @@ export const STATIC_PAGES = {
     label: "Hizmet Bölgeleri",
     path: "/hizmet-bolgeleri",
     defaults: {
-      title: "İstanbul Şömine Hizmet Bölgeleri | Bifire",
-      description: "Tuzla fabrika showroomumuzdan İstanbul'un 39 ilçesindeki şömine projelerine: keşif, özel ölçü üretim ve montaj. İlçenizi seçin, projenizi konuşalım.",
+      title: "Şömine Hizmet Bölgeleri | İstanbul, Marmara ve Ankara | Bifire",
+      description: "Tuzla’daki üretim ve fabrika showroomumuzdan İstanbul, Marmara’daki 10 il ve Ankara’daki şömine projelerine: özel tasarım, sevkiyat ve montaj.",
     },
   },
-  ...DISTRICT_ENTRIES,
+  ...AREA_ENTRIES,
 } as const;
 
 export type StaticPageKey = keyof typeof STATIC_PAGES;

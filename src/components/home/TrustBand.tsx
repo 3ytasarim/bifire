@@ -12,7 +12,7 @@ export function TrustBand() {
             Tasarım <span className="text-ember">/</span> Üretim <span className="text-ember">/</span> Montaj
           </p>
           <Link href="/hizmet-bolgeleri" className="mt-3 inline-flex min-h-10 items-center gap-1.5 text-[13px] font-semibold text-ember-ink underline-offset-4 hover:underline">
-            İstanbul hizmet bölgelerimiz <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
+            Hizmet bölgelerimiz <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5" />
           </Link>
         </div>
         <div className="lg:col-span-9">

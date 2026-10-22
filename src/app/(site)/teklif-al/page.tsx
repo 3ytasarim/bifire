@@ -4,7 +4,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { RequestForm } from "@/components/site/RequestForm";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { PROCESS } from "@/content/company";
-import { DISTRICT_OPTIONS } from "@/content/regions";
+import { DISTRICT_OPTIONS } from "@/content/service-areas/names";
 import { routes } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { getFormOptions } from "@/lib/queries";

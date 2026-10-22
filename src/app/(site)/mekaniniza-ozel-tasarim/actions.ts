@@ -4,7 +4,7 @@ import { randomBytes } from "node:crypto";
 import sharp from "sharp";
 import { z } from "zod";
 import { DESIGN_FLUE, DESIGN_PREFERENCES } from "@/content/design-service";
-import { DISTRICT_OPTIONS } from "@/content/regions";
+import { DISTRICT_OPTIONS } from "@/content/service-areas/names";
 import { prisma } from "@/lib/db";
 import { isFormRateLimited } from "@/lib/rate-limit";
 import { getIpHash } from "@/lib/request-meta";

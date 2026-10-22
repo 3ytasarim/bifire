@@ -29,7 +29,7 @@ export async function GET() {
     ...(FEATURES.projects ? [`- [Projeler](${canonicalUrl(routes.projects)})`] : []),
     `- [Hizmetler: Özel ölçü şömine tasarımı ve montaj](${canonicalUrl(routes.services)})`,
     `- [Tuzla Fabrika Showroom](${canonicalUrl(routes.showroom)})`,
-    `- [Hizmet Bölgeleri (İstanbul)](${canonicalUrl(routes.regions)})`,
+    `- [Hizmet Bölgeleri (İstanbul, Marmara ve Ankara)](${canonicalUrl(routes.regions)})`,
     `- [Şömine Rehberi (Blog)](${canonicalUrl(routes.blog)})`,
     `- [Kurumsal](${canonicalUrl(routes.about)})`,
     `- [İletişim](${canonicalUrl(routes.contact)})`,

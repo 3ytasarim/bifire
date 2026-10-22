@@ -9,7 +9,7 @@ import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import { submitDesignRequest, type DesignFormState } from "@/app/(site)/mekaniniza-ozel-tasarim/actions";
 import { Button3D } from "@/components/ui/button-3d";
 import { DESIGN_FLUE, DESIGN_PHOTO_MAX_MB, DESIGN_PHOTO_TYPES, DESIGN_PREFERENCES } from "@/content/design-service";
-import { DISTRICT_OPTIONS } from "@/content/regions";
+import { DISTRICT_OPTION_GROUPS, OTHER_AREA_OPTION } from "@/content/service-areas/names";
 import { inputCls, Select } from "./RequestForm";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
@@ -383,7 +383,7 @@ export function DesignRequest() {
                       {err.email ? <p className="mt-1.5 text-sm text-red-800">{err.email}</p> : null}
                     </div>
                     <div className="sm:col-span-2">
-                      <Select id="dr-district" name="district" label="Proje ilçesi" options={DISTRICT_OPTIONS} defaultValue={v.district} />
+                      <Select id="dr-district" name="district" label="Proje il / ilçesi" groups={DISTRICT_OPTION_GROUPS} options={[OTHER_AREA_OPTION]} defaultValue={v.district} />
                     </div>
                     <div className="sm:col-span-2">
                       <label className="flex gap-3 text-[14px] leading-relaxed text-steel">

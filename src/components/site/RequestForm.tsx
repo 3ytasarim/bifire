@@ -7,7 +7,7 @@ import { ArrowRight, CheckCircle2, ChevronDown, Loader2 } from "lucide-react";
 import { submitRequest, type RequestFormState } from "@/app/(site)/actions";
 import { Button3D } from "@/components/ui/button-3d";
 import { PROJECT_STAGES, PROJECT_TIMELINES, PROJECT_TOPICS } from "@/content/company";
-import { DISTRICT_OPTIONS } from "@/content/regions";
+import { DISTRICT_OPTION_GROUPS, OTHER_AREA_OPTION } from "@/content/service-areas/names";
 import { selectionStore } from "@/lib/selection-store";
 
 type Option = { id: string; name: string };
@@ -26,7 +26,24 @@ function Submit({ label }: { label: string }) {
 export const inputCls =
   "mt-2 block min-h-12 w-full rounded-xl border border-sand bg-white px-4 text-[16px] text-ink transition-colors outline-none placeholder:text-stone/70 focus:border-ink aria-[invalid=true]:border-red-700";
 
-export function Select({ id, name, label, options, defaultValue, placeholder = "Seçiniz" }: { id: string; name: string; label: string; options: readonly string[]; defaultValue?: string; placeholder?: string }) {
+/** Seçim kutusu; `groups` verilirse seçenekler başlıklar altında (optgroup) listelenir, `options` en sona eklenir. */
+export function Select({
+  id,
+  name,
+  label,
+  options = [],
+  groups,
+  defaultValue,
+  placeholder = "Seçiniz",
+}: {
+  id: string;
+  name: string;
+  label: string;
+  options?: readonly string[];
+  groups?: { label: string; options: readonly string[] }[];
+  defaultValue?: string;
+  placeholder?: string;
+}) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-semibold text-ink">
@@ -35,6 +52,15 @@ export function Select({ id, name, label, options, defaultValue, placeholder = "
       <div className="relative">
         <select id={id} name={name} defaultValue={defaultValue ?? ""} className={`${inputCls} appearance-none pr-10`}>
           <option value="">{placeholder}</option>
+          {groups?.map((g) => (
+            <optgroup key={g.label} label={g.label}>
+              {g.options.map((o) => (
+                <option key={o} value={o}>
+                  {o}
+                </option>
+              ))}
+            </optgroup>
+          ))}
           {options.map((o) => (
             <option key={o} value={o}>
               {o}
@@ -227,7 +253,7 @@ export function RequestForm({
           />
           {err.email ? <p id={fieldId("email-err")} className="mt-1.5 text-sm text-red-800">{err.email}</p> : null}
         </div>
-        {district ? <Select id={fieldId("district")} name="district" label="Proje ilçesi" options={DISTRICT_OPTIONS} defaultValue={v.district ?? defaultDistrict} /> : null}
+        {district ? <Select id={fieldId("district")} name="district" label="Proje il / ilçesi" groups={DISTRICT_OPTION_GROUPS} options={[OTHER_AREA_OPTION]} defaultValue={v.district ?? defaultDistrict} /> : null}
         {project ? (
           <>
             <Select id={fieldId("topic")} name="topic" label="İlgilendiğiniz konu" options={PROJECT_TOPICS} defaultValue={v.topic} />
