@@ -14,6 +14,7 @@ export async function getProductForm(id: string): Promise<(ProductFormData & { u
     where: { id },
     include: {
       images: { orderBy: { sortOrder: "asc" } },
+      drawings: { orderBy: { sortOrder: "asc" } },
       specifications: { orderBy: { sortOrder: "asc" } },
       features: { orderBy: { sortOrder: "asc" } },
       options: { orderBy: { sortOrder: "asc" } },
@@ -51,6 +52,7 @@ export async function getProductForm(id: string): Promise<(ProductFormData & { u
     sortOrder: p.sortOrder,
     tags: p.tags.map((t) => t.name).join(", "),
     gallery: p.images.map((i) => ({ url: i.url, alt: i.alt ?? "" })),
+    drawings: p.drawings.map((i) => ({ url: i.url, alt: i.alt ?? "", variant: i.variant ?? "" })),
     specs: p.specifications.map((s) => ({ group: s.group ?? "", label: s.label, value: s.value, unit: s.unit ?? "", variant: s.variant ?? "" })),
     features: p.features.map((f) => ({ label: f.label ?? "", title: f.title ?? "", text: f.text, note: f.note ?? "" })),
     options: p.options.map((o) => ({ group: o.group, value: o.value })),

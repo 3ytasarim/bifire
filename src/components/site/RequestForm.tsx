@@ -67,7 +67,13 @@ export function RequestForm({
   district,
   defaultDistrict,
   project,
+  selectionOverride,
+  idPrefix,
 }: {
+  /** Seçim deposu yerine gönderilecek seçim özeti (ör. seçim rehberi yanıtları + ürün seçimi). */
+  selectionOverride?: string;
+  /** Aynı sayfada iki form varsa alan id çakışmasını önler. */
+  idPrefix?: string;
   type: "CONTACT" | "QUOTE" | "SHOWROOM";
   showroomToggle?: boolean;
   district?: boolean;
@@ -85,7 +91,8 @@ export function RequestForm({
   const startedAt = useRef(0);
   const [categoryId, setCategoryId] = useState(defaultCategoryId ?? "");
   const [reqType, setReqType] = useState(type);
-  const selection = useSyncExternalStore(selectionStore.subscribe, selectionStore.get, selectionStore.getServer);
+  const storeSelection = useSyncExternalStore(selectionStore.subscribe, selectionStore.get, selectionStore.getServer);
+  const selection = selectionOverride ?? storeSelection;
   const statusRef = useRef<HTMLDivElement>(null);
 
   // Formun açılış zamanı (bot tuzağı) ref'te tutulur ve gönderim anında FormData'ya eklenir. DOM alanı
@@ -115,7 +122,7 @@ export function RequestForm({
   const v = state.values ?? {};
   const err = state.errors ?? {};
   const visibleProducts = categoryId ? products.filter((p) => p.categoryId === categoryId) : products;
-  const fieldId = (n: string) => `${type.toLowerCase()}-${n}`;
+  const fieldId = (n: string) => `${idPrefix ?? type.toLowerCase()}-${n}`;
   // Yarım genişlikli alan sayısı tekse son seçim kutusu tam genişliğe yayılır (boş hücre kalmasın).
   const oddHalf = [district, project, project, project].filter(Boolean).length % 2 === 1;
 

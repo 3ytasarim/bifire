@@ -63,6 +63,7 @@ const schema = z.object({
   sortOrder: int(0, 9999),
   tags: z.string().max(1000),
   gallery: jsonArray(z.object({ url: localPath, alt: z.string().trim().max(250) })),
+  drawings: jsonArray(z.object({ url: localPath, alt: z.string().trim().max(250), variant: z.string().trim().max(80).default("") })),
   specs: jsonArray(
     z.object({
       group: z.string().trim().max(80),
@@ -96,15 +97,15 @@ const schema = z.object({
 export async function saveProduct(_prev: ActionState, formData: FormData): Promise<ActionState> {
   await requireAdmin();
   const id = String(formData.get("id") ?? "") || null;
-  const parsed = schema.safeParse({ tags: "", gallery: "", specs: "", features: "", options: "", faqs: "", documents: "", description: "", ...formObject(formData) });
+  const parsed = schema.safeParse({ tags: "", gallery: "", drawings: "", specs: "", features: "", options: "", faqs: "", documents: "", description: "", ...formObject(formData) });
   if (!parsed.success) return zodErrors(parsed.error);
-  const { gallery, specs, features, options, faqs, documents, tags, ...d } = parsed.data;
+  const { gallery, drawings, specs, features, options, faqs, documents, tags, ...d } = parsed.data;
 
   if (!(await prisma.productCategory.findUnique({ where: { id: d.categoryId }, select: { id: true } }))) {
     return fail("Kategori bulunamadı.", { categoryId: "Geçerli bir kategori seçin." });
   }
 
-  const dims = await getMediaDimensions(gallery.map((g) => g.url));
+  const dims = await getMediaDimensions([...gallery, ...drawings].map((g) => g.url));
   const tagList = parseTags(tags);
   const data = { ...d, description: sanitizeRichText(d.description) || null };
 
@@ -120,6 +121,7 @@ export async function saveProduct(_prev: ActionState, formData: FormData): Promi
         await tx.product.update({ where: { id }, data: { ...data, tags: { set: [] } } });
         await Promise.all([
           tx.productImage.deleteMany({ where: { productId: id } }),
+          tx.productDrawing.deleteMany({ where: { productId: id } }),
           tx.productSpecification.deleteMany({ where: { productId: id } }),
           tx.productFeature.deleteMany({ where: { productId: id } }),
           tx.productOption.deleteMany({ where: { productId: id } }),
@@ -136,6 +138,9 @@ export async function saveProduct(_prev: ActionState, formData: FormData): Promi
       });
       await tx.productImage.createMany({
         data: gallery.map((g, i) => ({ productId: pid, url: g.url, alt: g.alt || null, width: dims.get(g.url)?.width ?? null, height: dims.get(g.url)?.height ?? null, sortOrder: i })),
+      });
+      await tx.productDrawing.createMany({
+        data: drawings.map((g, i) => ({ productId: pid, url: g.url, alt: g.alt || null, variant: g.variant || null, width: dims.get(g.url)?.width ?? null, height: dims.get(g.url)?.height ?? null, sortOrder: i })),
       });
       await tx.productSpecification.createMany({
         data: specs

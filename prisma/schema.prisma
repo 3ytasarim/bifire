@@ -299,6 +299,7 @@ model Product {
   // Kategori silinirken içinde ürün varsa engellenir (Restrict) — ürünler asla kaskadla silinmez.
   category       ProductCategory        @relation(fields: [categoryId], references: [id], onDelete: Restrict)
   images         ProductImage[]
+  drawings       ProductDrawing[]
   specifications ProductSpecification[]
   features       ProductFeature[]
   options        ProductOption[]
@@ -313,6 +314,23 @@ model Product {
   @@index([active, sortOrder])
   @@index([featured])
   @@index([createdAt])
+}
+
+/// Ölçü çizimi / ölçülü yerleşim görseli. variant boşsa tüm modeller için, doluysa yalnız o seçenek kombinasyonu ("Seri 01 / 70'lik") veya tek seçenek değeri ("70'lik") için gösterilir.
+model ProductDrawing {
+  id        String   @id @default(cuid())
+  productId String
+  url       String
+  alt       String?
+  variant   String?
+  width     Int?
+  height    Int?
+  sortOrder Int      @default(0)
+  createdAt DateTime @default(now())
+
+  product Product @relation(fields: [productId], references: [id], onDelete: Cascade)
+
+  @@index([productId, sortOrder])
 }
 
 model ProductImage {

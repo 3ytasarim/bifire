@@ -52,7 +52,7 @@ const schema = z.object({
   topic: oneOf(PROJECT_TOPICS),
   projectStage: oneOf(PROJECT_STAGES),
   timeline: oneOf(PROJECT_TIMELINES),
-  selection: optionalText(200),
+  selection: optionalText(600),
   kvkk: z.literal("on", { error: "Devam etmek için KVKK aydınlatma metnini onaylamanız gerekir." }),
 });
 

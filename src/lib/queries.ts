@@ -99,6 +99,7 @@ export const getProductBySlug = cache((slug: string) =>
     include: {
       category: { include: { parent: { select: { name: true, slug: true, active: true } } } },
       images: { orderBy: { sortOrder: "asc" } },
+      drawings: { orderBy: { sortOrder: "asc" } },
       specifications: { orderBy: { sortOrder: "asc" } },
       features: { orderBy: { sortOrder: "asc" } },
       options: { orderBy: { sortOrder: "asc" } },

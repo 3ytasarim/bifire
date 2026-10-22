@@ -40,6 +40,7 @@ export type ProductFormData = {
   sortOrder: number;
   tags: string;
   gallery: GalleryItem[];
+  drawings: GalleryItem[];
   specs: { group: string; label: string; value: string; unit: string; variant: string }[];
   features: { label: string; title: string; text: string; note: string }[];
   options: { group: string; value: string }[];
@@ -82,6 +83,11 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
               <p className="mb-2 text-sm font-medium text-neutral-800">Galeri</p>
               <GalleryEditor name="gallery" defaultValue={p?.gallery ?? []} nameHint={p?.name ?? "urun"} />
             </div>
+            <div>
+              <p className="mb-1 text-sm font-medium text-neutral-800">Ölçü çizimleri</p>
+              <p className="mb-2 text-xs text-neutral-500">Ürün sayfasında “Ölçü çizimleri” bölümünde büyütülebilir olarak gösterilir. Seçenek alanı, çizimin hangi model için geçerli olduğunu belirler (teknik tablodaki “Seçenek” değeriyle aynı yazın).</p>
+              <GalleryEditor name="drawings" defaultValue={p?.drawings ?? []} nameHint={`${p?.name ?? "urun"}-olcu`} withVariant emptyText="Ölçü çizimi yok." />
+            </div>
           </Section>
 
           <Section title="Temel teknik bilgiler" description="Kartlarda ve ürün sayfasının üst kısmında gösterilir. Bilinmeyen alanları boş bırakın.">
@@ -102,7 +108,7 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
 
           <Section
             title="Ek teknik özellikler"
-            description="Şömine türüne özel değerler. Grup adı tabloyu bölümlere ayırır. Değer ölçüye göre değişiyorsa “Seçenek” alanına ilgili seçenek değerini yazın (ör. 70'lik) ve her ölçü için ayrı satır ekleyin: ürün sayfasında seçilen ölçünün değerleri gösterilir ve “Tüm ölçüleri karşılaştır” tablosu oluşur. Seçenek boşsa satır tüm ölçüler için geçerlidir."
+            description="Şömine türüne özel değerler. Grup adı tabloyu bölümlere ayırır. Değer ölçüye göre değişiyorsa “Seçenek” alanına ilgili seçenek değerini yazın (ör. 70'lik) ve her ölçü için ayrı satır ekleyin. Değer birden fazla seçime bağlıysa (ör. Seri + Ölçü) değerleri seçenek grubu sırasıyla “ / ” ile birleştirin: “Seri 01 / 70'lik”: ürün sayfasında seçilen ölçünün değerleri gösterilir ve “Tüm ölçüleri karşılaştır” tablosu oluşur. Seçenek boşsa satır tüm ölçüler için geçerlidir."
           >
             <RowsEditor
               name="specs"

@@ -11,6 +11,10 @@ import { MobileCta } from "@/components/site/MobileCta";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { ProductOptions } from "@/components/site/ProductOptions";
 import { ProductSpecs, VariantHighlights, type SpecItem, type VariantRow } from "@/components/site/ProductSpecs";
+import { ProductDrawings } from "@/components/site/ProductDrawings";
+import { DesignTogether } from "@/components/site/DesignTogether";
+import { DETAIL_NOTE, SPEC_NOTE, WOOD_FAMILIES } from "@/content/wood-collection";
+import { CODE_LABEL, splitVariant } from "@/lib/variants";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
@@ -105,8 +109,15 @@ export default async function ProductPage({ params }: Props) {
   const primaryMeta = primary ? await getImageMeta(primary.url) : null;
   const wa = whatsappHref(settings, `Ürün: ${product.name} — ${absoluteUrl(path)}`);
   const optionGroups = groupOptions(product.options);
-  const variantGroup = optionGroups.find((g) => g.values.some((v) => variantSpecs.some((sp) => sp.variant === v))) ?? null;
-  const variants = variantGroup ? variantGroup.values.filter((v) => variantSpecs.some((sp) => sp.variant === v)) : [];
+  // Modeller: seçeneğe bağlı satırların anahtarları, veri sırasıyla ("70'lik" veya "Seri 01 / 70'lik").
+  // Anahtarın parçaları hangi seçenek gruplarında geçiyorsa model o grupların (sırasıyla) birleşimidir.
+  const variants = [...new Set(variantSpecs.map((sp) => sp.variant!))];
+  const variantGroups = optionGroups.filter((g) => g.values.some((v) => variants.some((k) => splitVariant(k).includes(v)))).map((g) => g.name);
+  const variantGroup = variantGroups.length ? variantGroups : null;
+  const codeRow = variantRows.find((r) => r.label === CODE_LABEL) ?? null;
+  const highlightRows = variantRows.filter((r) => r.label !== CODE_LABEL);
+  const family = WOOD_FAMILIES[product.slug] ?? null;
+  const drawings = product.drawings.map((d, n) => ({ url: d.url, alt: d.alt || `${product.name} — ölçü çizimi ${n + 1}`, variant: d.variant, width: d.width, height: d.height }));
   // Ölçü seçimi olan üründe teknik tablo tek parça ve veri sırasıyla: ölçüye bağlı + sabit satırlar karışık.
   // Marka/Yakıt gibi ürün alanları ayrıca küçük "Genel" tablosunda kalır.
   const specItems: SpecItem[] = [];
@@ -163,6 +174,30 @@ export default async function ProductPage({ params }: Props) {
           <div className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-7" y={20}>
               <ProductGallery images={gallery} name={product.name} />
+              {family ? (
+                <dl className="mt-5 grid gap-3 rounded-[1.5rem] border border-linen bg-white p-5 sm:grid-cols-3 sm:p-6">
+                  <p className="text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase sm:col-span-3">Yerleşim yaklaşımı</p>
+                  {[
+                    ["Görünüm", family.view],
+                    ["Yerleşim", family.place],
+                    ["Tasarım odağı", family.focus],
+                  ].map(([k, v]) => (
+                    <div key={k} className="border-t border-sand pt-3">
+                      <dt className="text-[11px] font-semibold tracking-[0.14em] text-stone uppercase">{k}</dt>
+                      <dd className="mt-1 text-[14px] leading-snug font-semibold text-ink">{v}</dd>
+                    </div>
+                  ))}
+                </dl>
+              ) : null}
+              <DesignTogether
+                productName={product.name}
+                categories={formCategories}
+                products={formProducts}
+                defaultCategoryId={product.categoryId}
+                defaultProductId={product.id}
+                sourcePath={path}
+                initial={product.fuelType === "WOOD" ? { fuel: "wood" } : product.fuelType === "ELECTRIC" ? { fuel: "electric" } : product.fuelType === "BIOETHANOL" ? { fuel: "bio" } : undefined}
+              />
             </Reveal>
 
             <div className="lg:col-span-5">
@@ -185,8 +220,8 @@ export default async function ProductPage({ params }: Props) {
                   </dl>
                 ) : null}
 
-                {optionGroups.length ? <ProductOptions groups={optionGroups} /> : null}
-                {variantGroup && variantRows.length ? <VariantHighlights group={variantGroup.name} fallback={variants[0] ?? ""} rows={variantRows} /> : null}
+                {optionGroups.length ? <ProductOptions groups={optionGroups} combo={variantGroups.length > 1 ? { groups: variantGroups, keys: variants } : undefined} /> : null}
+                {variantGroup && variantRows.length ? <VariantHighlights groups={variantGroups} fallback={variants[0] ?? ""} rows={highlightRows} code={codeRow} /> : null}
 
                 <div className="mt-8 flex flex-col gap-3">
                   <Button3D href="#teklif" tone="ember" size="lg" fullWidth>
@@ -251,22 +286,23 @@ export default async function ProductPage({ params }: Props) {
           </section>
         ) : null}
 
-        {rows.length || variantRows.length ? (
+        {rows.length || variantRows.length || drawings.length ? (
           <section aria-labelledby="teknik" className="bg-paper py-16 sm:py-24">
             <div className="shell grid gap-10 lg:grid-cols-12">
               <Reveal className="lg:col-span-4">
-                <p className="eyebrow text-ember-ink">{variantGroup ? "Ölçüye göre değişen detaylar" : "Teknik bilgiler"}</p>
+                <p className="eyebrow text-ember-ink">{variantGroup ? "Bifire ürün bilgileri" : "Teknik bilgiler"}</p>
                 <h2 id="teknik" className="display-3 mt-5 text-balance">
                   {variantGroup ? "Seçiminizin teknik karşılığı." : "Teknik özellikler"}
                 </h2>
                 <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-steel">
                   {variantGroup
-                    ? "Bir modelin görünümü kadar, projenize nasıl yerleşeceği de önemlidir. Ölçüyü değiştirerek teknik bilgileri karşılaştırabilirsiniz."
+                    ? "Bir modelin görünümü kadar, projenize nasıl yerleşeceği de önemlidir. Seri ve ölçüyü değiştirerek teknik bilgileri ve ölçü çizimlerini inceleyebilirsiniz."
                     : "Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir."}
                 </p>
               </Reveal>
               <div className="lg:col-span-8">
-                <ProductSpecs group={variantGroup?.name ?? null} variants={variants} rows={variantRows} items={specItems} common={specCommon} />
+                <ProductSpecs groups={variantGroups} variants={variants} rows={variantRows} items={specItems} common={specCommon} note={variantGroup ? SPEC_NOTE : undefined} />
+                {variantGroup || drawings.length ? <ProductDrawings drawings={drawings} groups={variantGroups} fallback={variants[0] ?? ""} /> : null}
               </div>
             </div>
           </section>
@@ -328,13 +364,13 @@ export default async function ProductPage({ params }: Props) {
             <div className="shell">
               <div className="grid gap-6 lg:grid-cols-12 lg:items-end">
                 <div className="lg:col-span-7">
-                  <p className="eyebrow text-ember">Detayların uzmanlığı</p>
+                  <p className="eyebrow text-ember">{family ? "Bifire üretim detayları" : "Detayların uzmanlığı"}</p>
                   <h2 id="detaylar" className="display-3 mt-5 text-balance text-white">
-                    Ateşin ardında, düşünülmüş bir yapı.
+                    {family ? "Tasarımın arkasındaki ayrıntılar." : "Ateşin ardında, düşünülmüş bir yapı."}
                   </h2>
                 </div>
                 <p className="text-[16px] leading-relaxed text-white/70 lg:col-span-5">
-                  Şöminenin karakterini yalnızca dış görünümü belirlemez. Seçimden uygulamaya kadar her detay, kullanım deneyiminin bir parçasıdır.
+                  {family?.detailIntro ?? "Şöminenin karakterini yalnızca dış görünümü belirlemez. Seçimden uygulamaya kadar her detay, kullanım deneyiminin bir parçasıdır."}
                 </p>
               </div>
               <Stagger as="ol" className="mt-12 grid gap-4 md:grid-cols-2">
@@ -354,10 +390,10 @@ export default async function ProductPage({ params }: Props) {
                   </StaggerItem>
                 ))}
               </Stagger>
+              {family ? <p className="mt-8 max-w-3xl text-[13px] leading-relaxed text-white/50">{DETAIL_NOTE}</p> : null}
             </div>
           </section>
         ) : null}
-
       </article>
 
       {FEATURES.projects && product.projects.length ? (

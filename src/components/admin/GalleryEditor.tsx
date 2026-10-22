@@ -6,10 +6,13 @@ import { ArrowDown, ArrowUp, ImagePlus, Trash2 } from "lucide-react";
 import { useMarkDirty } from "./AdminForm";
 import { MediaLibrary } from "./MediaLibrary";
 
-export type GalleryItem = { url: string; alt: string };
+export type GalleryItem = { url: string; alt: string; variant?: string };
 
-/** Çoklu görsel (galeri): yükle/kütüphaneden seç, sırala, alt metin gir. Değer `name` gizli alanında JSON. */
-export function GalleryEditor({ name, defaultValue, nameHint }: { name: string; defaultValue: GalleryItem[]; nameHint?: string }) {
+/**
+ * Çoklu görsel (galeri): yükle/kütüphaneden seç, sırala, alt metin gir. Değer `name` gizli alanında JSON.
+ * `withVariant`: her görsele seçenek eşleşmesi alanı (ölçü çizimleri için; boşsa tüm modellerde gösterilir).
+ */
+export function GalleryEditor({ name, defaultValue, nameHint, withVariant, emptyText = "Galeride görsel yok." }: { name: string; defaultValue: GalleryItem[]; nameHint?: string; withVariant?: boolean; emptyText?: string }) {
   const [items, setItemsState] = useState<GalleryItem[]>(defaultValue);
   const [open, setOpen] = useState(false);
   const markDirty = useMarkDirty();
@@ -47,6 +50,20 @@ export function GalleryEditor({ name, defaultValue, nameHint }: { name: string; 
                   onChange={(e) => setItems((prev) => prev.map((x, n) => (n === i ? { ...x, alt: e.target.value } : x)))}
                   className="mt-1 block min-h-10 w-full border border-neutral-300 px-2 text-sm outline-none focus:border-ink"
                 />
+                {withVariant ? (
+                  <>
+                    <label className="mt-2 block text-xs text-neutral-500" htmlFor={`${name}-variant-${i}`}>
+                      Seçenek (ops.) — ör. <code>{"Seri 01 / 90'lık"}</code> veya <code>{"90'lık"}</code>; boşsa tüm modellerde
+                    </label>
+                    <input
+                      id={`${name}-variant-${i}`}
+                      value={it.variant ?? ""}
+                      maxLength={80}
+                      onChange={(e) => setItems((prev) => prev.map((x, n) => (n === i ? { ...x, variant: e.target.value } : x)))}
+                      className="mt-1 block min-h-10 w-full border border-neutral-300 px-2 text-sm outline-none focus:border-ink"
+                    />
+                  </>
+                ) : null}
               </div>
               <div className="flex flex-col gap-1">
                 <button type="button" onClick={() => move(i, -1)} disabled={i === 0} aria-label="Yukarı taşı" className="flex h-8 w-8 items-center justify-center hover:bg-neutral-100 disabled:opacity-30">
@@ -63,7 +80,7 @@ export function GalleryEditor({ name, defaultValue, nameHint }: { name: string; 
           ))}
         </ul>
       ) : (
-        <p className="border border-dashed border-neutral-300 px-4 py-6 text-center text-sm text-neutral-500">Galeride görsel yok.</p>
+        <p className="border border-dashed border-neutral-300 px-4 py-6 text-center text-sm text-neutral-500">{emptyText}</p>
       )}
       <button type="button" onClick={() => setOpen(true)} className="mt-3 inline-flex min-h-10 items-center gap-2 border border-neutral-300 bg-white px-3 text-sm hover:border-ink">
         <ImagePlus aria-hidden="true" className="h-4 w-4" /> Görsel ekle
