@@ -13,7 +13,7 @@ type Group = { name: string; values: string[] };
  * serinin ölçüleri listelenir; seri değişince geçersiz kalan ölçü, o serinin ilk ölçüsüne kayar.
  * Seçim aynı sayfadaki teklif formuna ve teknik tabloya (selectionStore) aktarılır. SSR'da tüm seçenekler HTML'dedir.
  */
-export function ProductOptions({ groups, combo }: { groups: Group[]; combo?: { groups: string[]; keys: string[] } }) {
+export function ProductOptions({ groups, combo, prefix, numberFrom = 1 }: { groups: Group[]; combo?: { groups: string[]; keys: string[] }; prefix?: string; numberFrom?: number }) {
   const comboGroups = combo?.groups ?? [];
   const comboKeys = combo?.keys ?? [];
 
@@ -36,10 +36,8 @@ export function ProductOptions({ groups, combo }: { groups: Group[]; combo?: { g
 
   const [picked, setPicked] = useState<Record<string, string>>(() => normalize(Object.fromEntries(groups.map((g) => [g.name, g.values[0] ?? ""]))));
 
-  const summary = groups
-    .map((g) => (picked[g.name] ? `${g.name}: ${picked[g.name]}` : ""))
-    .filter(Boolean)
-    .join(" · ");
+  // `prefix`: sayfanın sabit seçimi (ör. model sayfasında "Model: BF-U-01-70 (Seri 01 · 70'lik)").
+  const summary = [prefix ?? "", ...groups.map((g) => (picked[g.name] ? `${g.name}: ${picked[g.name]}` : ""))].filter(Boolean).join(" · ");
 
   // Dış depoyu (form) senkronlamak bir yan etkidir; render sırasında yapılmaz.
   useEffect(() => {
@@ -49,11 +47,11 @@ export function ProductOptions({ groups, combo }: { groups: Group[]; combo?: { g
 
   return (
     <MotionConfig reducedMotion="user">
-      <div className="mt-8 space-y-6">
+      <div className={groups.length ? "mt-8 space-y-6" : "hidden"}>
         {groups.map((g, gi) => (
           <fieldset key={g.name}>
             <legend className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">
-              {String(gi + 1).padStart(2, "0")} / {g.name}
+              {String(gi + numberFrom).padStart(2, "0")} / {g.name}
             </legend>
             <div className="mt-3 flex flex-wrap gap-2">
               {g.values

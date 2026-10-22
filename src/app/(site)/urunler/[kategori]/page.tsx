@@ -8,7 +8,9 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { RichText } from "@/components/site/RichText";
 import { routes } from "@/lib/catalog";
-import { getCategoryBySlug, getCategoryProducts } from "@/lib/queries";
+import { getCategoryBySlug, getCategoryProducts, getModelCounts } from "@/lib/queries";
+import { CollectionView } from "@/components/collection/CollectionView";
+import { WOOD_COLLECTION } from "@/content/wood-collection";
 import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, graph, imageNode, itemListNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
@@ -51,6 +53,28 @@ export default async function CategoryPage({ params }: Props) {
   ];
   const imageMeta = category.image ? await getImageMeta(category.image) : null;
   const description = category.metaDescription || deriveDescription(category.description, category.content);
+
+  const jsonLd = (
+    <JsonLd
+      data={graph(
+        category.image ? imageNode(path, { url: category.image, alt: category.imageAlt || category.name, meta: imageMeta }) : null,
+        webPageNode({ path, name: category.name, description, type: "CollectionPage", hasBreadcrumb: true, hasPrimaryImage: Boolean(category.image), dateModified: category.updatedAt }),
+        breadcrumbNode(path, crumbs),
+        products.length ? itemListNode(path, products.map((p) => ({ name: p.name, path: routes.product(p.slug) }))) : null,
+      )}
+    />
+  );
+
+  // Odunlu şömine koleksiyonu: aile kartları (her aile → model listesi → model sayfası).
+  if (category.slug === WOOD_COLLECTION.categorySlug) {
+    const modelCounts = await getModelCounts(products.map((p) => p.id));
+    return (
+      <>
+        {jsonLd}
+        <CollectionView category={category} products={products} modelCounts={modelCounts} crumbs={crumbs} />
+      </>
+    );
+  }
 
   return (
     <>

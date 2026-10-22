@@ -24,6 +24,8 @@ const cardProductSelect = {
 } satisfies Prisma.ProductSelect;
 
 export type ProductCardData = Prisma.ProductGetPayload<{ select: typeof cardProductSelect }>;
+/** Ürün detay sayfası verisi (getProductBySlug). */
+export type ProductDetail = NonNullable<Awaited<ReturnType<typeof getProductBySlug>>>;
 
 const activeProduct = { active: true, category: { active: true } } satisfies Prisma.ProductWhereInput;
 
@@ -74,6 +76,12 @@ export function getCategoryProducts(categoryIds: string[]) {
     orderBy: [{ sortOrder: "asc" }, { createdAt: "desc" }],
     select: cardProductSelect,
   });
+}
+
+/** Koleksiyon aileleri için model sayısı ("Model kodu" satırı olan seçenek kombinasyonları). */
+export async function getModelCounts(productIds: string[]): Promise<Record<string, number>> {
+  const rows = await prisma.productSpecification.groupBy({ by: ["productId"], where: { productId: { in: productIds }, label: "Model kodu", variant: { not: null } }, _count: { _all: true } });
+  return Object.fromEntries(rows.map((r) => [r.productId, r._count._all]));
 }
 
 export function getAllProducts() {

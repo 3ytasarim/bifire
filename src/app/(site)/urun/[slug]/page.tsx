@@ -31,6 +31,8 @@ import { breadcrumbNode, faqNode, graph, ids, imageNode, productNode, webPageNod
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/seo/site";
 import { splitHtmlSections } from "@/lib/html-sections";
+import { FamilyView } from "@/components/collection/FamilyView";
+import { buildModels } from "@/lib/models";
 import { FEATURES } from "@/lib/features";
 
 export const revalidate = 300;
@@ -88,6 +90,10 @@ export default async function ProductPage({ params }: Props) {
     { name: category.name, path: routes.category(category.slug) },
     { name: product.name, path },
   ];
+
+  // Koleksiyon ailesi (modelleri olan ürün, ör. U Tipi): sade aile sayfası; ayrıntı her modelin kendi sayfasında.
+  const models = buildModels(product);
+  if (models.length) return <FamilyView product={product} models={models} crumbs={crumbs} settings={settings} form={{ categories: formCategories, products: formProducts }} />;
 
   const baseAlt = product.coverImageAlt || product.name;
   const gallery = [
