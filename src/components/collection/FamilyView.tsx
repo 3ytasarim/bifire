@@ -134,7 +134,7 @@ export function FamilyView({
             <p className="text-[16px] leading-relaxed text-steel lg:col-span-5">Modeli açın; teknik bilgileri, ölçü çizimlerini ve üretim detaylarını inceleyin.</p>
           </Reveal>
           <div className="mt-10">
-            <ModelGrid models={grid} note={NOTE} />
+            <ModelGrid models={grid} note={NOTE} image={product.coverImage} imageAlt={product.coverImageAlt} />
           </div>
         </div>
       </section>
