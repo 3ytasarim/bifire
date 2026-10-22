@@ -33,7 +33,19 @@ export const TEXT_POSITION_LABELS: Record<TextPosition, string> = {
  */
 export function categoryHref(c: { slug: string; products?: { slug: string }[]; childCount?: number }): string {
   if (!c.childCount && c.products?.length === 1) return `/urun/${c.products[0]!.slug}`;
-  return `/urunler/${c.slug}`;
+  return routes.category(c.slug);
+}
+
+/**
+ * Kategori adres kökü — kategori sayfası Word paketindeki "URL önerisi": şömine modelleri (odunlu ve alt tipleri,
+ * elektrikli, bioethanol) /somine-modelleri/…, bahçe ürünleri ve aksesuarlar /urunler/…. Yeni bir alt kategori
+ * üst kategorisinden kökünü alır (parentSlug); bilinmeyen bağlantılar kategori sayfasında doğru köke yönlenir.
+ */
+export type CategoryBase = "urunler" | "somine-modelleri";
+export const SOMINE_MODEL_ROOTS = ["odunlu-somineler", "elektrikli-somineler", "bioethanol-somineler"];
+const SOMINE_MODEL_SLUGS = new Set([...SOMINE_MODEL_ROOTS, "duz-somineler", "u-tipi-somineler", "l-tipi-somineler", "epi-somineler", "cift-yonlu-somineler", "prizma-somineler", "orta-somineler"]);
+export function categoryBase(slug: string, parentSlug?: string | null): CategoryBase {
+  return SOMINE_MODEL_SLUGS.has(slug) || (parentSlug && SOMINE_MODEL_ROOTS.includes(parentSlug)) ? "somine-modelleri" : "urunler";
 }
 
 /**
@@ -47,7 +59,7 @@ export const routes = {
   home: "/",
   about: "/kurumsal",
   products: "/urunler",
-  category: (slug: string) => `/urunler/${slug}`,
+  category: (slug: string, parentSlug?: string | null) => `/${categoryBase(slug, parentSlug)}/${slug}`,
   product: (slug: string) => `/urun/${slug}`,
   projects: "/projeler",
   project: (slug: string) => `/projeler/${slug}`,

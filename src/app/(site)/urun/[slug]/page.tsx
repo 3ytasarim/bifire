@@ -89,7 +89,7 @@ export default async function ProductPage({ params }: Props) {
     { name: "Ana Sayfa", path: "/" },
     { name: "Ürünler", path: routes.products },
     ...(parent ? [{ name: parent.name, path: routes.category(parent.slug) }] : []),
-    { name: category.name, path: routes.category(category.slug) },
+    { name: category.name, path: routes.category(category.slug, parent?.slug) },
     { name: product.name, path },
   ];
 
@@ -212,7 +212,7 @@ export default async function ProductPage({ params }: Props) {
 
             <div className="lg:col-span-5">
               <Reveal className="lg:sticky lg:top-32" delay={0.12} y={20}>
-                <Link href={routes.category(category.slug)} className="eyebrow text-ember-ink hover:text-ink">
+                <Link href={routes.category(category.slug, parent?.slug)} className="eyebrow text-ember-ink hover:text-ink">
                   {category.name}
                 </Link>
                 <h1 className="display-2 mt-5">{product.name}</h1>
@@ -503,7 +503,7 @@ export default async function ProductPage({ params }: Props) {
               <h2 id="benzer" className="display-3">
                 Benzer modeller
               </h2>
-              <Link href={routes.category(category.slug)} className="link-underline text-[13px] font-semibold tracking-[0.16em] text-ember-ink uppercase">
+              <Link href={routes.category(category.slug, parent?.slug)} className="link-underline text-[13px] font-semibold tracking-[0.16em] text-ember-ink uppercase">
                 Tümü
               </Link>
             </div>

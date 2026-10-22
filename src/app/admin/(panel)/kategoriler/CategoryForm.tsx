@@ -1,6 +1,7 @@
 "use client";
 
 import type { ProductCategory } from "@prisma/client";
+import { categoryBase, routes } from "@/lib/catalog";
 import { AdminForm, SaveBar } from "@/components/admin/AdminForm";
 import { Checkbox, Section, SelectInput, TextArea, TextInput } from "@/components/admin/fields";
 import { ImagePicker } from "@/components/admin/ImagePicker";
@@ -17,7 +18,7 @@ export function CategoryForm({ category, parents }: { category?: ProductCategory
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
           <Section title="Genel">
-            <SlugFields nameLabel="Kategori adı" defaultName={c?.name} defaultSlug={c?.slug} prefix="/urunler/" />
+            <SlugFields nameLabel="Kategori adı" defaultName={c?.name} defaultSlug={c?.slug} prefix={`/${categoryBase(c?.slug ?? "")}/`} />
             <SelectInput
               name="parentId"
               label="Üst kategori"
@@ -43,7 +44,7 @@ export function CategoryForm({ category, parents }: { category?: ProductCategory
           <Section title="SEO içeriği" description="Ürün listesinin altında yayınlanan açıklayıcı içerik (kategori hakkında rehber metin).">
             <RichTextEditor name="content" label="İçerik" defaultValue={c?.content} />
           </Section>
-          <SeoFields defaults={c ?? {}} fallbackTitle={c?.name ?? ""} fallbackDescription={c?.description ?? undefined} urlPath={`/urunler/${c?.slug ?? ""}`} fallbackImage={c?.image} />
+          <SeoFields defaults={c ?? {}} fallbackTitle={c?.name ?? ""} fallbackDescription={c?.description ?? undefined} urlPath={routes.category(c?.slug ?? "")} fallbackImage={c?.image} />
         </div>
         <div className="space-y-6">
           <Section title="Yayın">

@@ -124,7 +124,7 @@ export function guideRecommendation(a: GuideAnswers) {
     const m = WOOD[a.views ?? ""];
     title = m?.title ?? "Odunlu şömine seçenekleri";
     why = m?.why ?? "Hazne biçimini belirlemek için oturma planı, görüş yönleri ve bağlantı koşullarını birlikte ele alalım.";
-    links = m?.links ?? [{ label: "Odunlu şömineler", href: "/urunler/odunlu-somineler" }];
+    links = m?.links ?? [{ label: "Odunlu şömineler", href: "/somine-modelleri/odunlu-somineler" }];
     alternatives = "Yerleşim değişirse diğer odunlu hazne biçimleri de karşılaştırılabilir. Odunlu uygulama uygun bulunmazsa farklı ürün gruplarının koşulları ayrıca incelenebilir.";
   } else if (a.fuel === "electric") {
     title = "Elektrikli şömine seçenekleri";

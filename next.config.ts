@@ -30,6 +30,8 @@ const nextConfig: NextConfig = {
     return [
       { source: "/blog", destination: "/somine-rehberi", permanent: true },
       { source: "/blog/:path*", destination: "/somine-rehberi/:path*", permanent: true },
+      // Kategori kökü tek başına bir sayfa değil: şömine modelleri listesi ürünler sayfasıdır.
+      { source: "/somine-modelleri", destination: "/urunler", permanent: true },
     ];
   },
   async headers() {

@@ -59,7 +59,7 @@ export default async function ModelPage({ params }: Props) {
     { name: "Ana Sayfa", path: "/" },
     { name: "Ürünler", path: routes.products },
     ...(parent ? [{ name: parent.name, path: routes.category(parent.slug) }] : []),
-    { name: category.name, path: routes.category(category.slug) },
+    { name: category.name, path: routes.category(category.slug, parent?.slug) },
     { name: product.name, path: routes.product(product.slug) },
     { name: [model.series, model.size].filter(Boolean).join(" · "), path: modelPath(product.slug, model.slug) },
   ];
