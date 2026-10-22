@@ -88,16 +88,23 @@ export function MediaLibrary({
       <div className="flex h-full flex-col">
         <div className="flex flex-wrap items-center gap-3 border-b border-neutral-200 p-4">
           <h2 className="mr-auto text-base font-semibold">Medya kütüphanesi</h2>
-          <form
-            className="relative"
-            onSubmit={(e) => {
-              e.preventDefault();
-              load(query, 1);
-            }}
-          >
+          {/* Kütüphane çoğunlukla bir admin formunun içinde açılır: iç içe <form> olmaması için arama div + Enter tuşu. */}
+          <div role="search" className="relative">
             <Search aria-hidden="true" className="absolute top-1/2 left-3 h-4 w-4 -translate-y-1/2 text-neutral-400" />
-            <input value={query} onChange={(e) => setQuery(e.target.value)} placeholder="Ara…" aria-label="Görsellerde ara" className="h-10 w-48 border border-neutral-300 pr-3 pl-9 text-sm outline-none focus:border-ink" />
-          </form>
+            <input
+              type="search"
+              value={query}
+              onChange={(e) => setQuery(e.target.value)}
+              onKeyDown={(e) => {
+                if (e.key !== "Enter") return;
+                e.preventDefault();
+                load(query, 1);
+              }}
+              placeholder="Ara…"
+              aria-label="Görsellerde ara"
+              className="h-10 w-48 border border-neutral-300 pr-3 pl-9 text-sm outline-none focus:border-ink"
+            />
+          </div>
           <label className="inline-flex h-10 cursor-pointer items-center gap-2 bg-ink px-4 text-sm font-semibold text-white hover:bg-graphite">
             {uploading ? <Loader2 aria-hidden="true" className="h-4 w-4 animate-spin" /> : <Upload aria-hidden="true" className="h-4 w-4" />}
             {uploading ? "Yükleniyor…" : "Bilgisayardan yükle"}

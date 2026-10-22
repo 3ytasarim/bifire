@@ -23,6 +23,7 @@ export function ImagePicker({
   aspect = "aspect-[16/10]",
   nameHint,
   required,
+  fallback,
 }: {
   name: string;
   label: string;
@@ -33,8 +34,10 @@ export function ImagePicker({
   aspect?: string;
   nameHint?: string;
   required?: boolean;
+  /** Otomatik görsel (ör. site paylaşım görseli): kayıt boşsa bu gösterilir; aynı kalırsa boş gönderilir. */
+  fallback?: string | null;
 }) {
-  const [url, setUrlState] = useState(defaultValue ?? "");
+  const [url, setUrlState] = useState(defaultValue || fallback || "");
   const markDirty = useMarkDirty();
   const setUrl = (v: string) => {
     setUrlState(v);
@@ -70,7 +73,7 @@ export function ImagePicker({
         {label}
         {required ? <span className="text-ember-ink"> *</span> : null}
       </p>
-      <input type="hidden" name={name} value={url} />
+      <input type="hidden" name={name} value={fallback && url === fallback ? "" : url} />
       <div
         className={`relative ${aspect} w-full overflow-hidden border border-dashed ${fieldError ? "border-red-500" : "border-neutral-300"} bg-neutral-50`}
         onDragOver={(e) => e.preventDefault()}

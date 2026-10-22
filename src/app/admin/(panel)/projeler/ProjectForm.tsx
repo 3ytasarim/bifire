@@ -60,7 +60,7 @@ export function ProjectForm({ project, products }: { project?: ProjectFormData |
           <Section title="Kullanılan ürünler" description="Proje sayfasında listelenir; ürün sayfasında da bu proje gösterilir (iç linkleme).">
             <MultiPicker name="productIds" label="Ürünler" options={products} defaultValue={p?.productIds ?? []} />
           </Section>
-          <SeoFields defaults={p ?? {}} fallbackTitle={p?.title ?? ""} fallbackDescription={p?.shortDescription ?? undefined} urlPath={`/projeler/${p?.slug ?? ""}`} />
+          <SeoFields defaults={p ?? {}} fallbackTitle={p?.title ?? ""} fallbackDescription={p?.shortDescription ?? undefined} urlPath={`/projeler/${p?.slug ?? ""}`} fallbackImage={p?.coverImage} />
         </div>
         <div className="space-y-6">
           <Section title="Yayın">

@@ -43,7 +43,7 @@ export function CategoryForm({ category, parents }: { category?: ProductCategory
           <Section title="SEO içeriği" description="Ürün listesinin altında yayınlanan açıklayıcı içerik (kategori hakkında rehber metin).">
             <RichTextEditor name="content" label="İçerik" defaultValue={c?.content} />
           </Section>
-          <SeoFields defaults={c ?? {}} fallbackTitle={c?.name ?? ""} fallbackDescription={c?.description ?? undefined} urlPath={`/urunler/${c?.slug ?? ""}`} />
+          <SeoFields defaults={c ?? {}} fallbackTitle={c?.name ?? ""} fallbackDescription={c?.description ?? undefined} urlPath={`/urunler/${c?.slug ?? ""}`} fallbackImage={c?.image} />
         </div>
         <div className="space-y-6">
           <Section title="Yayın">

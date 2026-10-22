@@ -1,12 +1,8 @@
 import type { Metadata } from "next";
-import { notFound } from "next/navigation";
-import { AreaPageView } from "@/components/areas/AreaPageView";
-import { districtProducts } from "@/content/regions";
-import { districtOf, isDistrictIndexable, PROVINCES, provinceBySlug } from "@/content/service-areas";
-import { routes } from "@/lib/catalog";
-import { getFormOptions, getProductsBySlugs } from "@/lib/queries";
-import { buildMetadata, buildStaticPageMetadata } from "@/lib/seo/metadata";
-import type { StaticPageKey } from "@/lib/seo/static-pages";
+import { notFound, permanentRedirect } from "next/navigation";
+import { PROVINCES } from "@/content/service-areas";
+import { FLAT_REGION_PROVINCE, routes } from "@/lib/catalog";
+import { districtMetadata, DistrictContent, loadDistrict } from "../../district";
 
 export const revalidate = 300;
 export const dynamicParams = false;
@@ -17,28 +13,16 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ il: string; ilce: string }> };
 
-function load(il: string, ilce: string) {
-  const province = provinceBySlug(il);
-  const district = province ? districtOf(province, ilce) : null;
-  return province && district ? { province, district } : null;
-}
-
-/**
- * İndekslenen ilçeler (İstanbul) Admin > SEO'dan yönetilir; diğer ilçe taslakları yerel bilgi eklenene kadar
- * `noindex, follow` (yayın planı — bkz. content/service-areas INDEXED_DISTRICT_PROVINCES).
- */
+/** İl/ilçe hiyerarşisindeki ilçe sayfası. İstanbul ilçeleri düz adreslerine kalıcı yönlenir (routes.region). */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { il, ilce } = await params;
-  const data = load(il, ilce);
-  if (!data) return {};
-  if (isDistrictIndexable(il)) return buildStaticPageMetadata(`bolge-${ilce}` as StaticPageKey);
-  return buildMetadata({ title: data.district.seoTitle, description: data.district.meta, keywords: data.district.keywords, path: routes.region(il, ilce), index: false, follow: true });
+  return il === FLAT_REGION_PROVINCE ? {} : districtMetadata(il, ilce);
 }
 
 export default async function DistrictPage({ params }: Props) {
   const { il, ilce } = await params;
-  const data = load(il, ilce);
+  const data = loadDistrict(il, ilce);
   if (!data) notFound();
-  const [[categories, products], recommended] = await Promise.all([getFormOptions(), getProductsBySlugs(districtProducts(il === "istanbul" ? ilce : ""))]);
-  return <AreaPageView province={data.province} district={data.district} products={recommended} form={{ categories, products }} />;
+  if (il === FLAT_REGION_PROVINCE) permanentRedirect(routes.region(il, ilce));
+  return <DistrictContent data={data} />;
 }

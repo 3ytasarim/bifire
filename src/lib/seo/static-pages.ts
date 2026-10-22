@@ -1,4 +1,5 @@
 import { serviceBySlug } from "@/content/company";
+import { routes } from "@/lib/catalog";
 import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 
 /** İçerik dosyasındaki hizmet sayfası için varsayılan SEO (tek kaynak: content/*). */
@@ -15,7 +16,7 @@ const AREA_ENTRIES = Object.fromEntries(
   PROVINCES.flatMap((p) => [
     [`il-${p.slug}`, { label: `Hizmet bölgesi (il): ${p.name}`, path: `/hizmet-bolgeleri/${p.slug}`, defaults: { title: p.page.seoTitle, description: p.page.meta, keywords: p.page.keywords } }],
     ...(isDistrictIndexable(p.slug)
-      ? p.districts.map((d) => [`bolge-${d.slug}`, { label: `Hizmet bölgesi: ${d.name} (${p.name})`, path: `/hizmet-bolgeleri/${p.slug}/${d.slug}`, defaults: { title: d.seoTitle, description: d.meta, keywords: d.keywords } }])
+      ? p.districts.map((d) => [`bolge-${d.slug}`, { label: `Hizmet bölgesi: ${d.name} (${p.name})`, path: routes.region(p.slug, d.slug), defaults: { title: d.seoTitle, description: d.meta, keywords: d.keywords } }])
       : []),
   ]),
 ) as Record<`il-${string}` | `bolge-${string}`, AreaEntry>;

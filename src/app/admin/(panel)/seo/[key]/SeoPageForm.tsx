@@ -3,11 +3,12 @@
 import { useState } from "react";
 import type { SeoPage } from "@prisma/client";
 import { AdminForm, SaveBar } from "@/components/admin/AdminForm";
-import { Checkbox, CountedInput, Section, TextArea, TextInput } from "@/components/admin/fields";
+import { Checkbox, CountedInput, DefaultedInput, Section, TextInput } from "@/components/admin/fields";
 import { ImagePicker } from "@/components/admin/ImagePicker";
+import { publicUrl } from "@/lib/seo/public-origin";
 import { saveSeoPage } from "../actions";
 
-export function SeoPageForm({ pageKey, path, row, defaults }: { pageKey: string; path: string; row: SeoPage | null; defaults: { title: string; description: string; keywords: string } }) {
+export function SeoPageForm({ pageKey, path, row, defaults }: { pageKey: string; path: string; row: SeoPage | null; defaults: { title: string; description: string; keywords: string; ogImage: string } }) {
   // Alanlar sayfada şu an kullanılan değerle dolu gelir (kayıt yoksa içerik dosyasındaki varsayılan).
   const [title, setTitle] = useState(row?.title?.trim() || defaults.title);
   const [desc, setDesc] = useState(row?.description?.trim() || defaults.description);
@@ -26,12 +27,12 @@ export function SeoPageForm({ pageKey, path, row, defaults }: { pageKey: string;
             <CountedInput name="title" label="Sayfa başlığı (title)" hint={`Silinip boş kaydedilirse varsayılan kullanılır: “${defaults.title}”.`} defaultValue={title} recommended={[30, 60]} value={title} onValue={setTitle} />
             <CountedInput name="description" label="Meta açıklama" multiline hint="Silinip boş kaydedilirse varsayılan açıklama kullanılır." defaultValue={desc} recommended={[70, 160]} value={desc} onValue={setDesc} />
             <TextInput name="keywords" label="Anahtar kelimeler" hint="Virgülle ayırın." defaultValue={row?.keywords?.trim() || defaults.keywords} maxLength={300} />
-            <TextInput name="canonicalUrl" label="Canonical URL" hint="Genelde boş bırakın; yalnızca aynı site içindeki adres kabul edilir." defaultValue={row?.canonicalUrl ?? ""} maxLength={500} />
+            <DefaultedInput name="canonicalUrl" label="Canonical URL" hint="Sayfanın kendi adresi. Yalnızca aynı site içindeki bir adres kabul edilir." stored={row?.canonicalUrl} fallback={publicUrl(path)} maxLength={500} />
           </Section>
           <Section title="Sosyal paylaşım (Open Graph / Twitter)">
-            <TextInput name="ogTitle" label="Paylaşım başlığı" hint="Boşsa sayfa başlığı." defaultValue={row?.ogTitle ?? ""} maxLength={120} />
-            <TextArea name="ogDescription" label="Paylaşım açıklaması" hint="Boşsa meta açıklama." rows={2} defaultValue={row?.ogDescription ?? ""} maxLength={320} />
-            <ImagePicker name="ogImage" label="Paylaşım görseli" defaultValue={row?.ogImage} aspect="aspect-[1200/630]" hint="1200×630 önerilir. Boşsa site varsayılan paylaşım görseli." />
+            <DefaultedInput name="ogTitle" label="Paylaşım başlığı (og:title)" hint="Otomatik: sayfa başlığı." stored={row?.ogTitle} fallback={title} maxLength={120} />
+            <DefaultedInput name="ogDescription" label="Paylaşım açıklaması (og:description)" hint="Otomatik: meta açıklama." stored={row?.ogDescription} fallback={desc} multiline maxLength={320} />
+            <ImagePicker name="ogImage" label="Paylaşım görseli (og:image)" defaultValue={row?.ogImage} fallback={defaults.ogImage} aspect="aspect-[1200/630]" hint="1200×630 önerilir. Otomatik: site paylaşım görseli." />
           </Section>
         </div>
         <div>

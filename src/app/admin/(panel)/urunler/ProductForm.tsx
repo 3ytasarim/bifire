@@ -205,7 +205,7 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
             <DocumentsEditor name="documents" defaultValue={p?.documents ?? []} />
           </Section>
 
-          <SeoFields defaults={p ?? {}} fallbackTitle={p?.name ?? ""} fallbackDescription={p?.shortDescription ?? undefined} urlPath={`/urun/${p?.slug ?? ""}`} />
+          <SeoFields defaults={p ?? {}} fallbackTitle={p?.name ?? ""} fallbackDescription={p?.shortDescription ?? undefined} urlPath={`/urun/${p?.slug ?? ""}`} fallbackImage={p?.coverImage} />
         </div>
 
         <div className="space-y-6">

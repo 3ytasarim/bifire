@@ -1,6 +1,6 @@
 "use client";
 
-import { useId } from "react";
+import { useId, useState } from "react";
 import { useFieldError } from "./AdminForm";
 
 export const inputCls =
@@ -154,6 +154,57 @@ export function CountedInput({
           <input name={name} {...a} defaultValue={defaultValue ?? ""} onChange={(e) => onValue(e.target.value)} className={inputCls} />
         )
       }
+    </Field>
+  );
+}
+
+/**
+ * Otomatik değeri olan alan (canonical, OG başlık/açıklama…): kayıt boşsa sayfada şu an kullanılan değerle dolu
+ * görünür. Değer otomatik değerle aynı bırakılırsa boş gönderilir — böylece içerik/adres değişince otomatik değer
+ * de güncel kalır; yalnızca elle değiştirilen değer saklanır.
+ */
+export function DefaultedInput({
+  name,
+  label,
+  hint,
+  stored,
+  fallback,
+  multiline,
+  maxLength,
+  rows = 2,
+}: {
+  name: string;
+  label: string;
+  hint?: React.ReactNode;
+  stored?: string | null;
+  fallback: string;
+  multiline?: boolean;
+  maxLength?: number;
+  rows?: number;
+}) {
+  const [value, setValue] = useState(stored?.trim() || fallback);
+  const auto = value.trim() === fallback.trim();
+  return (
+    <Field
+      name={name}
+      label={label}
+      hint={
+        <>
+          {auto ? <span className="mr-1.5 inline-block bg-emerald-50 px-1.5 py-0.5 font-medium text-emerald-800">Otomatik</span> : null}
+          {hint}
+        </>
+      }
+    >
+      {(a) => (
+        <>
+          {multiline ? (
+            <textarea {...a} rows={rows} value={value} maxLength={maxLength} onChange={(e) => setValue(e.target.value)} className={`${inputCls} py-2.5`} />
+          ) : (
+            <input {...a} value={value} maxLength={maxLength} onChange={(e) => setValue(e.target.value)} className={inputCls} />
+          )}
+          <input type="hidden" name={name} value={auto ? "" : value} />
+        </>
+      )}
     </Field>
   );
 }

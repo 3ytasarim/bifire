@@ -1,7 +1,8 @@
 "use client";
 
 import { useState } from "react";
-import { Checkbox, CountedInput, TextInput } from "./fields";
+import { publicUrl } from "@/lib/seo/public-origin";
+import { Checkbox, CountedInput, DefaultedInput, TextInput } from "./fields";
 import { ImagePicker } from "./ImagePicker";
 import { Section } from "./fields";
 
@@ -14,11 +15,14 @@ export function SeoFields({
   fallbackTitle,
   fallbackDescription,
   urlPath,
+  fallbackImage,
 }: {
   defaults: { metaTitle?: string | null; metaDescription?: string | null; metaKeywords?: string | null; canonicalUrl?: string | null; ogImage?: string | null; noIndex?: boolean };
   fallbackTitle: string;
   fallbackDescription?: string;
   urlPath: string;
+  /** Paylaşım görseli boşsa kullanılan görsel (kapak). */
+  fallbackImage?: string | null;
 }) {
   const [title, setTitle] = useState(defaults.metaTitle ?? "");
   const [desc, setDesc] = useState(defaults.metaDescription ?? "");
@@ -35,8 +39,8 @@ export function SeoFields({
       <CountedInput name="metaTitle" label="Meta başlık" hint="Boşsa ad kullanılır." defaultValue={defaults.metaTitle} recommended={[30, 60]} value={title} onValue={setTitle} />
       <CountedInput name="metaDescription" label="Meta açıklama" multiline defaultValue={defaults.metaDescription} recommended={[70, 160]} value={desc} onValue={setDesc} />
       <TextInput name="metaKeywords" label="Anahtar kelimeler" hint="Virgülle ayırın. (Google sıralamada kullanmaz; iç arama ve diğer motorlar için.)" defaultValue={defaults.metaKeywords ?? ""} maxLength={300} />
-      <TextInput name="canonicalUrl" label="Canonical URL" hint="Genelde boş bırakın (sayfa kendi adresini kullanır). Yalnızca aynı site içindeki bir adres kabul edilir." defaultValue={defaults.canonicalUrl ?? ""} maxLength={500} />
-      <ImagePicker name="ogImage" label="Paylaşım görseli (OG)" defaultValue={defaults.ogImage} hint="Boşsa kapak görseli kullanılır. Önerilen 1200×630." aspect="aspect-[1200/630]" />
+      <DefaultedInput name="canonicalUrl" label="Canonical URL" hint="Sayfanın kendi adresi (adres değişirse otomatik güncellenir). Yalnızca aynı site içindeki bir adres kabul edilir." stored={defaults.canonicalUrl} fallback={publicUrl(urlPath)} maxLength={500} />
+      <ImagePicker name="ogImage" label="Paylaşım görseli (og:image)" defaultValue={defaults.ogImage} fallback={fallbackImage} hint="Otomatik: kapak görseli. Önerilen 1200×630." aspect="aspect-[1200/630]" />
       <Checkbox name="noIndex" label="Arama motorlarında gösterme (noindex)" hint="İşaretlenirse sayfa sitemap'ten de çıkar." defaultChecked={defaults.noIndex} />
     </Section>
   );

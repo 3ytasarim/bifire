@@ -4,6 +4,7 @@ import Link from "next/link";
 import { useState } from "react";
 import { ArrowUpRight, Search } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
+import { routes } from "@/lib/catalog";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const norm = (s: string) => s.toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
@@ -41,7 +42,7 @@ export function DistrictGrid({ provinceSlug, districts, highlight = [] }: { prov
             return (
               <motion.li key={d.slug} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.3, ease: EASE }}>
                 <Link
-                  href={`/hizmet-bolgeleri/${provinceSlug}/${d.slug}`}
+                  href={routes.region(provinceSlug, d.slug)}
                   className={`group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-2xl border p-5 transition-[border-color,box-shadow] duration-500 hover:shadow-[0_20px_40px_-28px_rgb(12_12_13/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${hi ? "border-ember/40 bg-ember/[0.04] hover:border-ember" : "border-linen bg-white hover:border-ember/40"}`}
                 >
                   <span className="min-w-0">

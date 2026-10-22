@@ -36,6 +36,13 @@ export function categoryHref(c: { slug: string; products?: { slug: string }[]; c
   return `/urunler/${c.slug}`;
 }
 
+/**
+ * İstanbul ilçeleri yayındaki düz adreslerini korur (/hizmet-bolgeleri/adalar-somine); diğer iller il/ilçe
+ * hiyerarşisindedir (/hizmet-bolgeleri/kocaeli/gebze). Kaynak: hizmet bölgeleri Word paketi "Önerilen URL".
+ */
+export const FLAT_REGION_PROVINCE = "istanbul";
+export const FLAT_REGION_SUFFIX = "-somine";
+
 export const routes = {
   home: "/",
   about: "/kurumsal",
@@ -56,7 +63,7 @@ export const routes = {
   design: "/mekaniniza-ozel-tasarim",
   regions: "/hizmet-bolgeleri",
   province: (il: string) => `/hizmet-bolgeleri/${il}`,
-  region: (il: string, ilce: string) => `/hizmet-bolgeleri/${il}/${ilce}`,
+  region: (il: string, ilce: string) => (il === FLAT_REGION_PROVINCE ? `/hizmet-bolgeleri/${ilce}${FLAT_REGION_SUFFIX}` : `/hizmet-bolgeleri/${il}/${ilce}`),
   kvkk: "/kvkk",
   privacy: "/gizlilik-politikasi",
   cookies: "/cerez-politikasi",

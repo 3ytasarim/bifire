@@ -5,6 +5,7 @@ import { useId, useMemo, useRef, useState } from "react";
 import { ArrowUpRight, MapPin, Search } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 import type { ProvinceName } from "@/content/service-areas/names";
+import { routes } from "@/lib/catalog";
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const norm = (s: string) => s.toLocaleLowerCase("tr").normalize("NFD").replace(/[̀-ͯ]/g, "").replace(/ı/g, "i");
@@ -26,7 +27,7 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
     () =>
       provinces.flatMap((p) => [
         { name: p.name, province: "İl sayfası", href: `/hizmet-bolgeleri/${p.slug}`, focus: p.focus, kind: "il" as const },
-        ...p.districts.map((d) => ({ name: d.name, province: p.name, href: `/hizmet-bolgeleri/${p.slug}/${d.slug}`, focus: d.focus, kind: "ilçe" as const })),
+        ...p.districts.map((d) => ({ name: d.name, province: p.name, href: routes.region(p.slug, d.slug), focus: d.focus, kind: "ilçe" as const })),
       ]),
     [provinces],
   );
@@ -163,7 +164,7 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
                   return (
                     <motion.li key={d.slug} initial={{ opacity: 0, y: 8 }} animate={{ opacity: 1, y: 0 }} transition={{ duration: 0.3, delay: Math.min(i * 0.015, 0.4), ease: EASE }}>
                       <Link
-                        href={`/hizmet-bolgeleri/${province.slug}/${d.slug}`}
+                        href={routes.region(province.slug, d.slug)}
                         title={d.focus}
                         className={`inline-flex min-h-11 items-center gap-1.5 rounded-full border px-4 text-[14px] font-semibold transition-colors duration-300 ${pri ? "border-ember/40 bg-ember/[0.06] text-ink hover:border-ember" : "border-linen bg-paper text-ink hover:border-ink"}`}
                       >

@@ -52,7 +52,7 @@ export function PostForm({ post, products, knownTags }: { post?: PostFormData | 
           <Section title="İlgili ürünler" description="Yazının altında “Yazıda bahsi geçen ürünler” olarak gösterilir (iç linkleme).">
             <MultiPicker name="productIds" label="Ürünler" options={products} defaultValue={p?.productIds ?? []} />
           </Section>
-          <SeoFields defaults={p ?? {}} fallbackTitle={p?.title ?? ""} fallbackDescription={p?.excerpt ?? undefined} urlPath={`/somine-rehberi/${p?.slug ?? ""}`} />
+          <SeoFields defaults={p ?? {}} fallbackTitle={p?.title ?? ""} fallbackDescription={p?.excerpt ?? undefined} urlPath={`/somine-rehberi/${p?.slug ?? ""}`} fallbackImage={p?.coverImage} />
         </div>
         <div className="space-y-6">
           <Section title="Yayın">
