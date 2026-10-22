@@ -5,7 +5,7 @@ import { getSiteSettings } from "@/lib/settings";
 import { htmlToText } from "@/lib/sanitize";
 import { getImageMeta } from "./image-meta";
 import { absoluteUrl, canonicalUrl, SITE_LOCALE, SITE_NAME } from "./site";
-import { STATIC_PAGES, type StaticPageKey } from "./static-pages";
+import { pageDefaults, STATIC_PAGES, type StaticPageKey } from "./static-pages";
 
 /** Marka yoksa ekler: "Şömine Hazneleri" → "Şömine Hazneleri | Bifire". Zaten markalıysa dokunmaz. */
 export function withBrand(title: string): string {
@@ -151,7 +151,7 @@ export async function buildStaticPageMetadata(key: StaticPageKey, overrides?: { 
   return buildMetadata({
     title: row?.title?.trim() ? withBrand(row.title) : def.defaults.title,
     description: row?.description?.trim() || def.defaults.description,
-    keywords: row?.keywords,
+    keywords: row?.keywords?.trim() || pageDefaults(key).keywords,
     path: overrides?.path ?? def.path,
     canonical: row?.canonicalUrl,
     image: row?.ogImage,

@@ -7,9 +7,10 @@ import { Checkbox, CountedInput, Section, TextArea, TextInput } from "@/componen
 import { ImagePicker } from "@/components/admin/ImagePicker";
 import { saveSeoPage } from "../actions";
 
-export function SeoPageForm({ pageKey, path, row, defaults }: { pageKey: string; path: string; row: SeoPage | null; defaults: { title: string; description: string } }) {
-  const [title, setTitle] = useState(row?.title ?? "");
-  const [desc, setDesc] = useState(row?.description ?? "");
+export function SeoPageForm({ pageKey, path, row, defaults }: { pageKey: string; path: string; row: SeoPage | null; defaults: { title: string; description: string; keywords: string } }) {
+  // Alanlar sayfada şu an kullanılan değerle dolu gelir (kayıt yoksa içerik dosyasındaki varsayılan).
+  const [title, setTitle] = useState(row?.title?.trim() || defaults.title);
+  const [desc, setDesc] = useState(row?.description?.trim() || defaults.description);
   const shownTitle = title.trim() ? (/bifire/i.test(title) ? title : `${title} | Bifire`) : defaults.title;
   return (
     <AdminForm action={saveSeoPage}>
@@ -22,9 +23,9 @@ export function SeoPageForm({ pageKey, path, row, defaults }: { pageKey: string;
               <p className="mt-1 line-clamp-1 text-lg text-[#1a0dab]">{shownTitle}</p>
               <p className="mt-1 line-clamp-2 text-sm text-neutral-700">{desc.trim() || defaults.description}</p>
             </div>
-            <CountedInput name="title" label="Sayfa başlığı (title)" hint={`Boşsa: “${defaults.title}”.`} defaultValue={row?.title} recommended={[30, 60]} value={title} onValue={setTitle} />
-            <CountedInput name="description" label="Meta açıklama" multiline hint="Boşsa varsayılan açıklama kullanılır." defaultValue={row?.description} recommended={[70, 160]} value={desc} onValue={setDesc} />
-            <TextInput name="keywords" label="Anahtar kelimeler" hint="Virgülle ayırın." defaultValue={row?.keywords ?? ""} maxLength={300} />
+            <CountedInput name="title" label="Sayfa başlığı (title)" hint={`Silinip boş kaydedilirse varsayılan kullanılır: “${defaults.title}”.`} defaultValue={title} recommended={[30, 60]} value={title} onValue={setTitle} />
+            <CountedInput name="description" label="Meta açıklama" multiline hint="Silinip boş kaydedilirse varsayılan açıklama kullanılır." defaultValue={desc} recommended={[70, 160]} value={desc} onValue={setDesc} />
+            <TextInput name="keywords" label="Anahtar kelimeler" hint="Virgülle ayırın." defaultValue={row?.keywords?.trim() || defaults.keywords} maxLength={300} />
             <TextInput name="canonicalUrl" label="Canonical URL" hint="Genelde boş bırakın; yalnızca aynı site içindeki adres kabul edilir." defaultValue={row?.canonicalUrl ?? ""} maxLength={500} />
           </Section>
           <Section title="Sosyal paylaşım (Open Graph / Twitter)">

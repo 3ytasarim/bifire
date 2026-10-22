@@ -24,6 +24,8 @@ export type AreaPage = {
   h1: string;
   seoTitle: string;
   meta: string;
+  /** Word paketindeki "Ana anahtar kelime" + "Yardımcı ifadeler" (virgülle). */
+  keywords?: string;
   /** İçerik odağı (kart ve listelerde kısa açıklama). */
   focus: string;
   intro: string[];

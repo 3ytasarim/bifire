@@ -8,7 +8,7 @@ import { revalidateSite } from "@/lib/admin/revalidate";
 import { requireAdmin } from "@/lib/auth/guard";
 import { prisma } from "@/lib/db";
 import { invalidateRedirectCache, normalizePath } from "@/lib/redirects";
-import { isStaticPageKey, STATIC_PAGES } from "@/lib/seo/static-pages";
+import { isStaticPageKey, pageDefaults, STATIC_PAGES } from "@/lib/seo/static-pages";
 
 const pageSchema = z.object({
   title: optional(120),
@@ -28,10 +28,19 @@ export async function saveSeoPage(_prev: ActionState, formData: FormData): Promi
   if (!isStaticPageKey(key)) return fail("Geçersiz sayfa.");
   const parsed = pageSchema.safeParse(formObject(formData));
   if (!parsed.success) return zodErrors(parsed.error);
+  // Varsayılanla aynı bırakılan alanlar saklanmaz (null): içerik dosyasındaki değer değişirse sayfa onu kullanır.
+  const def = pageDefaults(key);
+  const same = (v: string | null | undefined, d: string | undefined) => (v && d && v.trim() === d.trim() ? null : v);
+  const data = {
+    ...parsed.data,
+    title: same(parsed.data.title, def.title),
+    description: same(parsed.data.description, def.description),
+    keywords: same(parsed.data.keywords, def.keywords),
+  };
   await prisma.seoPage.upsert({
     where: { key },
-    create: { key, label: STATIC_PAGES[key].label, ...parsed.data },
-    update: parsed.data,
+    create: { key, label: STATIC_PAGES[key].label, ...data },
+    update: data,
   });
   revalidateSite();
   redirect(`/admin/seo/${key}?kaydedildi=1`);
