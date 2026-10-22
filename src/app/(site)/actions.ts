@@ -114,8 +114,8 @@ export async function submitRequest(_prev: RequestFormState, formData: FormData)
         topic: d.topic,
         projectStage: d.projectStage,
         timeline: d.timeline,
-        // Seçim yalnızca gerçek bir ürünle birlikte anlamlıdır.
-        selection: product ? d.selection : null,
+        // Ürün seçenekleri ve/veya seçim rehberi yanıtları (rehber ürün sayfası dışından da gönderilebilir).
+        selection: d.selection,
         kvkkConsent: true,
         consentAt: new Date(),
         ipHash,

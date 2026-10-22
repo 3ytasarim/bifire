@@ -4,9 +4,9 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { ChevronDown, Mail, Menu, Phone, X } from "lucide-react";
+import { ChevronDown, Mail, Menu, Phone, Sparkles, X } from "lucide-react";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
-import { FlowButton } from "@/components/ui/flow-button";
+import { BeaconCta } from "@/components/ui/beacon-cta";
 import { SOCIAL_ICONS } from "./Icons";
 import { Wordmark } from "./Wordmark";
 import { FEATURES } from "@/lib/features";
@@ -261,11 +261,27 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
               <Wordmark logoUrl={logoUrl} name={companyName} tone={transparent ? "light" : "dark"} />
             </Link>
 
-            <div className="hidden h-full flex-1 items-center justify-end gap-5 lg:flex xl:gap-10">
+            <div className="hidden h-full flex-1 items-center justify-end gap-4 lg:flex xl:gap-8">
               <nav aria-label="İkincil menü" className="h-full">
-                <ul className="flex h-full items-center gap-5 xl:gap-10">{renderLinks(NAV_RIGHT)}</ul>
+                <ul className="flex h-full items-center gap-4 xl:gap-8">{renderLinks(NAV_RIGHT)}</ul>
               </nav>
-              <FlowButton href="/teklif-al" text="Teklif Al" tone={transparent ? "light" : "ink"} className="shrink-0 whitespace-nowrap" />
+              <div className="flex shrink-0 items-center gap-2">
+                <button
+                  type="button"
+                  data-guide-open=""
+                  aria-haspopup="dialog"
+                  aria-label="Birlikte bulalım — adım adım şömine seçim rehberi"
+                  className={`group hidden min-h-11 shrink-0 items-center gap-2 rounded-full border px-4 text-[13px] font-semibold whitespace-nowrap transition-colors duration-300 min-[1400px]:inline-flex ${
+                    transparent ? "border-white/40 bg-white/10 text-white backdrop-blur-md hover:border-white" : "border-sand bg-white text-ink hover:border-ink"
+                  }`}
+                >
+                  <Sparkles aria-hidden="true" className="h-4 w-4 text-ember transition-transform duration-500 group-hover:rotate-12" />
+                  Birlikte bulalım
+                </button>
+                <BeaconCta href="/teklif-al" tone={transparent ? "light" : "ink"}>
+                  Teklif Al
+                </BeaconCta>
+              </div>
             </div>
 
             <button
@@ -345,6 +361,15 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
             </ul>
 
             <div className="mt-auto space-y-6 pt-10">
+              <button
+                type="button"
+                data-guide-open=""
+                aria-haspopup="dialog"
+                onClick={() => setOpen(false)}
+                className="flex min-h-14 w-full items-center justify-center gap-2 rounded-full border border-sand bg-white text-[15px] font-semibold text-ink"
+              >
+                <Sparkles aria-hidden="true" className="h-4 w-4 text-ember" /> Birlikte bulalım
+              </button>
               <ArrowFillButton href="/teklif-al" tone="ember" size="lg" fullWidth>
                 Teklif Al
               </ArrowFillButton>

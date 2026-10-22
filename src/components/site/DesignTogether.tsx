@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useEffect, useRef, useState, useSyncExternalStore } from "react";
 import { ArrowLeft, ArrowRight, ArrowUpRight, Check, Info, Sparkles, X } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
@@ -15,9 +16,11 @@ type Phase = "wizard" | "result" | "contact";
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /**
- * "Birlikte tasarlayalım": ürün sayfasında görselin altındaki adım adım seçim rehberi (popup). Sonuç bir başlangıç
- * yönüdür; son adımda yanıtlar ve ürün seçimi teklif formuna özet olarak eklenir. Sonucu görmek için iletişim
+ * "Birlikte bulalım / tasarlayalım": adım adım seçim rehberi (popup). Sonuç bir başlangıç yönüdür; son adımda
+ * yanıtlar (ürün sayfasındaysa ürün seçimi de) teklif formuna özet olarak eklenir. Sonucu görmek için iletişim
  * bilgisi gerekmez. Native <dialog>: odak hapsi ve Esc tarayıcıdan gelir.
+ * - `trigger="card"`: ürün sayfasındaki kart düğmesi.
+ * - `trigger="none"`: düğme çizmez; sayfadaki `[data-guide-open]` öğelerine tıklanınca açılır (site geneli, header).
  */
 export function DesignTogether({
   productName,
@@ -27,15 +30,18 @@ export function DesignTogether({
   defaultCategoryId,
   sourcePath,
   initial,
+  trigger = "card",
 }: {
-  productName: string;
+  productName?: string;
   categories: Option[];
   products: (Option & { categoryId: string })[];
-  defaultProductId: string;
-  defaultCategoryId: string;
-  sourcePath: string;
+  defaultProductId?: string;
+  defaultCategoryId?: string;
+  sourcePath?: string;
   initial?: GuideAnswers;
+  trigger?: "card" | "none";
 }) {
+  const pathname = usePathname();
   const ref = useRef<HTMLDialogElement>(null);
   const titleRef = useRef<HTMLHeadingElement>(null);
   const [open, setOpen] = useState(false);
@@ -59,6 +65,18 @@ export function DesignTogether({
     if (!open && d.open) d.close();
   }, [open]);
 
+  // Site geneli kullanım: [data-guide-open] öğeleri (header düğmesi vb.) pencereyi açar.
+  useEffect(() => {
+    if (trigger !== "none") return;
+    const onClick = (e: MouseEvent) => {
+      if (!(e.target as HTMLElement).closest("[data-guide-open]")) return;
+      e.preventDefault();
+      setOpen(true);
+    };
+    document.addEventListener("click", onClick);
+    return () => document.removeEventListener("click", onClick);
+  }, [trigger]);
+
   // Adım değişince ekran okuyucu ve klavye kullanıcısı için odak başlığa taşınır.
   useEffect(() => {
     if (open) titleRef.current?.focus({ preventScroll: true });
@@ -81,11 +99,12 @@ export function DesignTogether({
     goTo("place", -1);
   };
 
-  const guideText = `Birlikte tasarlayalım — ${summary.map((s) => `${s.label}: ${s.value}`).join(" · ")}`;
+  const guideText = `Seçim rehberi — ${summary.map((s) => `${s.label}: ${s.value}`).join(" · ")}`;
   const selection = [productSelection, guideText].filter(Boolean).join(" | ");
 
   return (
     <MotionConfig reducedMotion="user">
+      {trigger === "card" ? (
       <button
         type="button"
         onClick={() => setOpen(true)}
@@ -103,6 +122,7 @@ export function DesignTogether({
         </span>
         <ArrowUpRight aria-hidden="true" className="relative h-5 w-5 shrink-0 text-ink transition-transform duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
       </button>
+      ) : null}
 
       <dialog
         ref={ref}
@@ -246,7 +266,7 @@ export function DesignTogether({
                           <h2 id="dt-title" ref={titleRef} tabIndex={-1} className="mt-3 font-display text-3xl leading-tight font-semibold text-balance text-ink outline-none sm:text-4xl">
                             Projenizi birlikte netleştirelim.
                           </h2>
-                          <p className="mt-4 text-[15px] leading-relaxed text-steel">Seçim özetiniz ve {productName} için yaptığınız seçimler talebinize eklenir. Size dönüp görüşmeyi ya da Tuzla fabrika showroom ziyaretini planlayalım.</p>
+                          <p className="mt-4 text-[15px] leading-relaxed text-steel">{productName ? <>Seçim özetiniz ve {productName} için yaptığınız seçimler talebinize eklenir.</> : "Seçim özetiniz talebinize eklenir."} Size dönüp görüşmeyi ya da Tuzla fabrika showroom ziyaretini planlayalım.</p>
                           <div className="mt-6">
                             <RequestForm
                               type="QUOTE"
@@ -255,7 +275,7 @@ export function DesignTogether({
                               products={products}
                               defaultCategoryId={defaultCategoryId}
                               defaultProductId={defaultProductId}
-                              sourcePath={sourcePath}
+                              sourcePath={sourcePath ?? pathname ?? "/"}
                               selectionOverride={selection}
                               submitLabel="Görüşme talebimi gönder"
                               showroomToggle
@@ -290,7 +310,7 @@ export function DesignTogether({
                       </div>
                     ))}
                   </dl>
-                  {productSelection ? (
+                  {productSelection && productName ? (
                     <p className="mt-4 text-[13px] leading-relaxed text-steel">
                       <span className="font-semibold text-ink">{productName}:</span> {productSelection}
                     </p>
