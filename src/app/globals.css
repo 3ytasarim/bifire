@@ -202,6 +202,17 @@
   .rich :where(a) {
     @apply underline-offset-4;
   }
+  /* Uzun metin kartlarında (SeoArticle) madde işaretleri: halkalı ember nokta */
+  .article-card .rich :where(ul) {
+    @apply list-none pl-0;
+  }
+  .article-card .rich :where(ul > li) {
+    @apply relative pl-7;
+  }
+  .article-card .rich :where(ul > li)::before {
+    content: "";
+    @apply absolute top-[0.7em] left-1 h-2 w-2 rounded-full bg-ember shadow-[0_0_0_5px_rgb(224_105_31/0.15)];
+  }
 }
 
 /*

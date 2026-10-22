@@ -85,3 +85,12 @@ export function ParallaxFrame({ children, className }: { children: ReactNode; cl
     </MotionConfig>
   );
 }
+
+/** Görünür alana girince soldan sağa uzayan ince vurgu çizgisi (dekoratif). */
+export function GrowLine({ className }: { className?: string }) {
+  return (
+    <MotionConfig reducedMotion="user">
+      <motion.span aria-hidden="true" initial={{ scaleX: 0 }} whileInView={{ scaleX: 1 }} viewport={{ once: true, amount: 0.6 }} transition={{ duration: 1.1, ease: EASE }} className={`block origin-left ${className ?? ""}`} />
+    </MotionConfig>
+  );
+}
