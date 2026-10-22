@@ -11,7 +11,8 @@ import { formatDate, readingMinutes, routes } from "@/lib/catalog";
 import { getPostBySlug, getRelatedPosts } from "@/lib/queries";
 import { htmlToText } from "@/lib/sanitize";
 import { getImageMeta } from "@/lib/seo/image-meta";
-import { articleNode, breadcrumbNode, graph, ids, imageNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
+import { articleNode, breadcrumbNode, faqNode, graph, ids, imageNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
+import { extractFaq } from "@/lib/html-sections";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 
 export const revalidate = 300;
@@ -82,6 +83,7 @@ export default async function PostPage({ params }: Props) {
             keywords: post.tags.map((t) => t.name),
             wordCount: text ? text.split(/\s+/).length : undefined,
           }),
+          faqNode(path, extractFaq(post.content)),
         )}
       />
 
