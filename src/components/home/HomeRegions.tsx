@@ -1,47 +1,55 @@
 import Link from "next/link";
-import { ArrowUpRight, MapPin } from "lucide-react";
+import { ArrowUpRight } from "lucide-react";
+import { Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { PRIORITY_DISTRICTS } from "@/content/regions";
 import { PROVINCE_NAMES } from "@/content/service-areas/names";
 import { routes } from "@/lib/catalog";
+import { RegionsMap } from "./RegionsMap";
 
-/** Ana sayfa yerel SEO bölümü: Tuzla merkezli öncelikli İstanbul ilçeleri + tüm hizmet bölgeleri (11 il) bağlantısı. */
+/**
+ * Ana sayfa yerel SEO bölümü: Tuzla merkezli animasyonlu rota haritası (11 il) + öncelikli İstanbul ilçeleri.
+ * Tüm bağlantılar gerçek <a> (il ve ilçe sayfaları), harita yalnızca görsel katmandır.
+ */
 export function HomeRegions() {
   const districtCount = PROVINCE_NAMES.reduce((n, p) => n + p.districts.length, 0);
   return (
-    <section aria-labelledby="home-regions" className="bg-white py-20 sm:py-28">
-      <div className="shell grid gap-12 lg:grid-cols-12 lg:gap-16">
+    <section aria-labelledby="home-regions" className="relative overflow-hidden bg-white py-20 sm:py-28">
+      <div className="shell grid items-center gap-12 lg:grid-cols-12 lg:gap-14">
         <div className="lg:col-span-5">
-          <p className="eyebrow reveal text-ember-ink">Hizmet bölgeleri</p>
-          <h2 id="home-regions" className="display-2 reveal mt-5 text-balance text-ink">
-            Tuzla&apos;dan projenize, Marmara&apos;dan Ankara&apos;ya.
-          </h2>
-          <p className="reveal mt-6 max-w-md text-[17px] leading-relaxed text-steel">
-            Önceliğimiz Tuzla ve çevresi, Anadolu Yakası ve Sarıyer. Marmara’daki 10 il ve Ankara’daki projeleri de kapsam ve takvim uygunluğuyla birlikte değerlendiriyoruz.
-          </p>
-          <div className="reveal mt-10">
+          <Reveal>
+            <p className="eyebrow text-ember-ink">Hizmet bölgeleri</p>
+            <h2 id="home-regions" className="display-2 mt-5 text-balance text-ink">
+              Tuzla&apos;dan projenize, Marmara&apos;dan Ankara&apos;ya.
+            </h2>
+            <p className="mt-6 max-w-md text-[17px] leading-relaxed text-steel">
+              Önceliğimiz Tuzla ve çevresi, Anadolu Yakası ve Sarıyer. Marmara’daki 10 il ve Ankara’daki projeleri de kapsam ve takvim uygunluğuyla birlikte değerlendiriyoruz.
+            </p>
+          </Reveal>
+          <Stagger as="ul" className="mt-8 flex flex-wrap gap-2" gap={0.06}>
+            {PRIORITY_DISTRICTS.map((d) => (
+              <StaggerItem key={d.slug}>
+                <Link
+                  href={routes.region("istanbul", d.slug)}
+                  title={d.hint}
+                  className="group inline-flex min-h-11 items-center gap-2 rounded-full border border-linen bg-paper px-4 text-[14px] font-semibold text-ink transition-[border-color,background-color] duration-300 hover:border-ember/50 hover:bg-white"
+                >
+                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-ember transition-transform duration-300 group-hover:scale-150" />
+                  {d.name}
+                  <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 text-ember-ink opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
+                </Link>
+              </StaggerItem>
+            ))}
+          </Stagger>
+          <Reveal className="mt-10" delay={0.2}>
             <ArrowFillButton href={routes.regions} tone="ink">
               {`${PROVINCE_NAMES.length} il · ${districtCount} ilçe`}
             </ArrowFillButton>
-          </div>
+          </Reveal>
         </div>
-        <ul className="grid gap-3 sm:grid-cols-2 lg:col-span-7">
-          {PRIORITY_DISTRICTS.map((d) => (
-            <li key={d.slug} className="reveal">
-              <Link href={routes.region("istanbul", d.slug)} className="group flex h-full items-start justify-between gap-4 rounded-2xl border border-linen bg-paper p-6 transition-colors hover:border-ember/50">
-                <span>
-                  <span className="inline-flex items-center gap-1.5 text-[11px] font-semibold tracking-[0.18em] text-stone uppercase">
-                    <MapPin aria-hidden="true" className="h-3.5 w-3.5 text-ember" />
-                    {d.side}
-                  </span>
-                  <span className="mt-3 block font-display text-2xl font-semibold text-ink">{d.name}</span>
-                  <span className="mt-1 block text-[14px] leading-relaxed text-steel">{d.hint}</span>
-                </span>
-                <ArrowUpRight aria-hidden="true" className="mt-1 h-5 w-5 shrink-0 text-ember-ink transition-transform group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-              </Link>
-            </li>
-          ))}
-        </ul>
+        <Reveal className="lg:col-span-7" delay={0.1} y={24}>
+          <RegionsMap provinces={PROVINCE_NAMES.map((p) => ({ name: p.name, slug: p.slug, count: p.districts.length }))} />
+        </Reveal>
       </div>
     </section>
   );

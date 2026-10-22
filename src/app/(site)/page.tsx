@@ -6,7 +6,7 @@ import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { HeroFallback } from "@/components/home/HeroFallback";
 import { HeroSlider } from "@/components/home/HeroSlider";
 import { HomeRegions } from "@/components/home/HomeRegions";
-import { TrustBand } from "@/components/home/TrustBand";
+import { TrustFlow } from "@/components/home/TrustFlow";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { Journal } from "@/components/home/Journal";
@@ -33,7 +33,7 @@ export default async function HomePage() {
   const [slides, categories, featured, projects, posts, settings] = await Promise.all([
     getHeroSlides(),
     getNavCategories(),
-    getFeaturedProducts(8),
+    FEATURES.homeFeaturedProducts ? getFeaturedProducts(8) : Promise.resolve([]),
     FEATURES.projects ? getProjects({ featured: true, take: 5 }) : Promise.resolve([]),
     getHomePosts(3),
     getSiteSettings(),
@@ -80,10 +80,10 @@ export default async function HomePage() {
       ) : (
         <HeroFallback />
       )}
-      <TrustBand />
+      <TrustFlow />
       <CategoryShowcase categories={categories} />
       <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} caption={settings.aboutImageCaption} video={settings.aboutVideo} />
-      <FeaturedProducts products={featured} />
+      {FEATURES.homeFeaturedProducts ? <FeaturedProducts products={featured} /> : null}
       <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} video={settings.featureVideo} />
       {FEATURES.projects ? <FeaturedProjects projects={projects} /> : null}
       <ProcessSteps eyebrow="Projenizin adımları" title="İlk fikirden uygulamaya." id="home-process" />
