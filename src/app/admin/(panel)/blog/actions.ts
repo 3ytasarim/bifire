@@ -9,7 +9,7 @@ import { routes } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import { recordSlugChange } from "@/lib/redirects";
 import { sanitizeRichText } from "@/lib/sanitize";
-import { GUIDE_CATEGORIES } from "@/content/guide";
+import { GUIDE_CATEGORIES, NEXT_STEPS } from "@/content/guide";
 
 const schema = z.object({
   title: required("Başlık", 200),
@@ -33,17 +33,38 @@ const schema = z.object({
     .string()
     .trim()
     .transform((v) => (GUIDE_CATEGORIES.some((c) => c.slug === v) ? v : null)),
+  subtopic: optional(80),
+  guideNo: z
+    .string()
+    .trim()
+    .refine((v) => v === "" || (/^d+$/.test(v) && Number(v) >= 1 && Number(v) <= 9999), "Geçerli bir numara girin.")
+    .transform((v) => (v ? Number(v) : null)),
+  relatedNos: z
+    .string()
+    .trim()
+    .max(60)
+    .refine((v) => v === "" || /^d+(s*,s*d+)*$/.test(v), "Numaraları virgülle ayırın (ör. 009, 056).")
+    .transform((v) => v || null),
+  nextStep: z
+    .string()
+    .trim()
+    .transform((v) => (v in NEXT_STEPS ? v : null)),
   ...seoShape,
 });
 
 export async function savePost(_prev: ActionState, formData: FormData): Promise<ActionState> {
   const user = await requireAdmin();
   const id = String(formData.get("id") ?? "") || null;
-  const parsed = schema.safeParse({ content: "", tags: "", publishedAt: "", category: "", ...formObject(formData) });
+  const parsed = schema.safeParse({ content: "", tags: "", publishedAt: "", category: "", subtopic: "", guideNo: "", relatedNos: "", nextStep: "", ...formObject(formData) });
   if (!parsed.success) return zodErrors(parsed.error);
   const { tags, ...d } = parsed.data;
   const content = sanitizeRichText(d.content);
   if (d.published && !content) return fail("Yayınlanacak yazının içeriği boş olamaz.", { content: "İçerik yazın veya taslak olarak kaydedin." });
+
+  if (d.guideNo) {
+    const clash = await prisma.blogPost.findFirst({ where: { guideNo: d.guideNo, ...(id ? { id: { not: id } } : {}) }, select: { title: true } });
+    if (clash) return fail(`Bu makale numarası başka bir yazıda kullanılıyor: ${clash.title}`, { guideNo: "Numara kullanımda." });
+  }
 
   const tagList = parseTags(tags);
   const productIds = ids(formData, "productIds");

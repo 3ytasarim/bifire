@@ -10,7 +10,7 @@ import { RichText } from "@/components/site/RichText";
 import { routes } from "@/lib/catalog";
 import { getCategoryBySlug, getCategoryProducts, getModelCounts } from "@/lib/queries";
 import { CollectionView } from "@/components/collection/CollectionView";
-import { WOOD_COLLECTION } from "@/content/wood-collection";
+import { collectionCopy } from "@/lib/collection";
 import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, graph, imageNode, itemListNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
@@ -66,19 +66,10 @@ export default async function CategoryPage({ params }: Props) {
   );
 
   // Alt kategorili ürün grupları (Odunlu, Bahçe ve Tamamlayıcı…): koleksiyon düzeni — her ürün ailesi büyük kart.
-  // Odunlu koleksiyonun özel metinleri var; diğerleri kategori adı ve açıklamasını kullanır.
+  // Metinler Admin > Kategoriler'den (hero başlığı, seçim başlığı/metni, yaklaşım bandı); boşsa genel metin.
   if (category.children.length && products.length) {
     const modelCounts = await getModelCounts(products.map((p) => p.id));
-    const wood = category.slug === WOOD_COLLECTION.categorySlug;
-    const copy = wood
-      ? WOOD_COLLECTION
-      : {
-          eyebrow: `Bifire · ${category.parent?.name ?? "Ürün grubu"}`,
-          title: category.name,
-          intro: category.description,
-          pickTitle: "İhtiyacınıza uygun çözümü seçin.",
-          pickText: "Ürünü kullanım alanınız ve beklentinizle birlikte değerlendirelim; ölçü, malzeme ve uygulama kapsamını projeniz üzerinden netleştirelim.",
-        };
+    const copy = collectionCopy(category);
     return (
       <>
         {jsonLd}

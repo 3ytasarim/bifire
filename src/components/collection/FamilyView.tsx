@@ -10,7 +10,7 @@ import { RichText } from "@/components/site/RichText";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
-import { modelName, WOOD_FAMILIES } from "@/content/wood-collection";
+import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import { splitHtmlSections } from "@/lib/html-sections";
 import { formatSpec, keyValues, modelPath, type CollectionModel } from "@/lib/models";
@@ -34,15 +34,17 @@ export function FamilyView({
   crumbs,
   settings,
   form,
+  siblings,
 }: {
   product: ProductDetail;
   models: CollectionModel[];
   crumbs: Crumb[];
+  siblings: { slug: string; name: string; familyTitle: string | null }[];
   settings: SiteSettings;
   form: { categories: { id: string; name: string }[]; products: { id: string; name: string; categoryId: string }[] };
 }) {
   const path = routes.product(product.slug);
-  const family = WOOD_FAMILIES[product.slug] ?? null;
+  const family = familyOf(product);
   const gallery = galleryOf(product);
   const story = splitHtmlSections(product.description);
   const planning = story.sections.filter((s) => s.title === "Tasarım ve kullanım" || s.title === "Teknik değerlendirme");
@@ -57,7 +59,7 @@ export function FamilyView({
     values: keyValues(m).map((r) => ({ label: shortLabel(r.label), text: formatSpec(r.value, r.unit) })),
     hasData: m.hasData,
   }));
-  const others = Object.entries(WOOD_FAMILIES).filter(([slug]) => slug !== product.slug);
+  const others = siblings.map((x) => [x.slug, { title: x.familyTitle || x.name }] as const);
 
   return (
     <>

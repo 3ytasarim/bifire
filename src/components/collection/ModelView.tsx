@@ -13,7 +13,7 @@ import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
 import { PROCESS } from "@/content/company";
-import { DETAIL_NOTE, modelName, SPEC_NOTE, WOOD_FAMILIES } from "@/content/wood-collection";
+import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import { splitHtmlSections } from "@/lib/html-sections";
 import { formatSpec, groupOptions, keyValues, modelPath, variantGroupsOf, type CollectionModel } from "@/lib/models";
@@ -52,15 +52,17 @@ export function ModelView({
   crumbs,
   settings,
   form,
+  siblings,
 }: {
   product: ProductDetail;
   models: CollectionModel[];
   model: CollectionModel;
+  siblings: { slug: string; name: string; familyTitle: string | null }[];
   crumbs: Crumb[];
   settings: SiteSettings;
   form: { categories: { id: string; name: string }[]; products: { id: string; name: string; categoryId: string }[] };
 }) {
-  const family = WOOD_FAMILIES[product.slug] ?? null;
+  const family = familyOf(product);
   const name = modelName(family, product.name, model.size);
   const path = modelPath(product.slug, model.slug);
   const gallery = galleryOf(product);
@@ -242,7 +244,7 @@ export function ModelView({
                 ))}
               </tbody>
             </table>
-            <p className="mt-4 border-t border-sand pt-4 text-[13px] leading-relaxed text-stone">{SPEC_NOTE}</p>
+            {family?.specNote ? <p className="mt-4 border-t border-sand pt-4 text-[13px] leading-relaxed text-stone">{family.specNote}</p> : null}
             <ProductDrawings drawings={drawings} groups={[]} fallback={model.key} />
           </Reveal>
         </div>
@@ -274,7 +276,7 @@ export function ModelView({
                 </StaggerItem>
               ))}
             </Stagger>
-            <p className="mt-8 max-w-3xl text-[13px] leading-relaxed text-white/50">{DETAIL_NOTE}</p>
+            {family?.detailNote ? <p className="mt-8 max-w-3xl text-[13px] leading-relaxed text-white/50">{family.detailNote}</p> : null}
           </div>
         </section>
       ) : null}
@@ -336,8 +338,8 @@ export function ModelView({
           <div>
             <p className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">Farklı formları da keşfedin</p>
             <ul className="mt-4 flex flex-wrap gap-2">
-              {Object.entries(WOOD_FAMILIES)
-                .filter(([slug]) => slug !== product.slug)
+              {siblings
+                .map((x) => [x.slug, { title: x.familyTitle || x.name }] as const)
                 .map(([slug, f]) => (
                   <li key={slug}>
                     <Link href={routes.product(slug)} className="inline-flex min-h-11 items-center gap-1.5 rounded-full border border-linen bg-paper px-4 text-[14px] font-semibold text-ink transition-colors hover:border-ink">

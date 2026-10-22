@@ -35,6 +35,16 @@ export type ProductFormData = {
   weightKg: string;
   flueDiameterMm: number | null;
   dimensionsNote: string | null;
+  familyTitle: string | null;
+  collectionTag: string | null;
+  collectionLine: string | null;
+  collectionDesc: string | null;
+  viewText: string | null;
+  placeText: string | null;
+  focusText: string | null;
+  detailIntro: string | null;
+  specNote: string | null;
+  detailNote: string | null;
   featured: boolean;
   active: boolean;
   sortOrder: number;
@@ -75,6 +85,27 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
             </div>
             <TextArea name="shortDescription" label="Kısa açıklama" rows={3} maxLength={500} defaultValue={p?.shortDescription ?? ""} hint="Ürün başlığının altında ve kartlarda görünür; meta açıklama boşsa buradan üretilir." />
             <RichTextEditor name="description" label="Detaylı açıklama" defaultValue={p?.description} />
+          </Section>
+
+          <Section
+            title="Koleksiyon ve şablon metinleri"
+            description="Koleksiyon ailesi ürünlerinde (ör. U Tipi Odunlu Şömine) aile sayfası, model sayfaları ve koleksiyon kartlarında kullanılan metinler. Boş bırakılan alan sayfada gösterilmez. Modeller, teknik tablodaki “Model kodu” satırlarından oluşur."
+          >
+            <div className="grid gap-5 sm:grid-cols-2">
+              <TextInput name="familyTitle" label="Model adı (kısa ad)" defaultValue={p?.familyTitle ?? ""} maxLength={80} hint="Model sayfası başlığı: “U Tipi Şömine 70'lik”." />
+              <TextInput name="collectionTag" label="Kart etiketi" defaultValue={p?.collectionTag ?? ""} maxLength={80} hint="ör. Üç cephede ateş" />
+            </div>
+            <TextInput name="collectionLine" label="Vurgu cümlesi" defaultValue={p?.collectionLine ?? ""} maxLength={160} hint="ör. Ateşi farklı açılardan yaşayın." />
+            <TextArea name="collectionDesc" label="Koleksiyon tanıtımı" defaultValue={p?.collectionDesc ?? ""} maxLength={600} rows={3} hint="Koleksiyon kartında ve aile sayfasının başında görünür." />
+            <p className="text-sm font-medium text-neutral-800">Yerleşim yaklaşımı</p>
+            <div className="grid gap-5 sm:grid-cols-3">
+              <TextInput name="viewText" label="Ateş görünümü" defaultValue={p?.viewText ?? ""} maxLength={160} />
+              <TextInput name="placeText" label="Yerleşim" defaultValue={p?.placeText ?? ""} maxLength={160} />
+              <TextInput name="focusText" label="Seçimde odak" defaultValue={p?.focusText ?? ""} maxLength={160} />
+            </div>
+            <TextArea name="detailIntro" label="Üretim detayları girişi" defaultValue={p?.detailIntro ?? ""} maxLength={400} rows={2} hint="“Tasarımın arkasındaki ayrıntılar” bölümünün açıklaması." />
+            <TextArea name="specNote" label="Teknik tablo notu" defaultValue={p?.specNote ?? ""} maxLength={400} rows={2} />
+            <TextArea name="detailNote" label="Üretim detayları notu" defaultValue={p?.detailNote ?? ""} maxLength={400} rows={2} />
           </Section>
 
           <Section title="Görseller">

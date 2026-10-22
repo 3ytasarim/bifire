@@ -1,10 +1,10 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ModelView } from "@/components/collection/ModelView";
-import { modelName, WOOD_FAMILIES } from "@/content/wood-collection";
+import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import { buildModels, keyValues, formatSpec, modelPath } from "@/lib/models";
-import { getFormOptions, getProductBySlug } from "@/lib/queries";
+import { getCollectionSiblings, getFormOptions, getProductBySlug } from "@/lib/queries";
 import { buildEntityMetadata } from "@/lib/seo/metadata";
 import type { Crumb } from "@/lib/seo/json-ld";
 import { getSiteSettings } from "@/lib/settings";
@@ -35,7 +35,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await load(slug, m);
   if (!data) return {};
   const { product, model } = data;
-  const name = modelName(WOOD_FAMILIES[product.slug] ?? null, product.name, model.size);
+  const name = modelName(familyOf(product), product.name, model.size);
   const values = keyValues(model, 3).map((r) => `${r.label} ${formatSpec(r.value, r.unit)}`).join(", ");
   return buildEntityMetadata({
     name: `${name} ${model.code}`,
@@ -52,7 +52,7 @@ export default async function ModelPage({ params }: Props) {
   const data = await load(slug, m);
   if (!data) notFound();
   const { product, models, model } = data;
-  const [[categories, products], settings] = await Promise.all([getFormOptions(), getSiteSettings()]);
+  const [[categories, products], settings, siblings] = await Promise.all([getFormOptions(), getSiteSettings(), getCollectionSiblings(product)]);
   const category = product.category;
   const parent = category.parent?.active ? category.parent : null;
   const crumbs: Crumb[] = [
@@ -63,5 +63,5 @@ export default async function ModelPage({ params }: Props) {
     { name: product.name, path: routes.product(product.slug) },
     { name: [model.series, model.size].filter(Boolean).join(" · "), path: modelPath(product.slug, model.slug) },
   ];
-  return <ModelView product={product} models={models} model={model} crumbs={crumbs} settings={settings} form={{ categories, products }} />;
+  return <ModelView product={product} models={models} model={model} crumbs={crumbs} settings={settings} form={{ categories, products }} siblings={siblings} />;
 }

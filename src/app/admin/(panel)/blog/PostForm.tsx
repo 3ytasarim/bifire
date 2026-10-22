@@ -2,7 +2,7 @@
 
 import { AdminForm, SaveBar } from "@/components/admin/AdminForm";
 import { Checkbox, Section, SelectInput, TextArea, TextInput } from "@/components/admin/fields";
-import { GUIDE_CATEGORIES } from "@/content/guide";
+import { GUIDE_CATEGORIES, NEXT_STEPS } from "@/content/guide";
 import { ImagePicker } from "@/components/admin/ImagePicker";
 import { MultiPicker } from "@/components/admin/MultiPicker";
 import { RichTextEditor } from "@/components/admin/RichTextEditor";
@@ -24,6 +24,10 @@ export type PostFormData = {
   publishedAt: string;
   tags: string;
   category: string | null;
+  subtopic: string | null;
+  guideNo: number | null;
+  relatedNos: string | null;
+  nextStep: string | null;
   productIds: string[];
   metaTitle: string | null;
   metaDescription: string | null;
@@ -62,6 +66,10 @@ export function PostForm({ post, products, knownTags }: { post?: PostFormData | 
           </Section>
           <Section title="Rehber kategorisi">
             <SelectInput name="category" label="Kategori" placeholder="— Kategorisiz —" defaultValue={p?.category ?? ""} options={GUIDE_CATEGORIES.map((c) => ({ value: c.slug, label: c.name }))} hint="Şömine Rehberi ana sayfasında ve kategori sayfasında bu başlık altında listelenir." />
+            <TextInput name="subtopic" label="Alt konu" defaultValue={p?.subtopic ?? ""} maxLength={80} hint="Kategori sayfasındaki alt konu filtresi (ör. Baca ve hava)." />
+            <TextInput name="guideNo" label="Makale no (içerik haritası)" inputMode="numeric" defaultValue={p?.guideNo?.toString() ?? ""} hint="Okuma yolları ve “önce bunları okuyun” bu numarayla eşleşir; sitede görünmez." />
+            <TextInput name="relatedNos" label="İlgili rehberler (makale no)" defaultValue={p?.relatedNos ?? ""} maxLength={60} hint="Virgülle: 009, 056, 057 — yazı sonunda “İlgili rehberler”." />
+            <SelectInput name="nextStep" label="Sonraki adım" placeholder="— Genel çağrı —" defaultValue={p?.nextStep ?? ""} options={Object.keys(NEXT_STEPS).map((k) => ({ value: k, label: k }))} hint="Yazı sonundaki çağrı kutusu." />
           </Section>
           <Section title="Etiketler">
             <TextInput name="tags" label="Etiketler" defaultValue={p?.tags ?? ""} list="blog-tags" hint="Virgülle ayırın." maxLength={1000} />

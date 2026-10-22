@@ -21,6 +21,10 @@ const cardProductSelect = {
   heatingArea: true,
   efficiency: true,
   category: { select: { name: true, slug: true } },
+  familyTitle: true,
+  collectionTag: true,
+  collectionLine: true,
+  collectionDesc: true,
 } satisfies Prisma.ProductSelect;
 
 export type ProductCardData = Prisma.ProductGetPayload<{ select: typeof cardProductSelect }>;
@@ -84,6 +88,15 @@ export function getCategoryProducts(categoryIds: string[]) {
 export async function getModelCounts(productIds: string[]): Promise<Record<string, number>> {
   const rows = await prisma.productSpecification.groupBy({ by: ["productId"], where: { productId: { in: productIds }, label: "Model kodu", variant: { not: null } }, _count: { _all: true } });
   return Object.fromEntries(rows.map((r) => [r.productId, r._count._all]));
+}
+
+/** Aynı koleksiyondaki diğer aileler (şablon metni girilmiş ürünler) — "Farklı formları keşfedin" bağlantıları. */
+export function getCollectionSiblings(product: { id: string; categoryId: string; category: { parentId: string | null } }) {
+  return prisma.product.findMany({
+    where: { ...activeProduct, id: { not: product.id }, familyTitle: { not: null }, category: product.category.parentId ? { parentId: product.category.parentId } : { id: product.categoryId } },
+    orderBy: [{ category: { sortOrder: "asc" } }, { sortOrder: "asc" }],
+    select: { slug: true, name: true, familyTitle: true },
+  });
 }
 
 export function getAllProducts() {

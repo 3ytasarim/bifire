@@ -28,6 +28,18 @@ export function CategoryForm({ category, parents }: { category?: ProductCategory
             />
             <TextArea name="description" label="Kısa açıklama" defaultValue={c?.description ?? ""} maxLength={600} rows={3} hint="Kategori sayfasının başlığı altında ve kartlarda görünür." />
           </Section>
+          <Section
+            title="Koleksiyon sayfası metinleri"
+            description="Alt kategorisi olan ürün grubunda (ör. Odunlu Şömineler) sayfa koleksiyon düzeninde açılır: büyük başlık, aile kartları üstündeki başlık/metin ve koyu “yaklaşım” bandı. Boş bırakılan alanlarda genel metin kullanılır; yaklaşım metni boşsa bant gösterilmez."
+          >
+            <TextInput name="heroTitle" label="Sayfa başlığı (H1)" defaultValue={c?.heroTitle ?? ""} maxLength={160} hint="Boşsa kategori adı. Altında “Kısa açıklama” görünür." />
+            <div className="grid gap-5 sm:grid-cols-2">
+              <TextInput name="pickTitle" label="Kartlar üstü başlık" defaultValue={c?.pickTitle ?? ""} maxLength={160} />
+              <TextInput name="approachTitle" label="Yaklaşım bandı başlığı" defaultValue={c?.approachTitle ?? ""} maxLength={160} />
+            </div>
+            <TextArea name="pickText" label="Kartlar üstü metin" defaultValue={c?.pickText ?? ""} maxLength={600} rows={2} />
+            <TextArea name="approachText" label="Yaklaşım bandı metni" defaultValue={c?.approachText ?? ""} maxLength={2000} rows={5} hint="Paragrafları boş bir satırla ayırın." />
+          </Section>
           <Section title="SEO içeriği" description="Ürün listesinin altında yayınlanan açıklayıcı içerik (kategori hakkında rehber metin).">
             <RichTextEditor name="content" label="İçerik" defaultValue={c?.content} />
           </Section>

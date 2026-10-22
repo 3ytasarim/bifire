@@ -3,7 +3,7 @@ import { DesignTogether } from "@/components/site/DesignTogether";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { ProductGallery } from "@/components/site/ProductGallery";
 import type { GalleryImage } from "@/components/site/Lightbox";
-import type { WoodFamily } from "@/content/wood-collection";
+import type { WoodFamily } from "@/lib/collection";
 import type { ProductDetail } from "@/lib/queries";
 import { telHref, whatsappHref, type SiteSettings } from "@/lib/settings";
 
@@ -21,14 +21,16 @@ export function CollectionAside({ part, product, family, gallery, form, path }: 
   if (part === "gallery") return <ProductGallery images={gallery} name={product.name} />;
   return (
     <>
-      {family ? (
+      {family && (family.view || family.place || family.focus) ? (
         <dl className="mt-5 grid gap-3 rounded-[1.5rem] border border-linen bg-white p-5 sm:grid-cols-3 sm:p-6">
           <p className="text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase sm:col-span-3">Yerleşim yaklaşımı</p>
           {[
             ["Ateş görünümü", family.view],
             ["Yerleşim", family.place],
             ["Seçimde odak", family.focus],
-          ].map(([k, v]) => (
+          ]
+            .filter(([, v]) => v)
+            .map(([k, v]) => (
             <div key={k} className="border-t border-sand pt-3">
               <dt className="text-[11px] font-semibold tracking-[0.14em] text-stone uppercase">{k}</dt>
               <dd className="mt-1 text-[14px] leading-snug font-semibold text-ink">{v}</dd>

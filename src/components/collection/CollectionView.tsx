@@ -6,7 +6,7 @@ import { PageHero } from "@/components/site/PageHero";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
-import { WOOD_FAMILIES } from "@/content/wood-collection";
+import { familyOf } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import type { ProductCardData } from "@/lib/queries";
 import type { Crumb } from "@/lib/seo/json-ld";
@@ -67,7 +67,7 @@ export function CollectionView({
 
           <ol className="mt-14 space-y-6 sm:space-y-8">
             {products.map((p, i) => {
-              const f = WOOD_FAMILIES[p.slug];
+              const f = familyOf(p);
               const count = modelCounts[p.id] ?? 0;
               return (
                 <li key={p.id}>

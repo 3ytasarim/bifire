@@ -13,7 +13,7 @@ import { ProductOptions } from "@/components/site/ProductOptions";
 import { ProductSpecs, VariantHighlights, type SpecItem, type VariantRow } from "@/components/site/ProductSpecs";
 import { ProductDrawings } from "@/components/site/ProductDrawings";
 import { DesignTogether } from "@/components/site/DesignTogether";
-import { DETAIL_NOTE, SPEC_NOTE, WOOD_FAMILIES } from "@/content/wood-collection";
+import { familyOf } from "@/lib/collection";
 import { CODE_LABEL, splitVariant } from "@/lib/variants";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
@@ -24,7 +24,7 @@ import { Button3D } from "@/components/ui/button-3d";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
 import { keyFacts, routes, technicalRows, type TechRow } from "@/lib/catalog";
-import { getFormOptions, getProductBySlug, getRelatedProducts } from "@/lib/queries";
+import { getCollectionSiblings, getFormOptions, getProductBySlug, getRelatedProducts } from "@/lib/queries";
 import { getSiteSettings, telHref, whatsappHref } from "@/lib/settings";
 import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, faqNode, graph, ids, imageNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
@@ -93,7 +93,7 @@ export default async function ProductPage({ params }: Props) {
 
   // Koleksiyon ailesi (modelleri olan ürün, ör. U Tipi): sade aile sayfası; ayrıntı her modelin kendi sayfasında.
   const models = buildModels(product);
-  if (models.length) return <FamilyView product={product} models={models} crumbs={crumbs} settings={settings} form={{ categories: formCategories, products: formProducts }} />;
+  if (models.length) return <FamilyView product={product} models={models} crumbs={crumbs} settings={settings} form={{ categories: formCategories, products: formProducts }} siblings={await getCollectionSiblings(product)} />;
 
   const baseAlt = product.coverImageAlt || product.name;
   const gallery = [
@@ -122,7 +122,7 @@ export default async function ProductPage({ params }: Props) {
   const variantGroup = variantGroups.length ? variantGroups : null;
   const codeRow = variantRows.find((r) => r.label === CODE_LABEL) ?? null;
   const highlightRows = variantRows.filter((r) => r.label !== CODE_LABEL);
-  const family = WOOD_FAMILIES[product.slug] ?? null;
+  const family = familyOf(product);
   const drawings = product.drawings.map((d, n) => ({ url: d.url, alt: d.alt || `${product.name} — ölçü çizimi ${n + 1}`, variant: d.variant, width: d.width, height: d.height }));
   // Ölçü seçimi olan üründe teknik tablo tek parça ve veri sırasıyla: ölçüye bağlı + sabit satırlar karışık.
   // Marka/Yakıt gibi ürün alanları ayrıca küçük "Genel" tablosunda kalır.
@@ -307,7 +307,7 @@ export default async function ProductPage({ params }: Props) {
                 </p>
               </Reveal>
               <div className="lg:col-span-8">
-                <ProductSpecs groups={variantGroups} variants={variants} rows={variantRows} items={specItems} common={specCommon} note={variantGroup ? SPEC_NOTE : undefined} />
+                <ProductSpecs groups={variantGroups} variants={variants} rows={variantRows} items={specItems} common={specCommon} note={variantGroup ? (family?.specNote ?? undefined) : undefined} />
                 {variantGroup || drawings.length ? <ProductDrawings drawings={drawings} groups={variantGroups} fallback={variants[0] ?? ""} /> : null}
               </div>
             </div>
@@ -396,7 +396,7 @@ export default async function ProductPage({ params }: Props) {
                   </StaggerItem>
                 ))}
               </Stagger>
-              {family ? <p className="mt-8 max-w-3xl text-[13px] leading-relaxed text-white/50">{DETAIL_NOTE}</p> : null}
+              {family?.detailNote ? <p className="mt-8 max-w-3xl text-[13px] leading-relaxed text-white/50">{family.detailNote}</p> : null}
             </div>
           </section>
         ) : null}

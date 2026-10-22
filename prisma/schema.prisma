@@ -236,6 +236,13 @@ model ProductCategory {
   description     String?
   /// Ürün listesinin altındaki SEO içeriği (zengin metin, sanitize edilmiş HTML).
   content         String?
+  /// Koleksiyon düzeni (alt kategorili ürün grubu) metinleri: hero başlığı, seçim başlığı/metni, "yaklaşım" bandı.
+  heroTitle       String?
+  pickTitle       String?
+  pickText        String?
+  approachTitle   String?
+  /// Yaklaşım paragrafları; boş satırla ayrılır.
+  approachText    String?
   image           String?
   imageAlt        String?
   sortOrder       Int      @default(0)
@@ -287,6 +294,18 @@ model Product {
   flueDiameterMm Int?
   /// Serbest biçimli ölçü notu ("Cam: 90 × 45 cm").
   dimensionsNote String?
+  /// Koleksiyon ailesi şablon metinleri (ör. U Tipi): model adı kısa adı, kart etiketi/vurgu/tanıtım,
+  /// "Yerleşim yaklaşımı" (görünüm, yerleşim, seçimde odak), üretim detayları girişi ve tablo/detay notları.
+  familyTitle    String?
+  collectionTag  String?
+  collectionLine String?
+  collectionDesc String?
+  viewText       String?
+  placeText      String?
+  focusText      String?
+  detailIntro    String?
+  specNote       String?
+  detailNote     String?
 
   featured  Boolean @default(false)
   active    Boolean @default(true)
