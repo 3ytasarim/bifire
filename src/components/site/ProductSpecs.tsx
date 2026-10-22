@@ -40,30 +40,38 @@ function NumberTween({ target }: { target: number }) {
 
 /** Hero'daki seçime bağlı öne çıkan değerler (ör. Güç / Verim / Ağırlık) — ölçü değişince sayılar akar. */
 export function VariantHighlights({ group, fallback, rows }: { group: string; fallback: string; rows: VariantRow[] }) {
-  const { variant } = useCurrentVariant(group, fallback);
-  if (!rows.length) return null;
+  const { variant, picked } = useCurrentVariant(group, fallback);
+  const pickedText = Object.values(picked).filter(Boolean).join(" · ") || fallback;
+  const items = rows.slice(0, 4);
+  if (!items.length) return null;
   return (
-    <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-sand py-5">
-      {rows.slice(0, 3).map((r) => {
-        const v = r.values[variant];
-        return (
-          <div key={r.label}>
-            <dd className="font-display text-3xl leading-none font-semibold tracking-[-0.02em] text-ink tabular-nums sm:text-[2.1rem]">
-              {v ? (
-                <>
-                  {r.unit === "%" ? <span>%</span> : null}
-                  <AnimatedNumber value={v} />
-                  {r.unit && r.unit !== "%" ? <span className="ml-1 text-sm font-semibold text-steel">{r.unit}</span> : null}
-                </>
-              ) : (
-                "—"
-              )}
-            </dd>
-            <dt className="mt-2 text-[12px] font-medium text-stone">{r.label}</dt>
-          </div>
-        );
-      })}
-    </dl>
+    <div className="mt-8 border-y border-sand py-5">
+      <p aria-live="polite" className="flex items-center gap-2 text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase">
+        <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-ember" />
+        Seçilen model · {pickedText}
+      </p>
+      <dl className={`mt-4 grid gap-x-4 gap-y-5 ${items.length >= 4 ? "grid-cols-2 sm:grid-cols-4 sm:gap-x-3" : "grid-cols-3"}`}>
+        {items.map((r) => {
+          const v = r.values[variant];
+          return (
+            <div key={r.label} className="flex min-w-0 flex-col-reverse justify-end">
+              <dt className="mt-1.5 text-[10px] leading-snug font-semibold tracking-[0.1em] text-stone uppercase">{r.label}</dt>
+              <dd className="font-display text-[1.6rem] leading-none font-semibold tracking-[-0.03em] whitespace-nowrap text-ink tabular-nums xl:text-[1.75rem]">
+                {v ? (
+                  <>
+                    {r.unit === "%" ? <span className="text-ember">%</span> : null}
+                    <AnimatedNumber value={v} />
+                    {r.unit && r.unit !== "%" ? <span className="ml-0.5 text-xs font-semibold tracking-normal text-ember">{r.unit}</span> : null}
+                  </>
+                ) : (
+                  "—"
+                )}
+              </dd>
+            </div>
+          );
+        })}
+      </dl>
+    </div>
   );
 }
 

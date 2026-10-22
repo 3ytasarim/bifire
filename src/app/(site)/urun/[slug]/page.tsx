@@ -218,7 +218,8 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
 
-        {stats.length >= 2 ? (
+        {/* Ölçüye göre değişen değerler hero'da gösterildiği için sayaç şeridi yalnızca diğer ürünlerde. */}
+        {!variantRows.length && stats.length >= 2 ? (
           <section aria-label="Model özeti" className="border-y border-sand bg-white">
             <div className="shell">
               <dl className={`grid grid-cols-2 divide-sand sm:divide-x ${stats.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
