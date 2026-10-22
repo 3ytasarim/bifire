@@ -56,6 +56,15 @@ export function SettingsForm({ s }: { s: Omit<SiteSetting, "updatedAt"> }) {
               hint="Fabrika showroom sayfası ve sitedeki showroom bölümlerinde kullanılır. Gerçek showroom fotoğrafı önerilir; boşsa manifesto görseli gösterilir."
               nameHint="bifire tuzla fabrika showroom"
             />
+            <div>
+              <p className="text-sm font-medium text-neutral-800">“Mekânınıza özel tasarım” sayfası</p>
+              <p className="mt-1 text-xs text-neutral-500">Önce ve sonra görselleri birlikte seçilirse sayfada karşılaştırma (sürgülü) bölümü açılır; aynı kadrajdan iki görsel önerilir. Sonra görseli sayfanın üst görseli olarak da kullanılır.</p>
+              <div className="mt-3 grid gap-4 sm:grid-cols-3">
+                <ImagePicker name="designBeforeImage" label="Örnek mekân (önce)" defaultValue={s.designBeforeImage} aspect="aspect-[4/3]" nameHint="bifire ornek mekan" />
+                <ImagePicker name="designAfterImage" label="Tasarım önerisi (sonra)" defaultValue={s.designAfterImage} aspect="aspect-[4/3]" nameHint="bifire somine tasarim onerisi" />
+                <ImagePicker name="designMaterialImage" label="Malzeme görseli" defaultValue={s.designMaterialImage} aspect="aspect-[4/3]" nameHint="bifire somine kaplama malzemeleri" />
+              </div>
+            </div>
           </Section>
         </div>
         <div className="space-y-6">

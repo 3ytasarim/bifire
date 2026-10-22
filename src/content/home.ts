@@ -47,7 +47,7 @@ export const HOME = {
       { title: "Orta ve asma şömineler", text: "Mekânın ortasında heykelsi bir odak noktası." },
       { title: "Bacasız çözümler", text: "Baca imkânı olmayan mekânlar için bioethanol ve elektrikli modeller." },
     ],
-    cta: { label: "Projenizi konuşalım", href: "/teklif-al" },
+    cta: { label: "Projenizi konuşalım", href: "/mekaniniza-ozel-tasarim" },
     ctaTitle: "Mekânınıza uygun yerleşimi birlikte seçelim",
     ctaText: "Mimari çiziminizi ya da mekân fotoğraflarınızı paylaşın; hazne, cam tipi ve baca çözümünü birlikte belirleyelim.",
   },

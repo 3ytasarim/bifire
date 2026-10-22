@@ -23,10 +23,10 @@ function Submit({ label }: { label: string }) {
   );
 }
 
-const inputCls =
+export const inputCls =
   "mt-2 block min-h-12 w-full rounded-xl border border-sand bg-white px-4 text-[16px] text-ink transition-colors outline-none placeholder:text-stone/70 focus:border-ink aria-[invalid=true]:border-red-700";
 
-function Select({ id, name, label, options, defaultValue, placeholder = "Seçiniz" }: { id: string; name: string; label: string; options: readonly string[]; defaultValue?: string; placeholder?: string }) {
+export function Select({ id, name, label, options, defaultValue, placeholder = "Seçiniz" }: { id: string; name: string; label: string; options: readonly string[]; defaultValue?: string; placeholder?: string }) {
   return (
     <div>
       <label htmlFor={id} className="text-sm font-semibold text-ink">

@@ -34,6 +34,9 @@ const EMPTY: Omit<SiteSetting, "updatedAt"> = {
   featureVideo: null,
   showroomImage: null,
   showroomImageAlt: null,
+  designBeforeImage: null,
+  designAfterImage: null,
+  designMaterialImage: null,
 };
 
 /** İstek başına tek sorgu. Kayıt yoksa (ilk kurulum) boş varsayılanlar döner — sayfa asla kırılmaz. */

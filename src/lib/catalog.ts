@@ -52,6 +52,7 @@ export const routes = {
   services: "/hizmetler",
   service: (slug: string) => `/hizmetler/${slug}`,
   showroom: "/fabrika-showroom",
+  design: "/mekaniniza-ozel-tasarim",
   regions: "/hizmet-bolgeleri",
   region: (slug: string) => `/hizmet-bolgeleri/${slug}`,
   kvkk: "/kvkk",

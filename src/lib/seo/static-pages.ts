@@ -95,6 +95,14 @@ export const STATIC_PAGES = {
       description: "Tuzla fabrika showroomumuzda şömine modellerini, kapak mekanizmalarını ve kaplama malzemelerini yerinde görün. Ziyaretinizi önceden planlayın.",
     },
   },
+  "mekan-tasarim": {
+    label: "Mekânınıza Özel Tasarım",
+    path: "/mekaniniza-ozel-tasarim",
+    defaults: {
+      title: "Mekânınıza Özel Şömine Tasarımı | Fotoğrafınızı Paylaşın | Bifire",
+      description: "Mekânınızın fotoğrafını ve tercihlerinizi paylaşın; şöminenizin yaşam alanınızdaki yerleşimini görsel öneriyle birlikte tasarlayalım. Tuzla fabrika showroom.",
+    },
+  },
   "hizmet-bolgeleri": {
     label: "Hizmet Bölgeleri",
     path: "/hizmet-bolgeleri",

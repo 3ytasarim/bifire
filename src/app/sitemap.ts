@@ -60,6 +60,7 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("hizmet-ozel-olcu", routes.service("ozel-olcu-somine-tasarimi"), { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-montaj", routes.service("somine-montaji"), { changeFrequency: "monthly", priority: 0.7 }),
     ...page("showroom", routes.showroom, { changeFrequency: "monthly", priority: 0.7 }),
+    ...page("mekan-tasarim", routes.design, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-bolgeleri", routes.regions, { changeFrequency: "monthly", priority: 0.7 }),
     ...DISTRICTS.flatMap((d) => page(`bolge-${d.slug}`, routes.region(d.slug), { changeFrequency: "monthly", priority: 0.6 })),
     ...categories.map((c) => ({ url: canonicalUrl(routes.category(c.slug)), lastModified: c.updatedAt, changeFrequency: "weekly" as const, priority: 0.8, ...images(c.image) })),

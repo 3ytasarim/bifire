@@ -50,6 +50,8 @@ enum RequestType {
   CONTACT
   QUOTE
   SHOWROOM
+  /// Mekânınıza özel tasarım: mekân fotoğrafı + tercihler
+  DESIGN
 }
 
 enum RequestStatus {
@@ -102,41 +104,45 @@ model LoginAttempt {
 
 /// Tek satırlık site ayarları (id = "site").
 model SiteSetting {
-  id                String   @id @default("site")
-  companyName       String   @default("Bifire")
-  logoUrl           String?
-  faviconUrl        String?
-  phone             String?
-  whatsapp          String?
-  whatsappMessage   String?
-  email             String?
-  address           String?
-  mapsUrl           String?
-  mapsEmbedUrl      String?
-  workingHours      String?
-  instagramUrl      String?
-  facebookUrl       String?
-  youtubeUrl        String?
-  linkedinUrl       String?
-  pinterestUrl      String?
-  footerDescription String?
-  defaultOgImage    String?
+  id                  String   @id @default("site")
+  companyName         String   @default("Bifire")
+  logoUrl             String?
+  faviconUrl          String?
+  phone               String?
+  whatsapp            String?
+  whatsappMessage     String?
+  email               String?
+  address             String?
+  mapsUrl             String?
+  mapsEmbedUrl        String?
+  workingHours        String?
+  instagramUrl        String?
+  facebookUrl         String?
+  youtubeUrl          String?
+  linkedinUrl         String?
+  pinterestUrl        String?
+  footerDescription   String?
+  defaultOgImage      String?
   /// Ana sayfa "Bifire" manifesto bölümü görseli.
-  aboutImage        String?
-  aboutImageAlt     String?
+  aboutImage          String?
+  aboutImageAlt       String?
   /// Manifesto görselinin altındaki görünür açıklama (ör. ürün/model adı).
-  aboutImageCaption String?
+  aboutImageCaption   String?
   /// Manifesto görselinin yerinde sessiz, döngüde oynayan video (görsel poster/yedek olarak kalır).
-  aboutVideo        String?
+  aboutVideo          String?
   /// Ana sayfa "Mimari Ateş Çözümleri" büyük görseli.
-  featureImage      String?
-  featureImageAlt   String?
+  featureImage        String?
+  featureImageAlt     String?
   /// "Mimari Ateş Çözümleri" görselinin yerinde döngüde oynayan video (görsel poster/yedek olarak kalır).
-  featureVideo      String?
+  featureVideo        String?
   /// Fabrika showroom sayfası ve showroom bölümleri görseli (boşsa manifesto görseli kullanılır).
-  showroomImage     String?
-  showroomImageAlt  String?
-  updatedAt         DateTime @updatedAt
+  showroomImage       String?
+  showroomImageAlt    String?
+  /// "Mekânınıza özel tasarım" sayfası: örnek mekân (önce) / tasarım önerisi (sonra) / malzeme görseli
+  designBeforeImage   String?
+  designAfterImage    String?
+  designMaterialImage String?
+  updatedAt           DateTime @updatedAt
 }
 
 /// Statik sayfaların SEO bilgileri (Ana Sayfa, Kurumsal, Ürünler, Projeler, Blog, İletişim...).
@@ -561,11 +567,30 @@ model ContactRequest {
   createdAt    DateTime      @default(now())
   updatedAt    DateTime      @updatedAt
 
-  product  Product?         @relation(fields: [productId], references: [id], onDelete: SetNull)
-  category ProductCategory? @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  product     Product?            @relation(fields: [productId], references: [id], onDelete: SetNull)
+  category    ProductCategory?    @relation(fields: [categoryId], references: [id], onDelete: SetNull)
+  attachments RequestAttachment[]
 
   @@index([status, createdAt])
   @@index([isRead])
   @@index([createdAt])
   @@index([ipHash, createdAt])
+}
+
+/// Talebe eklenen müşteri dosyası (ör. mekân fotoğrafı). Herkese açık /uploads DEĞİL: özel depoda
+/// (PRIVATE_UPLOAD_DIR) tutulur, yalnızca admin oturumuyla /admin/talepler/dosya/[id] üzerinden açılır.
+model RequestAttachment {
+  id           String   @id @default(cuid())
+  requestId    String
+  storageKey   String   @unique
+  originalName String?
+  mimeType     String
+  size         Int
+  width        Int?
+  height       Int?
+  createdAt    DateTime @default(now())
+
+  request ContactRequest @relation(fields: [requestId], references: [id], onDelete: Cascade)
+
+  @@index([requestId])
 }

@@ -7,6 +7,7 @@ import { RequestStatus } from "@prisma/client";
 import { formObject, optional, zodErrors, type ActionState } from "@/lib/admin/form";
 import { requireAdmin } from "@/lib/auth/guard";
 import { prisma } from "@/lib/db";
+import { privateStorage } from "@/lib/storage/private";
 
 const schema = z.object({ status: z.enum(RequestStatus), adminNote: optional(4000) });
 
@@ -30,7 +31,10 @@ export async function markUnread(id: string) {
 
 export async function deleteRequest(id: string): Promise<{ ok: true } | { ok: false; error: string }> {
   await requireAdmin("ADMIN");
+  // Ekli müşteri dosyaları (özel depo) da silinir — KVKK silme talebinde iz kalmasın.
+  const files = await prisma.requestAttachment.findMany({ where: { requestId: id }, select: { storageKey: true } });
   await prisma.contactRequest.delete({ where: { id } }).catch(() => null);
+  await Promise.all(files.map((f) => privateStorage.remove(f.storageKey)));
   revalidatePath("/admin", "layout");
   return { ok: true };
 }

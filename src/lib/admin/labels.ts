@@ -13,4 +13,5 @@ export const REQUEST_TYPE: Record<RequestType, { label: string; short: string; t
   QUOTE: { label: "Teklif talebi", short: "Teklif", tone: "ember" },
   SHOWROOM: { label: "Showroom randevusu", short: "Showroom", tone: "amber" },
   CONTACT: { label: "İletişim", short: "İletişim", tone: "neutral" },
+  DESIGN: { label: "Mekâna özel tasarım", short: "Tasarım", tone: "green" },
 };

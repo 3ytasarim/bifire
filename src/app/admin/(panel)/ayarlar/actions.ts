@@ -53,6 +53,9 @@ const schema = z.object({
   featureVideo: optionalVideo,
   showroomImage: optionalImage,
   showroomImageAlt: optional(250),
+  designBeforeImage: optionalImage,
+  designAfterImage: optionalImage,
+  designMaterialImage: optionalImage,
 });
 
 export async function saveSettings(_prev: ActionState, formData: FormData): Promise<ActionState> {

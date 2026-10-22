@@ -1,6 +1,6 @@
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { Mail, Phone } from "lucide-react";
+import { Download, Lock, Mail, Phone } from "lucide-react";
 import { ConfirmAction } from "@/components/admin/ConfirmAction";
 import { Badge, PageHeader } from "@/components/admin/ui";
 import { REQUEST_STATUS, REQUEST_TYPE } from "@/lib/admin/labels";
@@ -13,7 +13,7 @@ export const metadata = { title: "Talep" };
 
 export default async function RequestDetail({ params }: { params: Promise<{ id: string }> }) {
   const { id } = await params;
-  const r = await prisma.contactRequest.findUnique({ where: { id }, include: { product: { select: { id: true, slug: true } } } });
+  const r = await prisma.contactRequest.findUnique({ where: { id }, include: { product: { select: { id: true, slug: true } }, attachments: { orderBy: { createdAt: "asc" } } } });
   if (!r) notFound();
   // Detay açıldığında okundu işaretlenir.
   if (!r.isRead) await prisma.contactRequest.update({ where: { id }, data: { isRead: true } });
@@ -25,7 +25,7 @@ export default async function RequestDetail({ params }: { params: Promise<{ id: 
     ["E-posta", r.email ? <a href={`mailto:${r.email}`} className="inline-flex items-center gap-1.5 underline"><Mail aria-hidden="true" className="h-3.5 w-3.5" />{r.email}</a> : "—"],
     ["İlgilendiği kategori", r.categoryName ?? "—"],
     ["İlgilendiği ürün", r.product ? <Link href={`/admin/urunler/${r.product.id}`} className="underline">{r.productName}</Link> : (r.productName ?? "—")],
-    ...(r.selection ? [["Seçilen seçenekler", r.selection] as [string, React.ReactNode]] : []),
+    ...(r.selection ? [[r.type === "DESIGN" ? "Tercihler" : "Seçilen seçenekler", r.selection] as [string, React.ReactNode]] : []),
     ...(r.topic ? [["İlgilendiği konu", r.topic] as [string, React.ReactNode]] : []),
     ["Proje ilçesi", r.district ?? "—"],
     ...(r.projectStage ? [["Proje aşaması", r.projectStage] as [string, React.ReactNode]] : []),
@@ -61,6 +61,33 @@ export default async function RequestDetail({ params }: { params: Promise<{ id: 
             <h2 className="text-sm text-neutral-500">Mesaj</h2>
             <p className="mt-2 text-[15px] leading-relaxed whitespace-pre-wrap">{r.message || "—"}</p>
           </div>
+          {r.attachments.length ? (
+            <div className="border-t border-neutral-200 px-5 py-4">
+              <h2 className="flex items-center gap-1.5 text-sm text-neutral-500">
+                <Lock aria-hidden="true" className="h-3.5 w-3.5" /> Müşteri fotoğrafı (yalnızca admin görebilir)
+              </h2>
+              <ul className="mt-3 grid gap-4 sm:grid-cols-2">
+                {r.attachments.map((a) => (
+                  <li key={a.id} className="border border-neutral-200">
+                    <a href={`/admin/talepler/dosya/${a.id}`} target="_blank" rel="noopener" className="block bg-neutral-100">
+                      {/* next/image optimizer oturum çerezi taşımaz; özel dosya doğrudan admin route'undan gelir. */}
+                      {/* eslint-disable-next-line @next/next/no-img-element */}
+                      <img src={`/admin/talepler/dosya/${a.id}`} alt={`${r.name} — mekân fotoğrafı`} width={a.width ?? undefined} height={a.height ?? undefined} className="h-auto w-full" loading="lazy" />
+                    </a>
+                    <div className="flex items-center justify-between gap-3 px-3 py-2 text-xs text-neutral-500">
+                      <span>
+                        {a.width && a.height ? `${a.width}×${a.height} · ` : ""}
+                        {(a.size / 1024 / 1024).toFixed(1)} MB
+                      </span>
+                      <a href={`/admin/talepler/dosya/${a.id}?indir=1`} className="inline-flex min-h-9 items-center gap-1 font-medium text-ink underline">
+                        <Download aria-hidden="true" className="h-3.5 w-3.5" /> İndir
+                      </a>
+                    </div>
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ) : null}
         </section>
         <RequestStatusForm id={r.id} status={r.status} adminNote={r.adminNote} options={Object.entries(REQUEST_STATUS).map(([value, s]) => ({ value, label: s.label }))} />
       </div>
