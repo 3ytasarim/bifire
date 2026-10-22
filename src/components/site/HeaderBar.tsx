@@ -134,7 +134,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
           open
             ? "bg-white" // backdrop-filter fixed konumlu mobil paneli header'a hapseder → açıkken düz zemin
             : transparent
-              ? "border-b border-transparent bg-gradient-to-b from-black/45 to-transparent"
+              ? "border-b border-transparent bg-gradient-to-b from-black/45 to-transparent bg-no-repeat [background-origin:border-box]"
               : "border-b border-linen bg-white/95 shadow-[0_10px_30px_-24px_rgb(12_12_13/0.35)] backdrop-blur-md"
         }`}
       >
