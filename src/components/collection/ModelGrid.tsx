@@ -115,7 +115,7 @@ export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel
                           <div key={v.label} className="inline-flex items-center gap-1.5 rounded-full border border-linen bg-paper px-3 py-1.5 transition-colors duration-300 group-hover:border-ember/30">
                             <Icon aria-hidden="true" className="h-3.5 w-3.5 text-ember-ink" />
                             <dt className="sr-only">{v.label}</dt>
-                            <dd className="text-[13px] font-semibold text-ink tabular-nums">{/^[d.,s]+$/.test(v.text) ? `${v.label} ${v.text}` : v.text}</dd>
+                            <dd className="text-[13px] font-semibold text-ink tabular-nums">{/^[\d.,\s]+$/.test(v.text) ? `${v.label} ${v.text}` : v.text}</dd>
                           </div>
                         );
                       })}
