@@ -185,10 +185,11 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
           </div>
         ) : null}
 
-        {/* Ana menü */}
-        <div className="shell">
-          <div className="flex h-[72px] items-center justify-between gap-4 lg:h-[88px]">
-            <nav aria-label="Ana menü" className="hidden h-full flex-1 lg:block">
+        {/* Ana menü — sayfa gövdesinden geniş kap: sağ/sol menü gruplarına logo çevresinde nefes payı kalır. */}
+        <div className="mx-auto w-full max-w-[1840px] px-4 sm:px-6 lg:px-8 2xl:px-12">
+          {/* Masaüstünde 1fr | logo | 1fr ızgara: sol ve sağ sütun eşit genişlikte, logo her zaman tam ortada. */}
+          <div className="flex h-[72px] items-center justify-between gap-4 lg:grid lg:h-[88px] lg:grid-cols-[minmax(0,1fr)_auto_minmax(0,1fr)] lg:gap-8 xl:gap-12">
+            <nav aria-label="Ana menü" className="hidden h-full min-w-0 lg:block">
               <ul className="flex h-full items-center gap-5 xl:gap-10">
                 {renderLinks(NAV_LEFT)}
                 <li className="group/mega h-full" onMouseEnter={() => setMegaDismissed(false)} onFocus={() => setMegaDismissed(false)}>
@@ -267,7 +268,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
               <Wordmark logoUrl={logoUrl} name={companyName} tone={transparent ? "light" : "dark"} />
             </Link>
 
-            <div className="hidden h-full flex-1 items-center justify-end gap-4 lg:flex xl:gap-8">
+            <div className="hidden h-full min-w-0 items-center justify-end gap-4 lg:flex xl:gap-8">
               <nav aria-label="İkincil menü" className="h-full">
                 <ul className="flex h-full items-center gap-4 xl:gap-8">{renderLinks(NAV_RIGHT)}</ul>
               </nav>
