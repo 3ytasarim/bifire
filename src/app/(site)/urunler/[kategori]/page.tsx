@@ -65,13 +65,24 @@ export default async function CategoryPage({ params }: Props) {
     />
   );
 
-  // Odunlu şömine koleksiyonu: aile kartları (her aile → model listesi → model sayfası).
-  if (category.slug === WOOD_COLLECTION.categorySlug) {
+  // Alt kategorili ürün grupları (Odunlu, Bahçe ve Tamamlayıcı…): koleksiyon düzeni — her ürün ailesi büyük kart.
+  // Odunlu koleksiyonun özel metinleri var; diğerleri kategori adı ve açıklamasını kullanır.
+  if (category.children.length && products.length) {
     const modelCounts = await getModelCounts(products.map((p) => p.id));
+    const wood = category.slug === WOOD_COLLECTION.categorySlug;
+    const copy = wood
+      ? WOOD_COLLECTION
+      : {
+          eyebrow: `Bifire · ${category.parent?.name ?? "Ürün grubu"}`,
+          title: category.name,
+          intro: category.description,
+          pickTitle: "İhtiyacınıza uygun çözümü seçin.",
+          pickText: "Ürünü kullanım alanınız ve beklentinizle birlikte değerlendirelim; ölçü, malzeme ve uygulama kapsamını projeniz üzerinden netleştirelim.",
+        };
     return (
       <>
         {jsonLd}
-        <CollectionView category={category} products={products} modelCounts={modelCounts} crumbs={crumbs} />
+        <CollectionView category={category} products={products} modelCounts={modelCounts} crumbs={crumbs} copy={copy} />
       </>
     );
   }

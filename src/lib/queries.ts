@@ -29,7 +29,7 @@ export type ProductDetail = NonNullable<Awaited<ReturnType<typeof getProductBySl
 
 const activeProduct = { active: true, category: { active: true } } satisfies Prisma.ProductWhereInput;
 
-const navProducts = { where: { active: true }, orderBy: [{ sortOrder: "asc" as const }], take: 2, select: { slug: true } };
+const navProducts = { where: { active: true }, orderBy: [{ sortOrder: "asc" as const }], take: 2, select: { slug: true, coverImage: true, coverImageAlt: true } };
 
 /** Menü/ana sayfa kategorileri; her kategori ve alt kategori için tıklama hedefi (`href`) hesaplanmış olarak döner. */
 export const getNavCategories = cache(async () => {
@@ -54,6 +54,8 @@ export const getNavCategories = cache(async () => {
   });
   return rows.map(({ products, children, ...c }) => ({
     ...c,
+    // Kategori görseli yoksa (ör. tek ürünlü kategori) kendi veya alt kategorisinin ilk ürün kapağı kullanılır.
+    image: c.image ?? [...products, ...children.flatMap((ch) => ch.products)].find((p) => p.coverImage)?.coverImage ?? null,
     href: categoryHref({ slug: c.slug, products, childCount: children.length }),
     children: children.map(({ products: chProducts, ...ch }) => ({ ...ch, href: categoryHref({ slug: ch.slug, products: chProducts }) })),
   }));

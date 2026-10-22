@@ -4,7 +4,7 @@ import Image from "next/image";
 import Link from "next/link";
 import { usePathname } from "next/navigation";
 import { useEffect, useId, useState } from "react";
-import { ChevronDown, Mail, Menu, Phone, Sparkles, X } from "lucide-react";
+import { ArrowUpRight, ChevronDown, Mail, Menu, Phone, Sparkles, X } from "lucide-react";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { BeaconCta } from "@/components/ui/beacon-cta";
 import { SOCIAL_ICONS } from "./Icons";
@@ -206,31 +206,32 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                       }`}
                     >
                       <div className="border-y border-linen bg-white shadow-[0_30px_60px_-30px_rgb(12_12_13/0.3)]">
-                        <div className="shell grid grid-cols-12 gap-10 py-10">
-                          <ul className="col-span-9 grid grid-cols-4 gap-x-6 gap-y-8">
-                            {categories.map((c) => (
-                              <li key={c.id}>
-                                <Link href={c.href} className="group/cat block">
-                                  <span className="zoom-media relative block aspect-[4/3] rounded-xl bg-bone">
+                        <div className="shell grid grid-cols-12 gap-8 py-9">
+                          {/* Yalnız kategori görseli + başlık (alt kategoriler sayfa içinde). Açılışta kartlar sırayla belirir. */}
+                          <ul className={`col-span-9 grid gap-4 ${categories.length > 4 ? "grid-cols-4" : categories.length === 4 ? "grid-cols-4" : "grid-cols-3"}`}>
+                            {categories.map((c, i) => (
+                              <li
+                                key={c.id}
+                                style={{ transitionDelay: `${80 + i * 60}ms` }}
+                                className="translate-y-3 opacity-0 transition-[opacity,translate] duration-500 ease-(--ease-premium) group-focus-within/mega:translate-y-0 group-focus-within/mega:opacity-100 group-hover/mega:translate-y-0 group-hover/mega:opacity-100"
+                              >
+                                <Link href={c.href} className="group/cat relative block overflow-hidden rounded-2xl bg-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember">
+                                  <span className="relative block aspect-[4/5]">
                                     {c.image ? (
-                                      <Image src={c.image} alt="" fill sizes="220px" className="object-cover" />
+                                      <Image src={c.image} alt="" fill sizes="260px" className="object-cover transition-transform duration-700 ease-(--ease-premium) group-hover/cat:scale-[1.04]" />
                                     ) : (
                                       <span className="ember-placeholder absolute inset-0" />
                                     )}
+                                    <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/15 to-transparent transition-opacity duration-500 group-hover/cat:opacity-90" />
                                   </span>
-                                  <span className="mt-3 block text-[15px] font-semibold text-ink transition-colors group-hover/cat:text-ember-ink">{c.name}</span>
+                                  <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
+                                    <span className="font-display text-[17px] leading-snug font-semibold text-white">{c.name}</span>
+                                    <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-md transition-colors duration-500 group-hover/cat:bg-ember group-hover/cat:text-ink">
+                                      <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover/cat:rotate-45" />
+                                    </span>
+                                  </span>
+                                  <span aria-hidden="true" className="absolute inset-x-4 bottom-0 h-[2px] origin-left scale-x-0 rounded-full bg-ember transition-transform duration-700 ease-(--ease-premium) group-hover/cat:scale-x-100" />
                                 </Link>
-                                {c.children.length ? (
-                                  <ul className="mt-1.5 space-y-1">
-                                    {c.children.map((ch) => (
-                                      <li key={ch.id}>
-                                        <Link href={ch.href} className="text-[13px] text-steel transition-colors hover:text-ember-ink">
-                                          {ch.name}
-                                        </Link>
-                                      </li>
-                                    ))}
-                                  </ul>
-                                ) : null}
                               </li>
                             ))}
                           </ul>
@@ -243,9 +244,14 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                               <ArrowFillButton href="/urunler" tone="ink" size="sm">
                                 Tüm ürünler
                               </ArrowFillButton>
-                              <ArrowFillButton href="/teklif-al" tone="light" size="sm">
-                                Teklif al
-                              </ArrowFillButton>
+                              <button
+                                type="button"
+                                data-guide-open=""
+                                aria-haspopup="dialog"
+                                className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-sand bg-white px-5 text-[13px] font-semibold text-ink transition-colors hover:border-ink"
+                              >
+                                <Sparkles aria-hidden="true" className="h-4 w-4 text-ember" /> Birlikte bulalım
+                              </button>
                             </div>
                           </div>
                         </div>
@@ -271,7 +277,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                   data-guide-open=""
                   aria-haspopup="dialog"
                   aria-label="Birlikte bulalım — adım adım şömine seçim rehberi"
-                  className={`group hidden min-h-11 shrink-0 items-center gap-2 rounded-full border px-4 text-[13px] font-semibold whitespace-nowrap transition-colors duration-300 min-[1400px]:inline-flex ${
+                  className={`group hidden min-h-11 shrink-0 items-center gap-2 rounded-full border px-4 text-[13px] font-semibold whitespace-nowrap transition-colors duration-300 min-[1536px]:inline-flex ${
                     transparent ? "border-white/40 bg-white/10 text-white backdrop-blur-md hover:border-white" : "border-sand bg-white text-ink hover:border-ink"
                   }`}
                 >
@@ -336,17 +342,6 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                         </span>
                         {c.name}
                       </Link>
-                      {c.children.length ? (
-                        <ul className="ml-12 border-l border-linen pl-4">
-                          {c.children.map((ch) => (
-                            <li key={ch.id}>
-                              <Link href={ch.href} className="flex min-h-11 items-center text-sm text-steel">
-                                {ch.name}
-                              </Link>
-                            </li>
-                          ))}
-                        </ul>
-                      ) : null}
                     </li>
                   ))}
                 </ul>
