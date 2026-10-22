@@ -10,7 +10,7 @@ import { FaqList } from "@/components/site/FaqList";
 import { MobileCta } from "@/components/site/MobileCta";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { ProductOptions } from "@/components/site/ProductOptions";
-import { ProductSpecs, VariantHighlights, type VariantRow } from "@/components/site/ProductSpecs";
+import { ProductSpecs, VariantStrip, type VariantRow } from "@/components/site/ProductSpecs";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
@@ -172,7 +172,6 @@ export default async function ProductPage({ params }: Props) {
                 ) : null}
 
                 {optionGroups.length ? <ProductOptions groups={optionGroups} /> : null}
-                {variantGroup && variantRows.length ? <VariantHighlights group={variantGroup.name} fallback={variants[0] ?? ""} rows={variantRows} /> : null}
 
                 <div className="mt-8 flex flex-col gap-3">
                   <Button3D href="#teklif" tone="ember" size="lg" fullWidth>
@@ -218,7 +217,9 @@ export default async function ProductPage({ params }: Props) {
           </div>
         </div>
 
-        {stats.length >= 2 ? (
+        {variantGroup && variantRows.length ? (
+          <VariantStrip group={variantGroup.name} fallback={variants[0] ?? ""} rows={variantRows} />
+        ) : stats.length >= 2 ? (
           <section aria-label="Model özeti" className="border-y border-sand bg-white">
             <div className="shell">
               <dl className={`grid grid-cols-2 divide-sand sm:divide-x ${stats.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>

@@ -38,32 +38,45 @@ function NumberTween({ target }: { target: number }) {
   return <motion.span>{text}</motion.span>;
 }
 
-/** Hero'daki seçime bağlı öne çıkan değerler (ör. Güç / Verim / Ağırlık) — ölçü değişince sayılar akar. */
-export function VariantHighlights({ group, fallback, rows }: { group: string; fallback: string; rows: VariantRow[] }) {
-  const { variant } = useCurrentVariant(group, fallback);
-  if (!rows.length) return null;
+/**
+ * Hero'nun altındaki geniş şerit: seçili ölçünün öne çıkan değerleri (Güç / Verim / Ağırlık / Baca çapı).
+ * Ölçü değiştikçe sayılar akarak güncellenir; üstte seçili model etiketi görünür.
+ */
+export function VariantStrip({ group, fallback, rows }: { group: string; fallback: string; rows: VariantRow[] }) {
+  const { variant, picked } = useCurrentVariant(group, fallback);
+  const pickedText = Object.values(picked).filter(Boolean).join(" · ") || fallback;
+  const items = rows.slice(0, 4);
+  if (!items.length) return null;
   return (
-    <dl className="mt-8 grid grid-cols-3 gap-4 border-y border-sand py-5">
-      {rows.slice(0, 3).map((r) => {
-        const v = r.values[variant];
-        return (
-          <div key={r.label}>
-            <dd className="font-display text-3xl leading-none font-semibold tracking-[-0.02em] text-ink tabular-nums sm:text-[2.1rem]">
-              {v ? (
-                <>
-                  {r.unit === "%" ? <span>%</span> : null}
-                  <AnimatedNumber value={v} />
-                  {r.unit && r.unit !== "%" ? <span className="ml-1 text-sm font-semibold text-steel">{r.unit}</span> : null}
-                </>
-              ) : (
-                "—"
-              )}
-            </dd>
-            <dt className="mt-2 text-[12px] font-medium text-stone">{r.label}</dt>
-          </div>
-        );
-      })}
-    </dl>
+    <section aria-label="Seçilen modelin öne çıkan değerleri" className="border-y border-sand bg-white">
+      <div className="shell">
+        <p aria-live="polite" className="flex items-center gap-2 pt-6 text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase">
+          <span aria-hidden="true" className="h-1.5 w-1.5 animate-pulse rounded-full bg-ember" />
+          Seçilen model · {pickedText}
+        </p>
+        <dl className={`grid grid-cols-2 divide-sand sm:divide-x ${items.length >= 4 ? "lg:grid-cols-4" : "lg:grid-cols-3"}`}>
+          {items.map((r) => {
+            const v = r.values[variant];
+            return (
+              <div key={r.label} className="px-2 pt-4 pb-8 first:pl-0 sm:px-8 sm:pb-10 sm:first:pl-0">
+                <dt className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">{r.label}</dt>
+                <dd className="mt-3 font-display text-5xl leading-none font-semibold tracking-[-0.03em] text-ink tabular-nums sm:text-6xl">
+                  {v ? (
+                    <>
+                      {r.unit === "%" ? <span className="text-ember">%</span> : null}
+                      <AnimatedNumber value={v} />
+                      {r.unit && r.unit !== "%" ? <span className="ml-1.5 text-lg font-semibold tracking-normal text-ember">{r.unit}</span> : null}
+                    </>
+                  ) : (
+                    "—"
+                  )}
+                </dd>
+              </div>
+            );
+          })}
+        </dl>
+      </div>
+    </section>
   );
 }
 
