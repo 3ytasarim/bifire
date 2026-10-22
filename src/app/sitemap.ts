@@ -21,9 +21,10 @@ export default async function sitemap(): Promise<Entry[]> {
   const [categories, products, projects, posts, seoPages] = await Promise.all([
     prisma.productCategory.findMany({
       where: { active: true, noIndex: false, OR: [{ parentId: null }, { parent: { active: true } }] },
-      select: { slug: true, updatedAt: true, image: true },
+      select: { slug: true, updatedAt: true, image: true, canonicalUrl: true, _count: { select: { children: { where: { active: true } }, products: { where: { active: true } } } } },
       orderBy: { sortOrder: "asc" },
-    }),
+      // Tek ürünlü kategori (canonical ürün sayfası) ve başka adrese canonical verilmiş kategori girmez.
+    }).then((cs) => cs.filter((c) => (!c.canonicalUrl || c.canonicalUrl.replace(/\/$/, "").endsWith(`/urunler/${c.slug}`)) && (c._count.children > 0 || c._count.products !== 1))),
     prisma.product.findMany({
       where: { active: true, noIndex: false, category: { active: true } },
       select: { slug: true, updatedAt: true, coverImage: true, images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 6 } },

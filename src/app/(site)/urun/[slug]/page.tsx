@@ -16,6 +16,7 @@ import { DesignTogether } from "@/components/site/DesignTogether";
 import { familyOf } from "@/lib/collection";
 import { CODE_LABEL, splitVariant } from "@/lib/variants";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
+import { SeoArticle } from "@/components/site/SeoArticle";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { JsonLd } from "@/components/site/JsonLd";
@@ -25,13 +26,13 @@ import { Button3D } from "@/components/ui/button-3d";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
 import { keyFacts, routes, technicalRows, type TechRow } from "@/lib/catalog";
-import { getCollectionSiblings, getFormOptions, getProductBySlug, getRelatedProducts } from "@/lib/queries";
+import { getCollectionSiblings, getFormOptions, getProductBySlug, getRelatedProducts, getSoleProductCategory } from "@/lib/queries";
 import { getSiteSettings, telHref, whatsappHref } from "@/lib/settings";
 import { getImageMeta } from "@/lib/seo/image-meta";
 import { breadcrumbNode, faqNode, graph, ids, imageNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/seo/site";
-import { splitHtmlSections } from "@/lib/html-sections";
+import { extractFaq, splitHtmlSections } from "@/lib/html-sections";
 import { FamilyView } from "@/components/collection/FamilyView";
 import { buildModels } from "@/lib/models";
 import { FEATURES } from "@/lib/features";
@@ -94,7 +95,8 @@ export default async function ProductPage({ params }: Props) {
 
   // Koleksiyon ailesi (modelleri olan ürün, ör. U Tipi): sade aile sayfası; ayrıntı her modelin kendi sayfasında.
   const models = buildModels(product);
-  if (models.length) return <FamilyView product={product} models={models} crumbs={crumbs} settings={settings} form={{ categories: formCategories, products: formProducts }} siblings={await getCollectionSiblings(product)} />;
+  const categoryArticle = await getSoleProductCategory(product.categoryId);
+  if (models.length) return <FamilyView product={product} models={models} crumbs={crumbs} settings={settings} form={{ categories: formCategories, products: formProducts }} siblings={await getCollectionSiblings(product)} categoryArticle={categoryArticle} />;
 
   const baseAlt = product.coverImageAlt || product.name;
   const gallery = [
@@ -171,7 +173,7 @@ export default async function ProductPage({ params }: Props) {
               ...variantRows.flatMap((r) => variants.map((v) => ({ name: `${r.label} (${v})`, value: r.values[v] ?? "", unitText: r.unit }))).filter((x) => x.value),
             ],
           }),
-          faqNode(path, faqs),
+          faqNode(path, [...faqs, ...extractFaq(categoryArticle?.content)]),
         )}
       />
 
@@ -490,6 +492,9 @@ export default async function ProductPage({ params }: Props) {
       ) : null}
 
       <MobileCta label={optionGroups.length ? "Seçtiğim model için teklif al" : "Bu ürün için teklif al"} />
+
+      {/* Tek ürünlü kategorinin uzun SEO metni (menü bu kategoriyi doğrudan bu sayfaya bağlar). */}
+      {categoryArticle ? <SeoArticle html={categoryArticle.content} name={categoryArticle.name} /> : null}
 
       {related.length ? (
         <section aria-labelledby="benzer" className="bg-paper py-16 sm:py-24">

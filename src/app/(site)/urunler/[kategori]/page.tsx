@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { SeoArticle } from "@/components/site/SeoArticle";
 import { routes } from "@/lib/catalog";
-import { getCategoryBySlug, getCategoryProducts, getModelCounts } from "@/lib/queries";
+import { getCategoryBySlug, getCategoryProducts, getModelCounts, getSoleProductCategory } from "@/lib/queries";
 import { CollectionView } from "@/components/collection/CollectionView";
 import { collectionCopy } from "@/lib/collection";
 import { extractFaq } from "@/lib/html-sections";
@@ -25,14 +25,19 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ kategori: string }> };
 
+/** Kayıtlı canonical boş ya da kategorinin kendi adresi mi (yönetici başka bir adres girmediyse). */
+const isSelfOrEmpty = (canonical: string | null, slug: string) => !canonical || /\/urunler\/([^/?#]+)\/?$/.exec(canonical)?.[1] === slug;
+
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { kategori } = await params;
   const c = await getCategoryBySlug(kategori);
   if (!c) return {};
+  const sole = await getSoleProductCategory(c.id);
   return buildEntityMetadata({
     name: c.name,
     path: routes.category(c.slug),
-    seo: c,
+    // Tek ürünlü kategori: aynı metin ürün sayfasında; arama motoruna ürün sayfası gösterilir.
+    seo: sole && isSelfOrEmpty(c.canonicalUrl, c.slug) ? { ...c, canonicalUrl: routes.product(sole.productSlug) } : c,
     fallbackDescription: [c.description, c.content],
     image: c.image,
     imageAlt: c.imageAlt,

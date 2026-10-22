@@ -318,3 +318,23 @@ export async function getProductsBySlugs(slugs: string[]): Promise<ProductCardDa
   const rows = await prisma.product.findMany({ where: { ...activeProduct, slug: { in: slugs } }, select: cardProductSelect });
   return slugs.map((s) => rows.find((r) => r.slug === s)).filter((r): r is ProductCardData => Boolean(r));
 }
+
+/**
+ * Tek ürünlü kategori (alt kategorisi yok, tek aktif ürün; ör. U Tipi Şömineler → U Tipi Odunlu Şömine): menü bu
+ * kategoriyi doğrudan ürün sayfasına bağlar (categoryHref), bu yüzden kategorinin uzun SEO metni ürün sayfasında
+ * gösterilir ve kategori sayfasının canonical'ı ürün sayfasıdır (yinelenen içerik oluşmaz).
+ */
+export const getSoleProductCategory = cache(async (categoryId: string) => {
+  const c = await prisma.productCategory.findUnique({
+    where: { id: categoryId },
+    select: {
+      name: true,
+      heroTitle: true,
+      content: true,
+      children: { where: { active: true }, select: { id: true } },
+      products: { where: { active: true }, select: { slug: true }, take: 2 },
+    },
+  });
+  if (!c || c.children.length || c.products.length !== 1) return null;
+  return { name: c.heroTitle || c.name, content: c.content, productSlug: c.products[0]!.slug };
+});
