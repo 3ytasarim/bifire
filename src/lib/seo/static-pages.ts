@@ -1,15 +1,18 @@
 import { serviceBySlug } from "@/content/company";
-import { districtBySlug } from "@/content/regions";
+import { DISTRICT_CONTENT } from "@/content/districts";
 
 /** İçerik dosyasındaki hizmet / ilçe sayfası için varsayılan SEO (tek kaynak: content/*). */
 function serviceEntry(slug: string) {
   const s = serviceBySlug(slug)!;
   return { label: `Hizmet: ${s.name}`, path: `/hizmetler/${slug}`, defaults: { title: `${s.metaTitle} | Bifire`, description: s.metaDescription } };
 }
-function districtEntry(slug: string) {
-  const d = districtBySlug(slug)!;
-  return { label: `Hizmet bölgesi: ${d.name}`, path: `/hizmet-bolgeleri/${slug}`, defaults: { title: `${d.page.title} | Bifire`, description: d.page.metaDescription } };
-}
+/** 39 ilçe sayfası: anahtar "bolge-<slug>"; varsayılan başlık H1, açıklama girişin ilk cümleleri. */
+const DISTRICT_ENTRIES = Object.fromEntries(
+  DISTRICT_CONTENT.map((d) => [
+    `bolge-${d.slug}`,
+    { label: `Hizmet bölgesi: ${d.name}`, path: `/hizmet-bolgeleri/${d.slug}`, defaults: { title: `${d.h1} | Bifire`, description: d.metaDescription } },
+  ]),
+) as Record<`bolge-${string}`, { label: string; path: string; defaults: { title: string; description: string } }>;
 
 /**
  * Admin > SEO menüsünde yönetilen statik sayfalar. `defaults` admin alanları boş bırakıldığında kullanılan
@@ -100,12 +103,7 @@ export const STATIC_PAGES = {
       description: "Tuzla fabrika showroomumuzdan İstanbul'un 39 ilçesindeki şömine projelerine: keşif, özel ölçü üretim ve montaj. İlçenizi seçin, projenizi konuşalım.",
     },
   },
-  "bolge-tuzla": districtEntry("tuzla"),
-  "bolge-pendik": districtEntry("pendik"),
-  "bolge-kartal": districtEntry("kartal"),
-  "bolge-maltepe": districtEntry("maltepe"),
-  "bolge-atasehir": districtEntry("atasehir"),
-  "bolge-sariyer": districtEntry("sariyer"),
+  ...DISTRICT_ENTRIES,
 } as const;
 
 export type StaticPageKey = keyof typeof STATIC_PAGES;

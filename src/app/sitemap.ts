@@ -4,7 +4,7 @@ import { routes } from "@/lib/catalog";
 import { publishedWhere } from "@/lib/queries";
 import { absoluteUrl, canonicalUrl } from "@/lib/seo/site";
 import { FEATURES } from "@/lib/features";
-import { DISTRICT_PAGES } from "@/content/regions";
+import { DISTRICTS } from "@/content/regions";
 
 export const revalidate = 3600;
 
@@ -61,7 +61,7 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("hizmet-montaj", routes.service("somine-montaji"), { changeFrequency: "monthly", priority: 0.7 }),
     ...page("showroom", routes.showroom, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-bolgeleri", routes.regions, { changeFrequency: "monthly", priority: 0.7 }),
-    ...DISTRICT_PAGES.flatMap((d) => page(`bolge-${d.slug}`, routes.region(d.slug), { changeFrequency: "monthly", priority: 0.6 })),
+    ...DISTRICTS.flatMap((d) => page(`bolge-${d.slug}`, routes.region(d.slug), { changeFrequency: "monthly", priority: 0.6 })),
     ...categories.map((c) => ({ url: canonicalUrl(routes.category(c.slug)), lastModified: c.updatedAt, changeFrequency: "weekly" as const, priority: 0.8, ...images(c.image) })),
     ...products.map((p) => ({
       url: canonicalUrl(routes.product(p.slug)),

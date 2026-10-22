@@ -3,11 +3,12 @@ import { Factory, MapPin } from "lucide-react";
 import { CountUp, Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { FaqList } from "@/components/site/FaqList";
 import { JsonLd } from "@/components/site/JsonLd";
-import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { PageHero } from "@/components/site/PageHero";
 import { RegionsGrid } from "@/components/site/RegionsGrid";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
-import { DISTRICTS, DISTRICT_PAGES, REGION_FAQS, SHOWROOM_DISTRICT, SIDES } from "@/content/regions";
+import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
+import { TrustPoints } from "@/components/site/TrustPoints";
+import { DISTRICTS, REGION_FAQS, REGION_JOURNEY, SHOWROOM_DISTRICT, SIDES } from "@/content/regions";
 import { routes } from "@/lib/catalog";
 import { breadcrumbNode, faqNode, graph, itemListNode, serviceNode, webPageNode } from "@/lib/seo/json-ld";
 import { buildStaticPageMetadata } from "@/lib/seo/metadata";
@@ -28,9 +29,8 @@ export default function RegionsPage() {
     slug: d.slug,
     side: d.side,
     hint: d.hint,
-    priority: Boolean(d.page),
-    // Ayrı sayfası olmayan ilçe → ilçesi seçili başvuru formu (canonical'ı parametresiz /teklif-al).
-    href: d.page ? routes.region(d.slug) : `${routes.quote}?ilce=${encodeURIComponent(d.name)}`,
+    priority: Boolean(d.priority),
+    href: routes.region(d.slug),
   })).sort((a, b) => Number(b.priority) - Number(a.priority) || a.name.localeCompare(b.name, "tr"));
 
   return (
@@ -46,17 +46,26 @@ export default function RegionsPage() {
             serviceType: "Şömine tasarımı ve montajı",
             areaServed: ["İstanbul", ...DISTRICTS.map((d) => d.name)],
           }),
-          itemListNode(routes.regions, DISTRICT_PAGES.map((d) => ({ name: d.page.title, path: routes.region(d.slug) }))),
+          itemListNode(routes.regions, DISTRICTS.map((d) => ({ name: `${d.name} Şömine`, path: routes.region(d.slug) }))),
           faqNode(routes.regions, REGION_FAQS),
         )}
       />
       <PageHero
         crumbs={CRUMBS}
         eyebrow="Hizmet bölgeleri"
-        title="İstanbul'da projenizden başlayalım."
-        intro="Tuzla fabrika showroomumuzdan başlayarak, uygulama yerinin koşullarını ve hizmet kapsamını birlikte değerlendirelim."
+        title="İstanbul’da şömine tasarımı, üretim ve montaj."
+        intro="Kendi üretimimiz, kendi montaj ekibimiz ve Tuzla fabrika showroomumuzla şömine projenizi birlikte değerlendirelim."
       >
-        <ul className="flex flex-wrap gap-3">
+        <div className="flex flex-wrap items-center gap-3">
+          <ArrowFillButton href="#ilceler" tone="ink">
+            İlçenizi bulun
+          </ArrowFillButton>
+          <ArrowFillButton href={routes.quote} tone="ember">
+            Projenizi paylaşın
+          </ArrowFillButton>
+        </div>
+        <p className="mt-5 max-w-xl text-[14px] leading-relaxed text-stone">Öncelikli odağımız Tuzla, çevre ilçeler ve Anadolu Yakası; Avrupa Yakası’nda özellikle Sarıyer.</p>
+        <ul className="mt-6 flex flex-wrap gap-3">
           <li className="inline-flex min-h-11 items-center gap-2 rounded-full border border-linen bg-white px-4 text-[14px] font-semibold text-ink">
             <MapPin aria-hidden="true" className="h-4 w-4 text-ember" /> <CountUp value={DISTRICTS.length} /> ilçe
           </li>
@@ -65,6 +74,12 @@ export default function RegionsPage() {
           </li>
         </ul>
       </PageHero>
+
+      <section aria-label="Tasarım, üretim ve montaj" className="bg-paper pb-10">
+        <div className="shell">
+          <TrustPoints />
+        </div>
+      </section>
 
       <section aria-labelledby="yakalar" className="bg-paper pb-16 sm:pb-20">
         <div className="shell">
@@ -90,11 +105,17 @@ export default function RegionsPage() {
         </div>
       </section>
 
-      <section aria-labelledby="ilceler" className="bg-paper pb-16 sm:pb-24">
+      <section id="ilceler" aria-labelledby="ilceler-baslik" className="scroll-mt-28 bg-paper pb-16 sm:pb-24">
         <div className="shell">
-          <h2 id="ilceler" className="sr-only">
-            İlçeler
-          </h2>
+          <Reveal className="mb-8">
+            <p className="eyebrow text-ember-ink">İstanbul ilçeleri</p>
+            <h2 id="ilceler-baslik" className="display-3 mt-5">
+              İlçenizi bulun.
+            </h2>
+            <p className="mt-4 max-w-2xl text-[16px] leading-relaxed text-steel">
+              Bulunduğunuz ilçeyi seçin; tasarım ve uygulama sürecini inceleyin. Diğer bölgelerde hizmet uygunluğunu adres, proje kapsamı ve takvim üzerinden birlikte değerlendirelim.
+            </p>
+          </Reveal>
           <RegionsGrid items={items} />
           <p className="mt-8 max-w-3xl text-[14px] leading-relaxed text-stone">
             İlçe sayfaları o ilçede bir şubemiz bulunduğu anlamına gelmez. Tüm projeler Tuzla fabrika showroomumuz ve kendi montaj ekibimizle yürütülür; hizmet kapsamı ve takvim uygunluğu ön görüşmede netleştirilir.
@@ -102,14 +123,34 @@ export default function RegionsPage() {
         </div>
       </section>
 
-      <ProcessSteps eyebrow="Nerede olursanız olun" title="Projeniz aynı adımlarla ilerler." id="bolge-surec" />
+      <section aria-labelledby="bolge-yolculuk" className="bg-white py-16 sm:py-24">
+        <div className="shell">
+          <Reveal>
+            <p className="eyebrow text-ember-ink">Projenizin yolculuğu</p>
+            <h2 id="bolge-yolculuk" className="display-3 mt-5">
+              İlk fikirden yaşam alanınıza.
+            </h2>
+          </Reveal>
+          <Stagger as="ol" className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-4" gap={0.12}>
+            {REGION_JOURNEY.map((j, i) => (
+              <StaggerItem key={j.title} className="group rounded-2xl border border-linen bg-paper p-6 transition-colors duration-500 hover:border-ember/40 hover:bg-white sm:p-7">
+                <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full border border-ember/30 bg-white font-display text-sm font-semibold text-ember-ink tabular-nums transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+                  {String(i + 1).padStart(2, "0")}
+                </span>
+                <h3 className="mt-5 font-display text-xl font-semibold text-ink">{j.title}</h3>
+                <p className="mt-2 text-[15px] leading-relaxed text-steel">{j.text}</p>
+              </StaggerItem>
+            ))}
+          </Stagger>
+        </div>
+      </section>
 
       <section aria-labelledby="bolge-sss" className="bg-paper py-16 sm:py-24">
         <div className="shell grid gap-10 lg:grid-cols-12">
           <Reveal className="lg:col-span-4">
-            <p className="eyebrow text-ember-ink">Sık sorulanlar</p>
+            <p className="eyebrow text-ember-ink">Başlamadan önce</p>
             <h2 id="bolge-sss" className="display-3 mt-5">
-              Hizmet bölgeleri hakkında.
+              Merak ettikleriniz.
             </h2>
           </Reveal>
           <Reveal className="lg:col-span-8" delay={0.1}>

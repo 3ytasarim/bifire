@@ -33,9 +33,12 @@ type Props = {
   categories: NavCategory[];
 };
 
-// Masaüstü: sol = Kurumsal · Ürünler (mega) · Hizmetler; sağ = Showroom · Rehber · İletişim (logo ana sayfaya gider).
+// Masaüstü: sol = Kurumsal · Ürünler (mega) · Hizmetler · Hizmet Bölgeleri; sağ = Showroom · Rehber · İletişim (logo ana sayfaya gider).
 const NAV_LEFT = [{ label: "Kurumsal", href: "/kurumsal" }];
-const NAV_AFTER_PRODUCTS = [{ label: "Hizmetler", href: "/hizmetler" }];
+const NAV_AFTER_PRODUCTS = [
+  { label: "Hizmetler", href: "/hizmetler" },
+  { label: "Hizmet Bölgeleri", href: "/hizmet-bolgeleri" },
+];
 const NAV_RIGHT = [
   ...(FEATURES.projects ? [{ label: "Projeler", href: "/projeler" }] : []),
   { label: "Showroom", href: "/fabrika-showroom" },
@@ -44,7 +47,7 @@ const NAV_RIGHT = [
 ];
 // Mobil panelde ek olarak gösterilenler.
 const NAV_MOBILE_FIRST = [{ label: "Ana Sayfa", href: "/" }];
-const NAV_MOBILE_EXTRA = [{ label: "Hizmet Bölgeleri", href: "/hizmet-bolgeleri" }];
+const NAV_MOBILE_EXTRA: { label: string; href: string }[] = [];
 
 /**
  * Norm Yacht header mantığı (üst bilgi bandı + sticky ana menü, ikiye bölünmüş menü, ortada logo,
@@ -105,7 +108,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
   const productsActive = pathname.startsWith("/urun");
 
   const linkClass = (active: boolean) =>
-    `relative inline-flex h-full items-center gap-1.5 py-2 text-[12px] font-semibold tracking-[0.18em] uppercase transition-colors duration-300 ${
+    `relative inline-flex h-full items-center gap-1.5 py-2 text-[12px] font-semibold tracking-[0.1em] whitespace-nowrap uppercase transition-colors duration-300 xl:tracking-[0.18em] ${
       transparent ? (active ? "text-white" : "text-white/80 hover:text-white") : active ? "text-ink" : "text-steel hover:text-ink"
     } after:absolute after:inset-x-0 after:bottom-0 after:h-[2px] after:origin-left after:bg-ember after:transition-transform after:duration-500 ${
       active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
@@ -186,7 +189,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
         <div className="shell">
           <div className="flex h-[72px] items-center justify-between gap-4 lg:h-[88px]">
             <nav aria-label="Ana menü" className="hidden h-full flex-1 lg:block">
-              <ul className="flex h-full items-center gap-7 xl:gap-10">
+              <ul className="flex h-full items-center gap-5 xl:gap-10">
                 {renderLinks(NAV_LEFT)}
                 <li className="group/mega h-full" onMouseEnter={() => setMegaDismissed(false)} onFocus={() => setMegaDismissed(false)}>
                   <Link href="/urunler" onClick={closeOnLinkClick} className={linkClass(productsActive)} aria-current={pathname === "/urunler" ? "page" : undefined}>
@@ -258,11 +261,11 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
               <Wordmark logoUrl={logoUrl} name={companyName} tone={transparent ? "light" : "dark"} />
             </Link>
 
-            <div className="hidden h-full flex-1 items-center justify-end gap-7 lg:flex xl:gap-10">
+            <div className="hidden h-full flex-1 items-center justify-end gap-5 lg:flex xl:gap-10">
               <nav aria-label="İkincil menü" className="h-full">
-                <ul className="flex h-full items-center gap-7 xl:gap-10">{renderLinks(NAV_RIGHT)}</ul>
+                <ul className="flex h-full items-center gap-5 xl:gap-10">{renderLinks(NAV_RIGHT)}</ul>
               </nav>
-              <FlowButton href="/teklif-al" text="Teklif Al" tone={transparent ? "light" : "ink"} />
+              <FlowButton href="/teklif-al" text="Teklif Al" tone={transparent ? "light" : "ink"} className="shrink-0 whitespace-nowrap" />
             </div>
 
             <button
