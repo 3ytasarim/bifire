@@ -16,6 +16,9 @@ export function splitHtmlSections(html: string | null | undefined): { lead: stri
   return { lead, sections };
 }
 
+/** SSS bölüm başlığı: "Sık sorulan sorular" veya "… hakkında sık sorulan sorular". */
+export const isFaqTitle = (title: string) => /s(ı|i)k sorulan sorular$/i.test(title.trim());
+
 /**
  * Yazı içindeki görünür SSS bölümünü (başlığı "Sık sorulan sorular" olan H2'nin altındaki H3 soru + paragraf
  * cevaplar) çıkarır — FAQPage şeması yalnızca sayfada gerçekten görünen soru/cevaplardan üretilir.
@@ -24,7 +27,7 @@ export function extractFaq(html: string | null | undefined): { q: string; a: str
   if (!html) return [];
   const text = (s: string) => s.replace(/<[^>]+>/g, "").replace(/&nbsp;/g, " ").replace(/&amp;/g, "&").replace(/&quot;/g, '"').replace(/&#39;/g, "'").replace(/\s+/g, " ").trim();
   const { sections } = splitHtmlSections(html);
-  const faq = sections.find((s) => /^s(ı|i)k sorulan sorular$/i.test(s.title.trim()));
+  const faq = sections.find((s) => isFaqTitle(s.title));
   if (!faq) return [];
   const parts = faq.html.split(/<h3>([\s\S]*?)<\/h3>/);
   const items: { q: string; a: string }[] = [];

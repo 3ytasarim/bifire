@@ -6,13 +6,14 @@ import { EmptyState } from "@/components/site/EmptyState";
 import { FinalCta } from "@/components/site/FinalCta";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
-import { RichText } from "@/components/site/RichText";
+import { SeoArticle } from "@/components/site/SeoArticle";
 import { routes } from "@/lib/catalog";
 import { getCategoryBySlug, getCategoryProducts, getModelCounts } from "@/lib/queries";
 import { CollectionView } from "@/components/collection/CollectionView";
 import { collectionCopy } from "@/lib/collection";
+import { extractFaq } from "@/lib/html-sections";
 import { getImageMeta } from "@/lib/seo/image-meta";
-import { breadcrumbNode, graph, imageNode, itemListNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
+import { breadcrumbNode, faqNode, graph, imageNode, itemListNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
 
 export const revalidate = 300;
@@ -61,6 +62,7 @@ export default async function CategoryPage({ params }: Props) {
         webPageNode({ path, name: category.name, description, type: "CollectionPage", hasBreadcrumb: true, hasPrimaryImage: Boolean(category.image), dateModified: category.updatedAt }),
         breadcrumbNode(path, crumbs),
         products.length ? itemListNode(path, products.map((p) => ({ name: p.name, path: routes.product(p.slug) }))) : null,
+        faqNode(path, extractFaq(category.content)),
       )}
     />
   );
@@ -73,22 +75,15 @@ export default async function CategoryPage({ params }: Props) {
     return (
       <>
         {jsonLd}
-        <CollectionView category={category} products={products} modelCounts={modelCounts} crumbs={crumbs} copy={copy} />
+        <CollectionView category={category} products={products} modelCounts={modelCounts} crumbs={crumbs} copy={copy} article={<SeoArticle html={category.content} name={category.name} />} />
       </>
     );
   }
 
   return (
     <>
-      <JsonLd
-        data={graph(
-          category.image ? imageNode(path, { url: category.image, alt: category.imageAlt || category.name, meta: imageMeta }) : null,
-          webPageNode({ path, name: category.name, description, type: "CollectionPage", hasBreadcrumb: true, hasPrimaryImage: Boolean(category.image), dateModified: category.updatedAt }),
-          breadcrumbNode(path, crumbs),
-          products.length ? itemListNode(path, products.map((p) => ({ name: p.name, path: routes.product(p.slug) }))) : null,
-        )}
-      />
-      <PageHero crumbs={crumbs} eyebrow={category.parent?.name ?? "Ürünler"} title={category.name} intro={category.description} image={category.image} imageAlt={category.imageAlt || category.name}>
+      {jsonLd}
+      <PageHero crumbs={crumbs} eyebrow={category.parent?.name ?? "Ürünler"} title={category.heroTitle || category.name} intro={category.description} image={category.image} imageAlt={category.imageAlt || category.name}>
         {category.children.length ? (
           <nav aria-label={`${category.name} alt kategorileri`}>
             <ul className="flex flex-wrap gap-2">
@@ -132,13 +127,7 @@ export default async function CategoryPage({ params }: Props) {
         </div>
       </section>
 
-      {category.content ? (
-        <section aria-label={`${category.name} hakkında`} className="border-t border-sand bg-bone py-16 sm:py-24">
-          <div className="shell">
-            <RichText html={category.content} className="mx-auto max-w-3xl" />
-          </div>
-        </section>
-      ) : null}
+      <SeoArticle html={category.content} name={category.name} />
       <FinalCta context={`Kategori: ${category.name}`} />
     </>
   );

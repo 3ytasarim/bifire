@@ -32,12 +32,15 @@ export function CollectionView({
   modelCounts,
   crumbs,
   copy,
+  article,
 }: {
   category: { name: string; image: string | null; imageAlt: string | null };
   products: ProductCardData[];
   modelCounts: Record<string, number>;
   crumbs: Crumb[];
   copy: CollectionCopy;
+  /** Kategorinin uzun SEO metni (SeoArticle); koleksiyon ve yaklaşım bandından sonra gösterilir. */
+  article?: React.ReactNode;
 }) {
   return (
     <>
@@ -132,6 +135,8 @@ export function CollectionView({
         </div>
       </section>
       ) : null}
+
+      {article}
 
       <ShowroomBlock />
     </>

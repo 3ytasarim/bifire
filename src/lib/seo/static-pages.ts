@@ -4,7 +4,7 @@ import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 /** İçerik dosyasındaki hizmet sayfası için varsayılan SEO (tek kaynak: content/*). */
 function serviceEntry(slug: string) {
   const s = serviceBySlug(slug)!;
-  return { label: `Hizmet: ${s.name}`, path: `/hizmetler/${slug}`, defaults: { title: `${s.metaTitle} | Bifire`, description: s.metaDescription } };
+  return { label: `Hizmet: ${s.name}`, path: `/hizmetler/${slug}`, defaults: { title: /bifire/i.test(s.metaTitle) ? s.metaTitle : `${s.metaTitle} | Bifire`, description: s.metaDescription } };
 }
 type AreaEntry = { label: string; path: string; defaults: { title: string; description: string } };
 /**

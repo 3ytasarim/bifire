@@ -1,3 +1,4 @@
+import { SERVICE_ARTICLES, type ServiceArticle } from "./service-articles";
 /**
  * Firma geneli metinler. Kullanıcı tarafından doğrulanan gerçekler (2026-10-22): kendi üretim, kendi montaj ekibi,
  * Tuzla'da fabrika showroom. Doğrulanamayan iddia (yıl, adet, yüzde, ödül, puan) EKLENMEZ.
@@ -48,19 +49,16 @@ export type Service = {
   sections: { title: string; text: string }[];
   includes: string[];
   faqs: { q: string; a: string }[];
+  /** Uzun SEO metni (HTML): bölümler, SSS, kapanış ve rehber bağlantıları — SeoArticle ile gösterilir. */
+  article: string;
 };
 
-export const SERVICES: Service[] = [
+const BASE_SERVICES: Omit<Service, keyof ServiceArticle>[] = [
   {
     slug: "ozel-olcu-somine-tasarimi",
     eyebrow: "Mekânınıza göre",
     name: "Özel Ölçü Şömine Tasarımı",
     summary: "Cam biçiminden dış kaplamaya, ölçü ve malzeme kararlarını evinizin planıyla birlikte ele alalım.",
-    metaTitle: "Özel Ölçü Şömine Tasarımı",
-    metaDescription:
-      "Mekânınıza özel ölçüde şömine tasarımı: cam oranı, hazne tipi, kaplama dokusu ve oturma düzeni aynı plan üzerinde. Kendi üretimimizle, Tuzla fabrika showroom.",
-    intro:
-      "Standart bir hazne her mekâna uymaz. Özel ölçü tasarımda cam oranı, kaplama dokusu ve oturma düzenini; şöminenin evinizdeki yeri ve uygulama koşullarıyla birlikte, aynı plan üzerinde değerlendiririz.",
     sections: [
       {
         title: "Cam biçimi ve görüş yönü",
@@ -80,27 +78,12 @@ export const SERVICES: Service[] = [
       },
     ],
     includes: ["Mekân ve kullanım beklentisinin değerlendirilmesi", "Hazne tipi ve cam yönü seçimi", "Kaplama malzemesi ve numune onayı", "Ölçü onayı ve üretim planı"],
-    faqs: [
-      {
-        q: "Özel ölçü şömine için nelerle başvurmalıyım?",
-        a: "Mekân fotoğrafları, yaklaşık ölçüler, varsa plan ve baca bilgisi ilk görüşme için yeterli bir başlangıçtır.",
-      },
-      {
-        q: "Tasarımı mimarımla birlikte yürütebilir miyiz?",
-        a: "Evet. Hazne teknik bilgileri ile baca ve yalıtım detayları mimarınızla paylaşılarak projeye birlikte işlenir.",
-      },
-    ],
   },
   {
     slug: "somine-montaji",
     eyebrow: "Kendi montaj ekibimizle",
     name: "Şömine Montajı",
     summary: "Saha, baca bağlantısı, yanma havası, ısı odası ve kaplama kararları aynı uygulamanın parçalarıdır.",
-    metaTitle: "Şömine Montajı ve Baca Bağlantısı",
-    metaDescription:
-      "Kendi montaj ekibimizle şömine montajı: keşif, baca bağlantısı, yanma havası, ısı yalıtımı ve kaplama uygulaması. İstanbul genelinde projeler, Tuzla fabrika showroom.",
-    intro:
-      "Doğru ürün kadar doğru montaj da önemlidir. Saha hazırlığı, baca bağlantısı, yanma havası, ısı odası ve kaplama aynı uygulamanın parçalarıdır; kendi montaj ekibimizle bu işleri tek elden koordine ederiz.",
     sections: [
       {
         title: "Keşif ve saha hazırlığı",
@@ -120,18 +103,11 @@ export const SERVICES: Service[] = [
       },
     ],
     includes: ["Yerinde keşif", "Baca ve yanma havası değerlendirmesi", "Isı yalıtımı ve kaplama uygulaması", "Teslim ve kullanım bilgilendirmesi"],
-    faqs: [
-      {
-        q: "Mevcut bacam yeni şömineye uygun mu?",
-        a: "Uygunluk, ürün gereklilikleri ve baca koşulları yerinde incelenerek değerlendirilir. Yalnızca bağlantı çapına bakılarak karar verilmez.",
-      },
-      {
-        q: "Teklife hangi işler dahil olur?",
-        a: "Hazne, kaplama, yalıtım, baca, nakliye ve montaj başlıkları teklifte ayrı ayrı açıklanır; ek işler de yazılı olarak belirtilir.",
-      },
-    ],
   },
 ];
+
+// Başlık, meta, giriş, SSS ve uzun metin hizmet sayfası Word paketinden gelir (service-articles.ts).
+export const SERVICES: Service[] = BASE_SERVICES.map((s) => ({ ...s, ...SERVICE_ARTICLES[s.slug]! }));
 
 export const serviceBySlug = (slug: string) => SERVICES.find((s) => s.slug === slug);
 

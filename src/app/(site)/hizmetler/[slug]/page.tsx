@@ -1,11 +1,11 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { Check } from "lucide-react";
-import { FaqList } from "@/components/site/FaqList";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { RequestForm } from "@/components/site/RequestForm";
+import { SeoArticle } from "@/components/site/SeoArticle";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { SERVICES, serviceBySlug } from "@/content/company";
 import { DISTRICTS } from "@/content/regions";
@@ -88,17 +88,8 @@ export default async function ServicePage({ params }: Props) {
 
       <ProcessSteps />
 
-      <section aria-labelledby="hizmet-sss" className="bg-paper py-16 sm:py-24">
-        <div className="shell grid gap-10 lg:grid-cols-12">
-          <div className="lg:col-span-4">
-            <p className="eyebrow text-ember-ink">Sık sorulanlar</p>
-            <h2 id="hizmet-sss" className="display-3 mt-5">
-              Aklınızdaki sorular.
-            </h2>
-          </div>
-          <FaqList items={service.faqs} className="lg:col-span-8" />
-        </div>
-      </section>
+      {/* Uzun metin, SSS ve rehber bağlantıları (hizmet sayfası Word paketi). */}
+      <SeoArticle html={service.article} name={service.name} />
 
       <section id="basvuru" aria-labelledby="hizmet-basvuru" className="scroll-mt-28 border-t border-sand bg-bone py-16 sm:py-24">
         <div className="shell grid gap-12 lg:grid-cols-12">

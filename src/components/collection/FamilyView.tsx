@@ -12,7 +12,7 @@ import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
 import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
-import { splitHtmlSections } from "@/lib/html-sections";
+import { isFaqTitle, splitHtmlSections } from "@/lib/html-sections";
 import { formatSpec, keyValues, modelPath, type CollectionModel } from "@/lib/models";
 import type { ProductDetail } from "@/lib/queries";
 import { breadcrumbNode, faqNode, graph, itemListNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
@@ -47,6 +47,9 @@ export function FamilyView({
   const family = familyOf(product);
   const gallery = galleryOf(product);
   const story = splitHtmlSections(product.description);
+  // Kategorinin seçim rehberi (Admin > Kategoriler uzun metni): aile sayfasından kategori sayfasına bağlantı kartı.
+  const guide = splitHtmlSections(product.category.content).sections.filter((s) => !isFaqTitle(s.title) && !/rehber/i.test(s.title));
+  const collection = product.category.parent ?? product.category;
   const planning = story.sections.filter((s) => s.title === "Tasarım ve kullanım" || s.title === "Teknik değerlendirme");
   const faqs = product.faqs.map((f) => ({ q: f.question, a: f.answer }));
   const description = deriveDescription(product.shortDescription, product.description) || product.name;
@@ -182,6 +185,34 @@ export function FamilyView({
         </div>
       </section>
 
+      {guide.length ? (
+        <section aria-labelledby="kategori-rehberi" className="bg-white pt-14 sm:pt-20">
+          <div className="shell">
+            <Link
+              href={routes.category(product.category.slug)}
+              className="group relative grid gap-6 overflow-hidden rounded-[1.75rem] border border-linen bg-gradient-to-br from-ember/[0.07] via-paper to-white p-7 transition-[border-color,box-shadow] duration-500 hover:border-ember hover:shadow-[0_30px_60px_-36px_rgb(224_105_31/0.55)] sm:p-10 lg:grid-cols-12 lg:items-center"
+            >
+              <span className="lg:col-span-5">
+                <span className="eyebrow block text-ember-ink">Seçim rehberi</span>
+                <span id="kategori-rehberi" className="mt-4 block font-display text-2xl leading-snug font-semibold text-balance text-ink sm:text-3xl">
+                  {product.category.heroTitle || product.category.name}: karar vermeden önce
+                </span>
+              </span>
+              <span className="flex flex-wrap gap-2 lg:col-span-6">
+                {guide.slice(0, 4).map((g) => (
+                  <span key={g.title} className="rounded-full border border-white/80 bg-white/70 px-4 py-2 text-[13px] font-semibold text-steel backdrop-blur">
+                    {g.title}
+                  </span>
+                ))}
+              </span>
+              <span aria-hidden="true" className="flex h-12 w-12 items-center justify-center justify-self-start rounded-full bg-ink text-white transition-colors duration-500 group-hover:bg-ember group-hover:text-ink lg:col-span-1 lg:justify-self-end">
+                <ArrowUpRight className="h-5 w-5" />
+              </span>
+            </Link>
+          </div>
+        </section>
+      ) : null}
+
       <nav aria-labelledby="diger-aileler" className="bg-white py-14 sm:py-20">
         <div className="shell">
           <p id="diger-aileler" className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">
@@ -196,7 +227,7 @@ export function FamilyView({
               </li>
             ))}
             <li>
-              <Link href={routes.category(product.category.slug)} className="inline-flex min-h-11 items-center px-4 text-[14px] font-semibold text-ember-ink underline-offset-4 hover:underline">
+              <Link href={routes.category(collection.slug)} className="inline-flex min-h-11 items-center px-4 text-[14px] font-semibold text-ember-ink underline-offset-4 hover:underline">
                 Tüm koleksiyon
               </Link>
             </li>
