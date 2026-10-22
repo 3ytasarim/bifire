@@ -190,6 +190,9 @@ const postCardSelect = {
   publishedAt: true,
   category: true,
   featured: true,
+  subtopic: true,
+  guideNo: true,
+  updatedAt: true,
   tags: { select: { name: true, slug: true } },
 } satisfies Prisma.BlogPostSelect;
 
@@ -229,6 +232,25 @@ export const getGuidePosts = cache((category?: string) =>
     select: postCardSelect,
   }),
 );
+
+/** Rehber: içerik haritası numaralarına göre yayındaki yazılar, verilen sırayla (yayında olmayanlar atlanır). */
+export async function getGuidePostsByNos(nos: number[]) {
+  if (!nos.length) return [];
+  const rows = await prisma.blogPost.findMany({ where: { ...publishedWhere(), guideNo: { in: nos } }, select: postCardSelect });
+  return nos.map((n) => rows.find((r) => r.guideNo === n)).filter((x): x is (typeof rows)[number] => Boolean(x));
+}
+
+/** Rehber kategori sayfası: alt konu filtresi + sayfalama (12). */
+export async function getGuideCategoryPage(category: string, opts: { page: number; subtopic?: string | null }) {
+  const where: Prisma.BlogPostWhereInput = { ...publishedWhere(), category, ...(opts.subtopic ? { subtopic: opts.subtopic } : {}) };
+  const take = 12;
+  const [posts, total, subtopics] = await Promise.all([
+    prisma.blogPost.findMany({ where, orderBy: [{ guideNo: "asc" }, { publishedAt: "desc" }], skip: (opts.page - 1) * take, take, select: postCardSelect }),
+    prisma.blogPost.count({ where }),
+    prisma.blogPost.groupBy({ by: ["subtopic"], where: { ...publishedWhere(), category }, _count: { _all: true } }),
+  ]);
+  return { posts, total, pages: Math.max(1, Math.ceil(total / take)), subtopics: subtopics.filter((x) => x.subtopic).map((x) => ({ name: x.subtopic!, count: x._count._all })) };
+}
 
 /** Ana sayfa: önce öne çıkanlar, sonra en yeniler. */
 export async function getHomePosts(take = 3) {

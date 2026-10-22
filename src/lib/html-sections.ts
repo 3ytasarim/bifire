@@ -35,3 +35,18 @@ export function extractFaq(html: string | null | undefined): { q: string; a: str
   }
   return items;
 }
+
+/**
+ * Makale içindekiler menüsü için H2 başlıklarına kararlı kimlik ekler (`bolum-1`…). Girdi sanitize edilmiş HTML'dir;
+ * yalnızca düz `<h2>` etiketlerine id eklenir, başka hiçbir şey değişmez.
+ */
+export function withHeadingIds(html: string | null | undefined): { html: string; toc: { id: string; title: string }[] } {
+  if (!html) return { html: "", toc: [] };
+  const toc: { id: string; title: string }[] = [];
+  const out = html.replace(/<h2>([\s\S]*?)<\/h2>/g, (_, inner: string) => {
+    const id = `bolum-${toc.length + 1}`;
+    toc.push({ id, title: inner.replace(/<[^>]+>/g, "").trim() });
+    return `<h2 id="${id}">${inner}</h2>`;
+  });
+  return { html: out, toc };
+}

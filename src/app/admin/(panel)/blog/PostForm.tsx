@@ -41,14 +41,14 @@ export function PostForm({ post, products, knownTags }: { post?: PostFormData | 
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
           <Section title="Yazı">
-            <SlugFields nameField="title" nameLabel="Başlık" defaultName={p?.title} defaultSlug={p?.slug} prefix="/blog/" />
+            <SlugFields nameField="title" nameLabel="Başlık" defaultName={p?.title} defaultSlug={p?.slug} prefix="/somine-rehberi/" />
             <TextArea name="excerpt" label="Özet" rows={3} maxLength={500} defaultValue={p?.excerpt ?? ""} hint="Blog kartlarında ve yazı başında gösterilir; meta açıklama boşsa buradan üretilir." />
             <RichTextEditor name="content" label="İçerik" defaultValue={p?.content} placeholder="Yazınızı buraya yazın. Ara başlıklar için H2/H3 kullanın." />
           </Section>
           <Section title="İlgili ürünler" description="Yazının altında “Yazıda bahsi geçen ürünler” olarak gösterilir (iç linkleme).">
             <MultiPicker name="productIds" label="Ürünler" options={products} defaultValue={p?.productIds ?? []} />
           </Section>
-          <SeoFields defaults={p ?? {}} fallbackTitle={p?.title ?? ""} fallbackDescription={p?.excerpt ?? undefined} urlPath={`/blog/${p?.slug ?? ""}`} />
+          <SeoFields defaults={p ?? {}} fallbackTitle={p?.title ?? ""} fallbackDescription={p?.excerpt ?? undefined} urlPath={`/somine-rehberi/${p?.slug ?? ""}`} />
         </div>
         <div className="space-y-6">
           <Section title="Yayın">

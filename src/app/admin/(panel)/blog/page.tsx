@@ -45,7 +45,7 @@ export default async function BlogAdminPage({ searchParams }: { searchParams: Pr
               <Link href={`/admin/blog/${p.id}`} className="font-medium hover:underline">
                 {p.title}
               </Link>
-              <p className="text-xs text-neutral-400">/blog/{p.slug}</p>
+              <p className="text-xs text-neutral-400">/somine-rehberi/{p.slug}</p>
             </td>
             <td className="px-4 py-3 text-neutral-600">{p.publishedAt ? p.publishedAt.toLocaleString("tr-TR", { dateStyle: "medium", timeStyle: "short", timeZone: "Europe/Istanbul" }) : "—"}</td>
             <td className="px-4 py-3">

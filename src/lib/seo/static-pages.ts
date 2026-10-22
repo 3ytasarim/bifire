@@ -61,7 +61,7 @@ export const STATIC_PAGES = {
   },
   blog: {
     label: "Şömine Rehberi",
-    path: "/blog",
+    path: "/somine-rehberi",
     defaults: {
       title: "Şömine Rehberi | Seçim, Montaj, Baca ve Bakım | Bifire",
       description: "Şömine seçiminden montaj ve bacaya, yalıtımdan kullanım ve bakıma: konulara ayrılmış rehberlerle evinize uygun şömineyi doğru sorularla keşfedin.",

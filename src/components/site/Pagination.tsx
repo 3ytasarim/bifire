@@ -4,7 +4,7 @@ import { ChevronLeft, ChevronRight } from "lucide-react";
 /** Sunucu tarafı sayfalama bağlantıları (?sayfa=2). Sayfa 1 her zaman parametresiz URL. */
 export function Pagination({ basePath, page, pages }: { basePath: string; page: number; pages: number }) {
   if (pages <= 1) return null;
-  const href = (n: number) => (n <= 1 ? basePath : `${basePath}?sayfa=${n}`);
+  const href = (n: number) => (n <= 1 ? basePath : `${basePath}${basePath.includes("?") ? "&" : "?"}sayfa=${n}`);
   return (
     <nav aria-label="Sayfalama" className="mt-16 flex items-center justify-center gap-2">
       {page > 1 ? (

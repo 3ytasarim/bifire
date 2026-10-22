@@ -25,6 +25,13 @@ const nextConfig: NextConfig = {
     // Yükleme limitleri (lib/upload.ts): görsel 10 MB, PDF 20 MB, video 40 MB; multipart ek yükü için pay bırakıldı.
     serverActions: { bodySizeLimit: "48mb" },
   },
+  // Rehber /blog → /somine-rehberi taşındı (kalıcı yönlendirme; eski bağlantılar ve dış linkler korunur).
+  async redirects() {
+    return [
+      { source: "/blog", destination: "/somine-rehberi", permanent: true },
+      { source: "/blog/:path*", destination: "/somine-rehberi/:path*", permanent: true },
+    ];
+  },
   async headers() {
     return [
       { source: "/:path*", headers: securityHeaders },

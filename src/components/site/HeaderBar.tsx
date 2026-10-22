@@ -42,7 +42,7 @@ const NAV_AFTER_PRODUCTS = [
 const NAV_RIGHT = [
   ...(FEATURES.projects ? [{ label: "Projeler", href: "/projeler" }] : []),
   { label: "Showroom", href: "/fabrika-showroom" },
-  { label: "Rehber", href: "/blog" },
+  { label: "Rehber", href: "/somine-rehberi" },
   { label: "İletişim", href: "/iletisim" },
 ];
 // Mobil panelde ek olarak gösterilenler.

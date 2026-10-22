@@ -506,6 +506,14 @@ model BlogPost {
   publishedAt   DateTime?
   /// Rehber konu kategorisi (src/content/guide.ts slug), ör. "montaj-ve-baca".
   category      String?
+  /// Rehber alt konusu (kategori içi filtre/etiket), ör. "Baca ve hava".
+  subtopic      String?
+  /// Rehber içerik haritasındaki makale numarası (1–130); yalnız yönetim/eşleştirme içindir, sitede gösterilmez.
+  guideNo       Int?      @unique
+  /// İlgili rehberlerin makale numaraları, virgülle ("009, 056, 057").
+  relatedNos    String?
+  /// Yazı sonu sonraki adım (ör. "Showroom randevusu", "Teknik destek").
+  nextStep      String?
 
   metaTitle       String?
   metaDescription String?
