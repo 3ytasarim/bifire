@@ -3,7 +3,6 @@ import Image from "next/image";
 import { ArrowDown, ArrowRight, ImageUp } from "lucide-react";
 import { ParallaxFrame, Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { BeforeAfter } from "@/components/site/BeforeAfter";
-import { DesignRequest } from "@/components/site/DesignRequest";
 import { FaqList } from "@/components/site/FaqList";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
@@ -207,7 +206,6 @@ export default async function DesignPage() {
         </Reveal>
       </section>
 
-      <DesignRequest />
     </>
   );
 }

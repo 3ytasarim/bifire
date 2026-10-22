@@ -20,6 +20,7 @@ import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { JsonLd } from "@/components/site/JsonLd";
 import { ProductGallery } from "@/components/site/ProductGallery";
+import { ShareSpaceButton } from "@/components/site/ShareSpaceButton";
 import { Button3D } from "@/components/ui/button-3d";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
@@ -180,6 +181,7 @@ export default async function ProductPage({ params }: Props) {
           <div className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-7" y={20}>
               <ProductGallery images={gallery} name={product.name} />
+              <ShareSpaceButton productName={product.name} productSlug={product.slug} />
               {family ? (
                 <dl className="mt-5 grid gap-3 rounded-[1.5rem] border border-linen bg-white p-5 sm:grid-cols-3 sm:p-6">
                   <p className="text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase sm:col-span-3">Yerleşim yaklaşımı</p>

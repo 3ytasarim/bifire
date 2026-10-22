@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { DesignRequest } from "@/components/site/DesignRequest";
 import { DesignTogether } from "@/components/site/DesignTogether";
 import { Footer } from "@/components/site/Footer";
 import { Header } from "@/components/site/Header";
@@ -31,6 +32,8 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       <WhatsAppFloat />
       {/* Site geneli seçim rehberi: header "Birlikte bulalım" düğmesi ve [data-guide-open] öğeleri açar. */}
       <DesignTogether trigger="none" categories={formCategories} products={formProducts} />
+      {/* Site geneli mekân fotoğrafı başvurusu: [data-design-open] öğeleri (ürün sayfası, mekân tasarım sayfası) açar. */}
+      <DesignRequest />
       <RevealObserver />
     </>
   );

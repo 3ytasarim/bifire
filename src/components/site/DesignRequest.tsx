@@ -2,6 +2,7 @@
 
 import Image from "next/image";
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { useActionState, useEffect, useRef, useState } from "react";
 import { useFormStatus } from "react-dom";
 import { ArrowLeft, ArrowRight, CheckCircle2, ImageUp, Loader2, Lock, Trash2, X } from "lucide-react";
@@ -46,7 +47,8 @@ function Submit() {
 
 /**
  * "Mekânınıza özel tasarım" başvurusu: 1) mekân fotoğrafı 2) tercihler 3) özet + iletişim. Sayfadaki
- * `[data-design-open]` öğeleri ve #paylas bağlantısı pencereyi açar. Tüm adımlar tek <form>'dadır (gizli
+ * `[data-design-open]` öğeleri ve #paylas bağlantısı pencereyi açar (site geneli, layout'ta tek örnek). Öğe
+ * `data-design-product` (ad) ve `data-design-product-slug` taşıyorsa talep o ürünle ilişkilendirilir. Tüm adımlar tek <form>'dadır (gizli
  * adımların alanları korunur). Fotoğraf isteğe bağlıdır; özel depoya kaydedilir, yalnızca ekibimiz görür.
  */
 export function DesignRequest() {
@@ -61,12 +63,18 @@ export function DesignRequest() {
   const [busy, setBusy] = useState(false);
   const [prefs, setPrefs] = useState({ preference: "Birlikte seçelim", wallWidth: "", ceilingHeight: "", flue: "Henüz bilmiyorum", note: "" });
   const [state, action] = useActionState<DesignFormState, FormData>(submitDesignRequest, { status: "idle" });
+  const pathname = usePathname();
+  const [product, setProduct] = useState<{ name: string; slug: string } | null>(null);
 
   useEffect(() => {
     const onClick = (e: MouseEvent) => {
       const t = (e.target as HTMLElement).closest("[data-design-open]");
       if (!t) return;
       e.preventDefault();
+      const name = t.getAttribute("data-design-product");
+      const slug = t.getAttribute("data-design-product-slug");
+      setProduct(name && slug ? { name, slug } : null);
+      setStep(0);
       setOpen(true);
     };
     document.addEventListener("click", onClick);
@@ -123,12 +131,15 @@ export function DesignRequest() {
     fd.delete("photoPicker");
     if (photo) fd.set("photo", photo.blob, photo.name);
     for (const [k, v] of Object.entries(prefs)) fd.set(k, v);
+    fd.set("sourcePath", pathname ?? "/");
+    if (product) fd.set("productSlug", product.slug);
     action(fd);
   };
 
   const err = state.status === "error" ? (state.errors ?? {}) : {};
   const v = state.values ?? {};
   const summary = [
+    ...(product ? [["İlgilendiğiniz ürün", product.name]] : []),
     ["Mekân fotoğrafı", photo ? "Eklendi" : "Eklenmedi"],
     ["Şömine tercihi", prefs.preference],
     ["Duvar genişliği", prefs.wallWidth ? `~${prefs.wallWidth} cm` : "Belirtilmedi"],

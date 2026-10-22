@@ -115,6 +115,11 @@ export async function submitDesignRequest(_prev: DesignFormState, formData: Form
   }
 
   const d = parsed.data;
+  // Ürün sayfasından açıldıysa ürün (istemciden gelen slug'a güvenilmez: aktif ürün olarak doğrulanır).
+  const productSlug = String(formData.get("productSlug") ?? "").slice(0, 160);
+  const product = productSlug ? await prisma.product.findFirst({ where: { slug: productSlug, active: true }, select: { id: true, name: true, categoryId: true } }) : null;
+  const rawSource = String(formData.get("sourcePath") ?? "");
+  const sourcePath = /^\/[\w\-/çğıöşüÇĞİÖŞÜ]*$/.test(rawSource) && rawSource.length <= 300 ? rawSource : "/mekaniniza-ozel-tasarim";
   const selection = [
     `Şömine tercihi: ${d.preference}`,
     d.wallWidth ? `Duvar genişliği: ~${d.wallWidth} cm` : null,
@@ -146,7 +151,10 @@ export async function submitDesignRequest(_prev: DesignFormState, formData: Form
         district: d.district,
         topic: "Mekânınıza özel tasarım",
         selection,
-        sourcePath: "/mekaniniza-ozel-tasarim",
+        sourcePath,
+        productId: product?.id ?? null,
+        productName: product?.name ?? null,
+        categoryId: product?.categoryId ?? null,
         kvkkConsent: true,
         consentAt: now,
         ipHash,

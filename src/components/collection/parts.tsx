@@ -2,6 +2,7 @@ import { Phone } from "lucide-react";
 import { DesignTogether } from "@/components/site/DesignTogether";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { ProductGallery } from "@/components/site/ProductGallery";
+import { ShareSpaceButton } from "@/components/site/ShareSpaceButton";
 import type { GalleryImage } from "@/components/site/Lightbox";
 import type { WoodFamily } from "@/lib/collection";
 import type { ProductDetail } from "@/lib/queries";
@@ -18,7 +19,13 @@ type FormOptions = { categories: { id: string; name: string }[]; products: { id:
  * yaklaşımı ve "Birlikte tasarlayalım". Mobilde sıra: galeri → başlık/seçimler → ekler (sayfa ızgarası belirler).
  */
 export function CollectionAside({ part, product, family, gallery, form, path }: { part: "gallery" | "extras"; product: ProductDetail; family: WoodFamily | null; gallery: GalleryImage[]; form: FormOptions; path: string }) {
-  if (part === "gallery") return <ProductGallery images={gallery} name={product.name} />;
+  if (part === "gallery")
+    return (
+      <>
+        <ProductGallery images={gallery} name={product.name} />
+        <ShareSpaceButton productName={product.name} productSlug={product.slug} />
+      </>
+    );
   return (
     <>
       {family && (family.view || family.place || family.focus) ? (
