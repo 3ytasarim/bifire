@@ -13,7 +13,7 @@ export async function Header() {
       email={s.email}
       workingHours={s.workingHours}
       socials={socialLinks(s)}
-      categories={categories.map(({ id, name, slug, image, imageAlt, children }) => ({ id, name, slug, image, imageAlt, children }))}
+      categories={categories.map(({ id, name, slug, image, imageAlt, href, children }) => ({ id, name, slug, image, imageAlt, href, children }))}
     />
   );
 }

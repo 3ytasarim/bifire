@@ -63,7 +63,15 @@ const schema = z.object({
   sortOrder: int(0, 9999),
   tags: z.string().max(1000),
   gallery: jsonArray(z.object({ url: localPath, alt: z.string().trim().max(250) })),
-  specs: jsonArray(z.object({ group: z.string().trim().max(80), label: z.string().trim().max(120), value: z.string().trim().max(160), unit: z.string().trim().max(30) })),
+  specs: jsonArray(
+    z.object({
+      group: z.string().trim().max(80),
+      label: z.string().trim().max(120),
+      value: z.string().trim().max(160),
+      unit: z.string().trim().max(30),
+      variant: z.string().trim().max(80).default(""),
+    }),
+  ),
   features: jsonArray(
     z.object({
       label: z.string().trim().max(60).default(""),
@@ -132,7 +140,7 @@ export async function saveProduct(_prev: ActionState, formData: FormData): Promi
       await tx.productSpecification.createMany({
         data: specs
           .filter((s) => s.label && s.value)
-          .map((s, i) => ({ productId: pid, group: s.group || null, label: s.label, value: s.value, unit: s.unit || null, sortOrder: i })),
+          .map((s, i) => ({ productId: pid, group: s.group || null, label: s.label, value: s.value, unit: s.unit || null, variant: s.variant || null, sortOrder: i })),
       });
       await tx.productFeature.createMany({
         data: features

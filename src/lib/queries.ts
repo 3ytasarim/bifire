@@ -2,6 +2,7 @@ import "server-only";
 import { cache } from "react";
 import type { Prisma } from "@prisma/client";
 import { prisma } from "@/lib/db";
+import { categoryHref } from "@/lib/catalog";
 
 /**
  * Public site sorguları. Hepsi yalnızca aktif / yayında içerik döner; `cache` aynı istekte
@@ -26,8 +27,11 @@ export type ProductCardData = Prisma.ProductGetPayload<{ select: typeof cardProd
 
 const activeProduct = { active: true, category: { active: true } } satisfies Prisma.ProductWhereInput;
 
-export const getNavCategories = cache(() =>
-  prisma.productCategory.findMany({
+const navProducts = { where: { active: true }, orderBy: [{ sortOrder: "asc" as const }], take: 2, select: { slug: true } };
+
+/** Menü/ana sayfa kategorileri; her kategori ve alt kategori için tıklama hedefi (`href`) hesaplanmış olarak döner. */
+export const getNavCategories = cache(async () => {
+  const rows = await prisma.productCategory.findMany({
     where: { active: true, parentId: null },
     orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
     select: {
@@ -37,15 +41,21 @@ export const getNavCategories = cache(() =>
       image: true,
       imageAlt: true,
       description: true,
+      products: navProducts,
       children: {
         where: { active: true },
         orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-        select: { id: true, name: true, slug: true },
+        select: { id: true, name: true, slug: true, products: navProducts },
       },
       _count: { select: { products: { where: { active: true } } } },
     },
-  }),
-);
+  });
+  return rows.map(({ products, children, ...c }) => ({
+    ...c,
+    href: categoryHref({ slug: c.slug, products, childCount: children.length }),
+    children: children.map(({ products: chProducts, ...ch }) => ({ ...ch, href: categoryHref({ slug: ch.slug, products: chProducts }) })),
+  }));
+});
 
 export const getCategoryBySlug = cache((slug: string) =>
   prisma.productCategory.findFirst({

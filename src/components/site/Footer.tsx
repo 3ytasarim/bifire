@@ -70,7 +70,7 @@ export async function Footer() {
           <ul className="mt-6 space-y-1">
             {categories.map((c) => (
               <li key={c.id}>
-                <Link href={routes.category(c.slug)} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-ink">
+                <Link href={c.href} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-ink">
                   {c.name}
                 </Link>
               </li>

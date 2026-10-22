@@ -40,7 +40,7 @@ export type ProductFormData = {
   sortOrder: number;
   tags: string;
   gallery: GalleryItem[];
-  specs: { group: string; label: string; value: string; unit: string }[];
+  specs: { group: string; label: string; value: string; unit: string; variant: string }[];
   features: { label: string; title: string; text: string; note: string }[];
   options: { group: string; value: string }[];
   faqs: { question: string; answer: string }[];
@@ -100,7 +100,10 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
             <TextInput name="dimensionsNote" label="Ölçü notu" placeholder="ör. Cam ölçüsü 90 × 45 cm" defaultValue={p?.dimensionsNote ?? ""} maxLength={250} />
           </Section>
 
-          <Section title="Ek teknik özellikler" description="Şömine türüne özel diğer değerler (ör. tank kapasitesi, cam tipi, sertifika). Grup adı tabloyu bölümlere ayırır.">
+          <Section
+            title="Ek teknik özellikler"
+            description="Şömine türüne özel değerler. Grup adı tabloyu bölümlere ayırır. Değer ölçüye göre değişiyorsa “Seçenek” alanına ilgili seçenek değerini yazın (ör. 70'lik) ve her ölçü için ayrı satır ekleyin: ürün sayfasında seçilen ölçünün değerleri gösterilir ve “Tüm ölçüleri karşılaştır” tablosu oluşur. Seçenek boşsa satır tüm ölçüler için geçerlidir."
+          >
             <RowsEditor
               name="specs"
               addLabel="Özellik satırı ekle"
@@ -111,6 +114,7 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
                 { key: "label", label: "Özellik" },
                 { key: "value", label: "Değer" },
                 { key: "unit", label: "Birim", width: "w-24" },
+                { key: "variant", label: "Seçenek (ops.)", width: "w-full sm:w-32", maxLength: 80 },
               ]}
             />
           </Section>

@@ -21,9 +21,9 @@ export function ProductOptions({ groups }: { groups: Group[] }) {
 
   // Dış depoyu (form) senkronlamak bir yan etkidir; render sırasında yapılmaz.
   useEffect(() => {
-    selectionStore.set(summary);
-    return () => selectionStore.set("");
-  }, [summary]);
+    selectionStore.set(summary, picked);
+    return () => selectionStore.set("", {});
+  }, [summary, picked]);
 
   return (
     <MotionConfig reducedMotion="user">

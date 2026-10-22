@@ -10,6 +10,7 @@ import { FaqList } from "@/components/site/FaqList";
 import { MobileCta } from "@/components/site/MobileCta";
 import { ProcessSteps } from "@/components/site/ProcessSteps";
 import { ProductOptions } from "@/components/site/ProductOptions";
+import { ProductSpecs, VariantHighlights, type VariantRow } from "@/components/site/ProductSpecs";
 import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
@@ -90,12 +91,22 @@ export default async function ProductPage({ params }: Props) {
     ...product.images.filter((i) => i.url !== product.coverImage).map((i, n) => ({ url: i.url, alt: i.alt || `${product.name} — görsel ${n + 2}`, width: i.width, height: i.height })),
   ];
   const facts = keyFacts(product);
-  const rows = technicalRows(product, product.specifications);
+  // Seçeneğe bağlı (variant) satırlar ölçüye göre değişen değerlerdir; diğerleri tüm ölçüler için geçerlidir.
+  const rows = technicalRows(product, product.specifications.filter((sp) => !sp.variant));
+  const variantSpecs = product.specifications.filter((sp) => sp.variant);
+  const variantRows: VariantRow[] = [];
+  for (const sp of variantSpecs) {
+    let row = variantRows.find((r) => r.label === sp.label);
+    if (!row) variantRows.push((row = { label: sp.label, unit: sp.unit, values: {} }));
+    row.values[sp.variant!] = sp.value;
+  }
   const description = deriveDescription(product.shortDescription, product.description) || product.name;
   const primary = gallery[0];
   const primaryMeta = primary ? await getImageMeta(primary.url) : null;
   const wa = whatsappHref(settings, `Ürün: ${product.name} — ${absoluteUrl(path)}`);
   const optionGroups = groupOptions(product.options);
+  const variantGroup = optionGroups.find((g) => g.values.some((v) => variantSpecs.some((sp) => sp.variant === v))) ?? null;
+  const variants = variantGroup ? variantGroup.values.filter((v) => variantSpecs.some((sp) => sp.variant === v)) : [];
   const bullets = product.features.filter((f) => !f.title);
   const details = product.features.filter((f) => f.title);
   const faqs = product.faqs.map((f) => ({ q: f.question, a: f.answer }));
@@ -123,7 +134,10 @@ export default async function ProductPage({ params }: Props) {
             category: category.name,
             modelCode: product.modelCode,
             brand: product.brand,
-            properties: rows.filter((r) => r.label !== "Marka" && r.label !== "Model kodu").map((r) => ({ name: r.label, value: r.raw ?? r.value, unitText: r.unit })),
+            properties: [
+              ...rows.filter((r) => r.label !== "Marka" && r.label !== "Model kodu").map((r) => ({ name: r.label, value: r.raw ?? r.value, unitText: r.unit })),
+              ...variantRows.flatMap((r) => variants.map((v) => ({ name: `${r.label} (${v})`, value: r.values[v] ?? "", unitText: r.unit }))).filter((x) => x.value),
+            ],
           }),
           faqNode(path, faqs),
         )}
@@ -158,6 +172,7 @@ export default async function ProductPage({ params }: Props) {
                 ) : null}
 
                 {optionGroups.length ? <ProductOptions groups={optionGroups} /> : null}
+                {variantGroup && variantRows.length ? <VariantHighlights group={variantGroup.name} fallback={variants[0] ?? ""} rows={variantRows} /> : null}
 
                 <div className="mt-8 flex flex-col gap-3">
                   <Button3D href="#teklif" tone="ember" size="lg" fullWidth>
@@ -217,6 +232,25 @@ export default async function ProductPage({ params }: Props) {
                   </Reveal>
                 ))}
               </dl>
+            </div>
+          </section>
+        ) : null}
+
+        {rows.length || variantRows.length ? (
+          <section aria-labelledby="teknik" className="bg-paper py-16 sm:py-24">
+            <div className="shell grid gap-10 lg:grid-cols-12">
+              <Reveal className="lg:col-span-4">
+                <p className="eyebrow text-ember-ink">Ölçüye göre değişen detaylar</p>
+                <h2 id="teknik" className="display-3 mt-5">
+                  Teknik özellikler
+                </h2>
+                <p className="mt-4 max-w-sm text-[15px] text-steel">
+                  {variantRows.length ? "Ölçüyü değiştirerek teknik bilgileri karşılaştırabilirsiniz. " : ""}Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir.
+                </p>
+              </Reveal>
+              <div className="lg:col-span-8">
+                <ProductSpecs group={variantGroup?.name ?? null} variants={variants} rows={variantRows} common={groupRows(rows)} />
+              </div>
             </div>
           </section>
         ) : null}
@@ -307,38 +341,6 @@ export default async function ProductPage({ params }: Props) {
           </section>
         ) : null}
 
-        {rows.length ? (
-          <section aria-labelledby="teknik" className="py-16 sm:py-24">
-            <div className="shell grid gap-10 lg:grid-cols-12">
-              <div className="lg:col-span-4">
-                <h2 id="teknik" className="display-3">
-                  Teknik özellikler
-                </h2>
-                <p className="mt-4 max-w-sm text-[15px] text-steel">Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir.</p>
-              </div>
-              <div className="space-y-10 lg:col-span-8">
-                {groupRows(rows).map(([group, items]) => (
-                  <table key={group} className="w-full border-collapse text-left text-[15px]">
-                    <caption className="pb-3 text-left text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase">{group}</caption>
-                    <tbody>
-                      {items.map((r) => (
-                        <tr key={`${group}-${r.label}`} className="border-t border-sand">
-                          <th scope="row" className="w-1/2 py-4 pr-4 font-medium text-steel">
-                            {r.label}
-                          </th>
-                          <td className="py-4 font-semibold text-ink">
-                            {r.value}
-                            {r.unit ? ` ${r.unit}` : ""}
-                          </td>
-                        </tr>
-                      ))}
-                    </tbody>
-                  </table>
-                ))}
-              </div>
-            </div>
-          </section>
-        ) : null}
       </article>
 
       {FEATURES.projects && product.projects.length ? (

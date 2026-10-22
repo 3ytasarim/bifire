@@ -27,6 +27,15 @@ export const TEXT_POSITION_LABELS: Record<TextPosition, string> = {
   BOTTOM_LEFT: "Sol alt",
 };
 
+/**
+ * Kategori bağlantısı: alt kategorisi olmayan ve tek aktif ürünü bulunan kategori doğrudan ürün sayfasına gider
+ * (kategori sayfası açılıp ürünü ikinci kez tıklamak gerekmesin). Kategori sayfası yine erişilebilir kalır.
+ */
+export function categoryHref(c: { slug: string; products?: { slug: string }[]; childCount?: number }): string {
+  if (!c.childCount && c.products?.length === 1) return `/urun/${c.products[0]!.slug}`;
+  return `/urunler/${c.slug}`;
+}
+
 export const routes = {
   home: "/",
   about: "/kurumsal",

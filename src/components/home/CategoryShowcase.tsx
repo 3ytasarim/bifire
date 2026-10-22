@@ -2,7 +2,7 @@ import { HOME } from "@/content/home";
 import { CategoryCard } from "@/components/site/Cards";
 import { SectionHeading } from "@/components/site/SectionHeading";
 
-type Category = { id: string; name: string; slug: string; image: string | null; imageAlt: string | null; description: string | null; _count: { products: number } };
+type Category = { id: string; name: string; slug: string; href: string; image: string | null; imageAlt: string | null; description: string | null; _count: { products: number } };
 
 /**
  * Ürün grupları — asimetrik mimari grid: ilk iki kategori büyük, diğerleri üçlü sıra.

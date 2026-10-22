@@ -17,7 +17,8 @@ export type NavCategory = {
   slug: string;
   image: string | null;
   imageAlt: string | null;
-  children: { id: string; name: string; slug: string }[];
+  href: string;
+  children: { id: string; name: string; slug: string; href: string }[];
 };
 
 export type HeaderSocial = { kind: keyof typeof SOCIAL_ICONS; url: string; label: string };
@@ -206,7 +207,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                           <ul className="col-span-9 grid grid-cols-4 gap-x-6 gap-y-8">
                             {categories.map((c) => (
                               <li key={c.id}>
-                                <Link href={`/urunler/${c.slug}`} className="group/cat block">
+                                <Link href={c.href} className="group/cat block">
                                   <span className="zoom-media relative block aspect-[4/3] rounded-xl bg-bone">
                                     {c.image ? (
                                       <Image src={c.image} alt="" fill sizes="220px" className="object-cover" />
@@ -220,7 +221,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                                   <ul className="mt-1.5 space-y-1">
                                     {c.children.map((ch) => (
                                       <li key={ch.id}>
-                                        <Link href={`/urunler/${ch.slug}`} className="text-[13px] text-steel transition-colors hover:text-ember-ink">
+                                        <Link href={ch.href} className="text-[13px] text-steel transition-colors hover:text-ember-ink">
                                           {ch.name}
                                         </Link>
                                       </li>
@@ -310,7 +311,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                   </li>
                   {categories.map((c) => (
                     <li key={c.id}>
-                      <Link href={`/urunler/${c.slug}`} className="flex min-h-12 items-center gap-3 text-base text-ink">
+                      <Link href={c.href} className="flex min-h-12 items-center gap-3 text-base text-ink">
                         <span className="relative h-9 w-9 shrink-0 overflow-hidden rounded-lg bg-bone">
                           {c.image ? <Image src={c.image} alt="" fill sizes="36px" className="object-cover" /> : <span className="ember-placeholder absolute inset-0" />}
                         </span>
@@ -320,7 +321,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, workingHours, so
                         <ul className="ml-12 border-l border-linen pl-4">
                           {c.children.map((ch) => (
                             <li key={ch.id}>
-                              <Link href={`/urunler/${ch.slug}`} className="flex min-h-11 items-center text-sm text-steel">
+                              <Link href={ch.href} className="flex min-h-11 items-center text-sm text-steel">
                                 {ch.name}
                               </Link>
                             </li>

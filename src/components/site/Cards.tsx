@@ -121,7 +121,7 @@ export function CategoryCard({
   aspect = "aspect-[4/5]",
   priority,
 }: {
-  category: { name: string; slug: string; image: string | null; imageAlt: string | null; description?: string | null; count?: number };
+  category: { name: string; slug: string; href?: string; image: string | null; imageAlt: string | null; description?: string | null; count?: number };
   sizes?: string;
   aspect?: string;
   priority?: boolean;
@@ -141,7 +141,7 @@ export function CategoryCard({
               <p className="inline-flex rounded-full bg-white/20 px-3 py-1 text-[11px] font-semibold tracking-[0.08em] backdrop-blur">{category.count} model</p>
             ) : null}
             <h3 className="mt-3 font-display text-2xl leading-tight font-semibold sm:text-[1.7rem]">
-              <Link href={routes.category(category.slug)} className="after:absolute after:inset-0">
+              <Link href={category.href ?? routes.category(category.slug)} className="after:absolute after:inset-0">
                 {category.name}
               </Link>
             </h3>
