@@ -21,4 +21,7 @@ next-env.d.ts
 npm-debug.log*
 
 # yüklenen dosyalar (Hetzner kalıcı diski)
-/storage/
+# Herkese açık medya (storage/uploads: ürün, bölge, rehber görselleri) repoda tutulur — pull ile site görselleriyle gelir.
+# Müşteri dosyaları (storage/private: mekân fotoğrafları vb.) KVKK gereği ASLA repoya girmez.
+/storage/*
+!/storage/uploads/
