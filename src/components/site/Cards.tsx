@@ -36,10 +36,7 @@ export function ProductCard({ product, sizes = "(min-width: 1280px) 25vw, (min-w
         {product.coverImage ? (
           <Image src={product.coverImage} alt={product.coverImageAlt || product.name} fill sizes={sizes} className="object-cover" {...(priority ? { priority: true } : {})} />
         ) : product.conceptImage ? (
-          <>
-            <Image src={product.conceptImage} alt={product.conceptImageAlt || product.name} fill sizes={sizes} className="object-cover" {...(priority ? { priority: true } : {})} />
-            <span className="absolute right-4 bottom-4 rounded-full bg-ink/70 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur">Temsili tasarım</span>
-          </>
+          <Image src={product.conceptImage} alt={product.conceptImageAlt || product.name} fill sizes={sizes} className="object-cover" {...(priority ? { priority: true } : {})} />
         ) : (
           <Placeholder label={product.category.name} />
         )}

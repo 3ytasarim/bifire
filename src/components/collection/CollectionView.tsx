@@ -80,7 +80,6 @@ export function CollectionView({
                         {p.coverImage || p.conceptImage ? (
                           <ParallaxFrame className="absolute inset-0 overflow-hidden">
                             <Image src={(p.coverImage || p.conceptImage)!} alt={(p.coverImage ? p.coverImageAlt : p.conceptImageAlt) || p.name} fill sizes="(min-width: 768px) 50vw, 100vw" className="object-cover" />
-                            {p.coverImage ? null : <span className="absolute right-4 bottom-4 rounded-full bg-ink/70 px-3 py-1 text-[11px] font-semibold text-white backdrop-blur">Temsili tasarım</span>}
                           </ParallaxFrame>
                         ) : (
                           <span aria-hidden="true" className="ember-placeholder absolute inset-0" />

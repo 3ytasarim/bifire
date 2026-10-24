@@ -110,7 +110,6 @@ export default async function DesignPage() {
             </Reveal>
             <Reveal className="mt-10" delay={0.1}>
               <BeforeAfter before={before} after={after} beforeLabel="Örnek mekân" afterLabel="Tasarım önerisi" />
-              <p className="mt-3 text-[13px] text-stone">Temsili görsellerdir; gerçek müşteri projesi veya uygulanmış Bifire ürünü değildir.</p>
             </Reveal>
             <div className="mt-12 grid gap-8 lg:grid-cols-12 lg:items-end">
               <Reveal className="lg:col-span-7">

@@ -124,7 +124,7 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
               <p className="mb-2 text-xs text-neutral-500">Ürün sayfasında “Ölçü çizimleri” bölümünde büyütülebilir olarak gösterilir. Seçenek alanı, çizimin hangi model için geçerli olduğunu belirler (teknik tablodaki “Seçenek” değeriyle aynı yazın).</p>
               <GalleryEditor name="drawings" defaultValue={p?.drawings ?? []} nameHint={`${p?.name ?? "urun"}-olcu`} withVariant emptyText="Ölçü çizimi yok." />
             </div>
-            <TextArea name="imageNote" label="Görsel notu" defaultValue={p?.imageNote ?? ""} maxLength={300} rows={2} hint="Görsellerin hemen altında görünür (ör. “Yapay zekâyla oluşturulmuş temsili mekân tasarımıdır; gerçek ürün fotoğrafı değildir.”)." />
+            <TextArea name="imageNote" label="Görsel notu" defaultValue={p?.imageNote ?? ""} maxLength={300} rows={2} hint="İsteğe bağlı: görsellerin hemen altında küçük bir not olarak görünür. Boşsa not gösterilmez." />
             <ImagePicker name="conceptImage" label="Temsili tasarım görseli (galeri dışı)" defaultValue={p?.conceptImage} altName="conceptImageAlt" altDefault={p?.conceptImageAlt} aspect="aspect-[16/9] max-w-md" nameHint={`${p?.name ?? "urun"}-temsili`} hint="Gerçek ürün fotoğrafı olmayan modeller için: ana galeriye konmaz, sayfada “Temsili tasarım önerisi” bölümünde görsel notuyla gösterilir." />
           </Section>
 

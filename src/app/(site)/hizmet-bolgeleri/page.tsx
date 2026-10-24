@@ -137,7 +137,6 @@ export default function RegionsPage() {
               </StaggerItem>
             ))}
           </Stagger>
-          <p className="mt-6 text-[12.5px] leading-relaxed text-stone">Kart görselleri: yapay zekâyla oluşturulmuş temsili şömine tasarımlarıdır; gerçek Bifire uygulaması değildir.</p>
         </div>
       </section>
 

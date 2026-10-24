@@ -124,7 +124,6 @@ export default async function PostPage({ params }: Props) {
               <div className="relative aspect-[16/9] overflow-hidden rounded-[1.75rem] bg-linen">
                 <Image src={post.coverImage} alt={post.coverImageAlt || post.title} fill priority sizes="(min-width: 1152px) 1100px, 100vw" className="object-cover" />
               </div>
-              <figcaption className="mt-3 text-[12px] text-stone">Temsili görsel; gerçek bir Bifire uygulaması veya ürün fotoğrafı değildir.</figcaption>
             </figure>
           </div>
         ) : null}

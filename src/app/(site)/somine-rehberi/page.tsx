@@ -124,7 +124,6 @@ export default async function GuidePage({ searchParams }: Props) {
                 </div>
               ))}
             </div>
-            <p className="absolute top-4 right-4 rounded-full border border-white/30 bg-ink/40 px-3 py-1 text-[10px] font-medium tracking-[0.08em] text-white/85 backdrop-blur-md">Temsili görsel</p>
           </Reveal>
         </div>
       </section>

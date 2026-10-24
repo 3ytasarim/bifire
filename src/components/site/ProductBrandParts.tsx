@@ -134,9 +134,6 @@ export function ConceptHero({ url, alt, note }: { url: string; alt: string; note
     <figure>
       <div className="relative aspect-[4/5] w-full overflow-hidden rounded-2xl bg-bone sm:aspect-square">
         <Image src={url} alt={alt} fill priority sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
-        <span className="absolute top-4 left-4 inline-flex items-center gap-1.5 rounded-full bg-ink/75 px-3 py-1.5 text-[12px] font-semibold text-white backdrop-blur">
-          <Sparkles aria-hidden="true" className="h-3.5 w-3.5 text-ember" /> Temsili mekân tasarımı
-        </span>
       </div>
       {note ? (
         <figcaption>
