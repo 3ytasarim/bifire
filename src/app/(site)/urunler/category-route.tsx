@@ -8,7 +8,7 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { SeoArticle } from "@/components/site/SeoArticle";
 import { ImageNote } from "@/components/site/ProductBrandParts";
-import { categoryBase, routes, type CategoryBase } from "@/lib/catalog";
+import { routes } from "@/lib/catalog";
 import { getCategoryBySlug, getCategoryProducts, getModelCounts, getSoleProductCategory } from "@/lib/queries";
 import { CollectionView } from "@/components/collection/CollectionView";
 import { collectionCopy } from "@/lib/collection";
@@ -23,7 +23,7 @@ import { buildEntityMetadata, deriveDescription } from "@/lib/seo/metadata";
  */
 
 /** Kayıtlı canonical boş ya da kategorinin kendi adresi mi (yönetici başka bir adres girmediyse). */
-const isSelfOrEmpty = (canonical: string | null, slug: string) => !canonical || /\/(?:urunler|somine-modelleri)\/([^/?#]+)\/?$/.exec(canonical)?.[1] === slug;
+const isSelfOrEmpty = (canonical: string | null, slug: string) => !canonical || /\/([^/?#]+)\/?$/.exec(canonical)?.[1] === slug;
 
 export async function categoryMetadata(kategori: string): Promise<Metadata> {
   const c = await getCategoryBySlug(kategori);
@@ -33,17 +33,17 @@ export async function categoryMetadata(kategori: string): Promise<Metadata> {
     name: c.name,
     path: routes.category(c.slug, c.parent?.slug),
     // Tek ürünlü kategori: aynı metin ürün sayfasında; arama motoruna ürün sayfası gösterilir.
-    seo: sole && isSelfOrEmpty(c.canonicalUrl, c.slug) ? { ...c, canonicalUrl: routes.product(sole.productSlug) } : c,
+    seo: sole && isSelfOrEmpty(c.canonicalUrl, c.slug) ? { ...c, canonicalUrl: routes.product(sole.productSlug, c.slug, c.parent?.slug) } : c,
     fallbackDescription: [c.description, c.content],
     image: c.image,
     imageAlt: c.imageAlt,
   });
 }
 
-export async function CategoryRoute({ kategori, base }: { kategori: string; base: CategoryBase }) {
+export async function CategoryRoute({ kategori, at }: { kategori: string; at: string }) {
   const category = await getCategoryBySlug(kategori);
   if (!category) notFound();
-  if (categoryBase(category.slug, category.parent?.slug) !== base) permanentRedirect(routes.category(category.slug, category.parent?.slug));
+  if (routes.category(category.slug, category.parent?.slug) !== at) permanentRedirect(routes.category(category.slug, category.parent?.slug));
 
   const products = await getCategoryProducts([category.id, ...category.children.map((c) => c.id)]);
   const path = routes.category(category.slug, category.parent?.slug);
@@ -62,7 +62,7 @@ export async function CategoryRoute({ kategori, base }: { kategori: string; base
         category.image ? imageNode(path, { url: category.image, alt: category.imageAlt || category.name, meta: imageMeta }) : null,
         webPageNode({ path, name: category.name, description, type: "CollectionPage", hasBreadcrumb: true, hasPrimaryImage: Boolean(category.image), dateModified: category.updatedAt }),
         breadcrumbNode(path, crumbs),
-        products.length ? itemListNode(path, products.map((p) => ({ name: p.name, path: routes.product(p.slug) }))) : null,
+        products.length ? itemListNode(path, products.map((p) => ({ name: p.name, path: routes.product(p.slug, p.category.slug) }))) : null,
         faqNode(path, extractFaq(category.content)),
       )}
     />

@@ -24,6 +24,8 @@ export type ProductFormData = {
   description: string | null;
   coverImage: string | null;
   coverImageAlt: string | null;
+  /** Ürünün site adresi (kategoriye göre: /urun/… veya /elektrikli-somineler/…/…). */
+  path?: string;
   imageNote: string | null;
   conceptImage: string | null;
   conceptImageAlt: string | null;
@@ -81,7 +83,7 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
           <Section title="Genel">
-            <SlugFields nameLabel="Ürün adı" defaultName={p?.name} defaultSlug={p?.slug} prefix="/urun/" />
+            <SlugFields nameLabel="Ürün adı" defaultName={p?.name} defaultSlug={p?.slug} prefix={p?.path ? p.path.slice(0, p.path.lastIndexOf("/") + 1) : "/urun/"} />
             <div className="grid gap-5 sm:grid-cols-2">
               <TextInput name="modelCode" label="Model kodu" defaultValue={p?.modelCode ?? ""} maxLength={80} />
               <TextInput name="brand" label="Marka" defaultValue={p?.brand ?? ""} maxLength={80} hint="Bifire ya da ithal marka adı. Boşsa şemada marka yazılmaz." />
@@ -210,7 +212,7 @@ export function ProductForm({ product, categories }: { product?: ProductFormData
             <DocumentsEditor name="documents" defaultValue={p?.documents ?? []} />
           </Section>
 
-          <SeoFields defaults={p ?? {}} fallbackTitle={p?.name ?? ""} fallbackDescription={p?.shortDescription ?? undefined} urlPath={`/urun/${p?.slug ?? ""}`} fallbackImage={p?.coverImage} />
+          <SeoFields defaults={p ?? {}} fallbackTitle={p?.name ?? ""} fallbackDescription={p?.shortDescription ?? undefined} urlPath={p?.path ?? `/urun/${p?.slug ?? ""}`} fallbackImage={p?.coverImage} />
         </div>
 
         <div className="space-y-6">

@@ -1,4 +1,5 @@
 import "server-only";
+import { routes } from "@/lib/catalog";
 import { prisma } from "@/lib/db";
 import type { ProductFormData } from "./ProductForm";
 
@@ -21,6 +22,7 @@ export async function getProductForm(id: string): Promise<(ProductFormData & { u
       faqs: { orderBy: { sortOrder: "asc" } },
       documents: { orderBy: { sortOrder: "asc" } },
       tags: { select: { name: true } },
+      category: { select: { slug: true, parent: { select: { slug: true } } } },
     },
   });
   if (!p) return null;
@@ -30,6 +32,7 @@ export async function getProductForm(id: string): Promise<(ProductFormData & { u
     name: p.name,
     slug: p.slug,
     categoryId: p.categoryId,
+    path: routes.product(p.slug, p.category.slug, p.category.parent?.slug),
     modelCode: p.modelCode,
     brand: p.brand,
     shortDescription: p.shortDescription,

@@ -1,7 +1,7 @@
 "use client";
 
 import type { ProductCategory } from "@prisma/client";
-import { categoryBase, routes } from "@/lib/catalog";
+import { routes } from "@/lib/catalog";
 import { AdminForm, SaveBar } from "@/components/admin/AdminForm";
 import { Checkbox, Section, SelectInput, TextArea, TextInput } from "@/components/admin/fields";
 import { ImagePicker } from "@/components/admin/ImagePicker";
@@ -18,7 +18,7 @@ export function CategoryForm({ category, parents }: { category?: ProductCategory
       <div className="grid gap-6 xl:grid-cols-3">
         <div className="space-y-6 xl:col-span-2">
           <Section title="Genel">
-            <SlugFields nameLabel="Kategori adı" defaultName={c?.name} defaultSlug={c?.slug} prefix={`/${categoryBase(c?.slug ?? "")}/`} />
+            <SlugFields nameLabel="Kategori adı" defaultName={c?.name} defaultSlug={c?.slug} prefix={routes.category(c?.slug || "x").replace(/x$/, "")} />
             <SelectInput
               name="parentId"
               label="Üst kategori"

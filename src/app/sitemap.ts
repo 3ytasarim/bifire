@@ -27,7 +27,7 @@ export default async function sitemap(): Promise<Entry[]> {
     }).then((cs) => cs.filter((c) => (!c.canonicalUrl || c.canonicalUrl.replace(/\/$/, "").endsWith(`/${c.slug}`)) && (c._count.children > 0 || c._count.products !== 1))),
     prisma.product.findMany({
       where: { active: true, noIndex: false, category: { active: true } },
-      select: { slug: true, updatedAt: true, coverImage: true, images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 6 } },
+      select: { slug: true, updatedAt: true, coverImage: true, category: { select: { slug: true, parent: { select: { slug: true } } } }, images: { select: { url: true }, orderBy: { sortOrder: "asc" }, take: 6 } },
       orderBy: { sortOrder: "asc" },
     }),
     prisma.project.findMany({
@@ -72,7 +72,7 @@ export default async function sitemap(): Promise<Entry[]> {
     ]),
     ...categories.map((c) => ({ url: canonicalUrl(routes.category(c.slug)), lastModified: c.updatedAt, changeFrequency: "weekly" as const, priority: 0.8, ...images(c.image) })),
     ...products.map((p) => ({
-      url: canonicalUrl(routes.product(p.slug)),
+      url: canonicalUrl(routes.product(p.slug, p.category.slug, p.category.parent?.slug)),
       lastModified: p.updatedAt,
       changeFrequency: "monthly" as const,
       priority: 0.7,

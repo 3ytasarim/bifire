@@ -32,7 +32,7 @@ export const TEXT_POSITION_LABELS: Record<TextPosition, string> = {
  * (kategori sayfası açılıp ürünü ikinci kez tıklamak gerekmesin). Kategori sayfası yine erişilebilir kalır.
  */
 export function categoryHref(c: { slug: string; products?: { slug: string }[]; childCount?: number }): string {
-  if (!c.childCount && c.products?.length === 1) return `/urun/${c.products[0]!.slug}`;
+  if (!c.childCount && c.products?.length === 1) return routes.product(c.products[0]!.slug, c.slug);
   return routes.category(c.slug);
 }
 
@@ -41,10 +41,17 @@ export function categoryHref(c: { slug: string; products?: { slug: string }[]; c
  * elektrikli, bioethanol) /somine-modelleri/…, bahçe ürünleri ve aksesuarlar /urunler/…. Yeni bir alt kategori
  * üst kategorisinden kökünü alır (parentSlug); bilinmeyen bağlantılar kategori sayfasında doğru köke yönlenir.
  */
-export type CategoryBase = "urunler" | "somine-modelleri";
-export const SOMINE_MODEL_ROOTS = ["odunlu-somineler", "elektrikli-somineler", "bioethanol-somineler"];
+export type CategoryBase = "urunler" | "somine-modelleri" | "elektrikli";
+export const SOMINE_MODEL_ROOTS = ["odunlu-somineler", "bioethanol-somineler"];
+/**
+ * Elektrikli şömineler Zaya ürün paketindeki URL planıyla kendi kökünde: /elektrikli-somineler (ana kategori),
+ * /elektrikli-somineler/2-boyutlu-somineler (alt kategori), /elektrikli-somineler/2-boyutlu-somineler/zaya-pagla-70 (ürün).
+ */
+export const ELECTRIC_ROOT = "elektrikli-somineler";
+const ELECTRIC_SUBS = new Set(["2-boyutlu-somineler", "3-boyutlu-somineler"]);
 const SOMINE_MODEL_SLUGS = new Set([...SOMINE_MODEL_ROOTS, "duz-somineler", "u-tipi-somineler", "l-tipi-somineler", "epi-somineler", "cift-yonlu-somineler", "prizma-somineler", "orta-somineler"]);
 export function categoryBase(slug: string, parentSlug?: string | null): CategoryBase {
+  if (slug === ELECTRIC_ROOT || ELECTRIC_SUBS.has(slug) || parentSlug === ELECTRIC_ROOT) return "elektrikli";
   return SOMINE_MODEL_SLUGS.has(slug) || (parentSlug && SOMINE_MODEL_ROOTS.includes(parentSlug)) ? "somine-modelleri" : "urunler";
 }
 
@@ -59,8 +66,14 @@ export const routes = {
   home: "/",
   about: "/kurumsal",
   products: "/urunler",
-  category: (slug: string, parentSlug?: string | null) => `/${categoryBase(slug, parentSlug)}/${slug}`,
-  product: (slug: string) => `/urun/${slug}`,
+  category: (slug: string, parentSlug?: string | null) => {
+    const base = categoryBase(slug, parentSlug);
+    if (base === "elektrikli") return slug === ELECTRIC_ROOT ? `/${ELECTRIC_ROOT}` : `/${ELECTRIC_ROOT}/${slug}`;
+    return `/${base}/${slug}`;
+  },
+  /** Ürün adresi: elektrikli alt kategorilerdeki ürünler /elektrikli-somineler/{alt}/{ürün}, diğerleri /urun/{ürün}. */
+  product: (slug: string, categorySlug?: string | null, parentSlug?: string | null) =>
+    categorySlug && categorySlug !== ELECTRIC_ROOT && categoryBase(categorySlug, parentSlug) === "elektrikli" ? `/${ELECTRIC_ROOT}/${categorySlug}/${slug}` : `/urun/${slug}`,
   projects: "/projeler",
   project: (slug: string) => `/projeler/${slug}`,
   blog: "/somine-rehberi",

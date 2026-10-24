@@ -49,7 +49,7 @@ export function ProductCard({ product, sizes = "(min-width: 1280px) 25vw, (min-w
       </div>
       <div className="flex flex-1 flex-col p-6">
         <h3 className="font-display text-xl leading-snug font-semibold tracking-[-0.01em] text-ink transition-colors duration-300 group-hover:text-ember-ink">
-          <Link href={routes.product(product.slug)} className="after:absolute after:inset-0">
+          <Link href={routes.product(product.slug, product.category.slug)} className="after:absolute after:inset-0">
             {product.name}
           </Link>
         </h3>

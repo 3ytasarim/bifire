@@ -14,7 +14,7 @@ export async function GET() {
     prisma.product.findMany({
       where: { active: true, noIndex: false, category: { active: true } },
       orderBy: { sortOrder: "asc" },
-      select: { name: true, slug: true, shortDescription: true },
+      select: { name: true, slug: true, shortDescription: true, category: { select: { slug: true, parent: { select: { slug: true } } } } },
       take: 200,
     }),
   ]);
@@ -39,7 +39,7 @@ export async function GET() {
     ...categories.map((c) => `- [${c.name}](${canonicalUrl(routes.category(c.slug))})${c.description ? `: ${c.description}` : ""}`),
     "",
     "## Ürünler",
-    ...products.map((p) => `- [${p.name}](${canonicalUrl(routes.product(p.slug))})${p.shortDescription ? `: ${p.shortDescription}` : ""}`),
+    ...products.map((p) => `- [${p.name}](${canonicalUrl(routes.product(p.slug, p.category.slug, p.category.parent?.slug))})${p.shortDescription ? `: ${p.shortDescription}` : ""}`),
     "",
   ];
   return new Response(lines.join("\n"), { headers: { "Content-Type": "text/plain; charset=utf-8" } });

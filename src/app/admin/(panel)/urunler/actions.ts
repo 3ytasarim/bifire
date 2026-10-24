@@ -179,7 +179,10 @@ export async function saveProduct(_prev: ActionState, formData: FormData): Promi
     if (e instanceof Error && e.message === "NOT_FOUND") return fail("Ürün bulunamadı.");
     throw e;
   }
-  if (previousSlug && previousSlug !== d.slug) await recordSlugChange(routes.product(previousSlug), routes.product(d.slug));
+  if (previousSlug && previousSlug !== d.slug) {
+    const cat = await prisma.productCategory.findUnique({ where: { id: d.categoryId }, select: { slug: true, parent: { select: { slug: true } } } });
+    await recordSlugChange(routes.product(previousSlug, cat?.slug, cat?.parent?.slug), routes.product(d.slug, cat?.slug, cat?.parent?.slug));
+  }
   revalidateSite();
   redirect(`/admin/urunler/${savedId}?kaydedildi=1`);
 }

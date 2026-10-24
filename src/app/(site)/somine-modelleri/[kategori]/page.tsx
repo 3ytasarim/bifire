@@ -15,5 +15,5 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
 }
 
 export default async function Page({ params }: Props) {
-  return <CategoryRoute kategori={(await params).kategori} base="somine-modelleri" />;
+  return <CategoryRoute kategori={(await params).kategori} at={`/somine-modelleri/${(await params).kategori}`} />;
 }

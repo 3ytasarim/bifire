@@ -91,7 +91,7 @@ export function CollectionView({
                           {String(i + 1).padStart(2, "0")} · {f?.tag ?? p.category.name}
                         </p>
                         <h3 className="mt-4 font-display text-3xl leading-tight font-semibold text-ink sm:text-4xl">
-                          <Link href={routes.product(p.slug)} className="after:absolute after:inset-0">
+                          <Link href={routes.product(p.slug, p.category.slug)} className="after:absolute after:inset-0">
                             {f ? `${f.title}ler` : p.name}
                           </Link>
                         </h3>
