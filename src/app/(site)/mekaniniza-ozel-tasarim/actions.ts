@@ -6,6 +6,7 @@ import { z } from "zod";
 import { DESIGN_FLUE, DESIGN_PREFERENCES } from "@/content/design-service";
 import { DISTRICT_OPTIONS } from "@/content/service-areas/names";
 import { prisma } from "@/lib/db";
+import { safeIntakeRequest } from "@/lib/crm/intake";
 import { isFormRateLimited } from "@/lib/rate-limit";
 import { getIpHash } from "@/lib/request-meta";
 import { privateStorage } from "@/lib/storage/private";
@@ -141,7 +142,7 @@ export async function submitDesignRequest(_prev: DesignFormState, formData: Form
       storedKey = `talepler/${now.getUTCFullYear()}/${String(now.getUTCMonth() + 1).padStart(2, "0")}/mekan-${randomBytes(12).toString("hex")}.jpg`;
       await privateStorage.put(storedKey, photo.data);
     }
-    await prisma.contactRequest.create({
+    const created = await prisma.contactRequest.create({
       data: {
         type: "DESIGN",
         name: d.name,
@@ -161,6 +162,8 @@ export async function submitDesignRequest(_prev: DesignFormState, formData: Form
         attachments: photo && storedKey ? { create: { storageKey: storedKey, originalName: file instanceof File ? file.name.slice(0, 200) : null, mimeType: "image/jpeg", size: photo.data.length, width: photo.width, height: photo.height } } : undefined,
       },
     });
+    // CRM: müşteri eşleştirme + proje + ilk dönüş görevi (başarısız olsa da form akışı bozulmaz).
+    await safeIntakeRequest(created.id);
   } catch {
     if (storedKey) await privateStorage.remove(storedKey);
     return { status: "error", message: "Talebiniz şu an kaydedilemedi. Lütfen tekrar deneyin ya da telefonla ulaşın.", values };

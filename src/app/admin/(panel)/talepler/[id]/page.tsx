@@ -7,6 +7,7 @@ import { REQUEST_STATUS, REQUEST_TYPE } from "@/lib/admin/labels";
 import { prisma } from "@/lib/db";
 import { telHref } from "@/lib/settings";
 import { deleteRequest, markUnread } from "../actions";
+import { intakeExistingRequest } from "../../crm/actions";
 import { RequestStatusForm } from "./RequestForm";
 
 export const metadata = { title: "Talep" };
@@ -39,6 +40,18 @@ export default async function RequestDetail({ params }: { params: Promise<{ id: 
     <div>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeader title={r.name} back={{ label: "Talepler", href: "/admin/talepler" }} />
+        {r.crmProjectId ? (
+          <Link href={`/admin/crm/proje/${r.crmProjectId}`} className="inline-flex min-h-10 items-center gap-2 bg-ink px-4 text-sm font-semibold text-white hover:bg-graphite">
+            CRM kartını aç
+          </Link>
+        ) : (
+          <form action={intakeExistingRequest}>
+            <input type="hidden" name="id" value={r.id} />
+            <button type="submit" className="inline-flex min-h-10 items-center gap-2 bg-ember px-4 text-sm font-semibold text-ink hover:bg-ember/90">
+              CRM&apos;e aktar
+            </button>
+          </form>
+        )}
         <div className="flex items-center gap-2">
           <Badge tone={REQUEST_STATUS[r.status].tone}>{REQUEST_STATUS[r.status].label}</Badge>
           <form action={markUnread.bind(null, r.id)}>

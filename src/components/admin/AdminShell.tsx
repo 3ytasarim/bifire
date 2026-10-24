@@ -10,6 +10,11 @@ import {
   Gauge,
   Images,
   Inbox,
+  Contact,
+  KanbanSquare,
+  LayoutDashboard,
+  ListChecks,
+  MessageSquareText,
   LayoutTemplate,
   LogOut,
   Menu,
@@ -26,6 +31,16 @@ import { logoutAction } from "@/app/admin/login/actions";
 
 const NAV = [
   { group: "Genel", items: [{ href: "/admin", label: "Panel", icon: Gauge }, { href: "/admin/talepler", label: "Talepler", icon: Inbox, badge: "requests" as const }] },
+  {
+    group: "CRM",
+    items: [
+      { href: "/admin/crm", label: "Genel bakış", icon: LayoutDashboard, exact: true },
+      { href: "/admin/crm/musteriler", label: "Müşteriler", icon: Contact },
+      { href: "/admin/crm/surec", label: "Satış süreci", icon: KanbanSquare },
+      { href: "/admin/crm/gorevler", label: "Görevler", icon: ListChecks, badge: "overdue" as const },
+      { href: "/admin/crm/mesajlar", label: "Hazır mesajlar", icon: MessageSquareText },
+    ],
+  },
   {
     group: "Katalog",
     items: [
@@ -54,7 +69,7 @@ const NAV = [
   },
 ];
 
-export function AdminShell({ user, unread, children }: { user: { name: string; email: string; role: string }; unread: number; children: React.ReactNode }) {
+export function AdminShell({ user, unread, overdue = 0, children }: { user: { name: string; email: string; role: string }; unread: number; overdue?: number; children: React.ReactNode }) {
   const pathname = usePathname();
   const [open, setOpen] = useState(false);
   // Sayfa değişince mobil menü kapanır (render sırasında önceki yol ile karşılaştırma, effect yok).
@@ -63,7 +78,7 @@ export function AdminShell({ user, unread, children }: { user: { name: string; e
     setLastPath(pathname);
     setOpen(false);
   }
-  const isActive = (href: string) => (href === "/admin" ? pathname === "/admin" : pathname.startsWith(href));
+  const isActive = (href: string, exact?: boolean) => (href === "/admin" || exact ? pathname === href : pathname.startsWith(href));
   const canAdmin = user.role === "ADMIN" || user.role === "SUPERADMIN";
 
   const nav = (
@@ -76,7 +91,8 @@ export function AdminShell({ user, unread, children }: { user: { name: string; e
               .filter((it) => !("minRole" in it) || canAdmin)
               .map((it) => {
                 const Icon = it.icon;
-                const active = isActive(it.href);
+                const active = isActive(it.href, "exact" in it && it.exact);
+                const count = "badge" in it ? (it.badge === "overdue" ? overdue : unread) : 0;
                 return (
                   <li key={it.href}>
                     <Link
@@ -86,7 +102,11 @@ export function AdminShell({ user, unread, children }: { user: { name: string; e
                     >
                       <Icon aria-hidden="true" className={`h-4 w-4 ${active ? "text-ember" : ""}`} />
                       <span className="flex-1">{it.label}</span>
-                      {"badge" in it && unread > 0 ? <span className="min-w-6 bg-ember px-1.5 text-center text-xs font-semibold text-ink">{unread}</span> : null}
+                      {count > 0 ? (
+                        <span title={"badge" in it && it.badge === "overdue" ? "Tarihi geçen görev ve takipler" : "Okunmamış talepler"} className={`min-w-6 px-1.5 text-center text-xs font-semibold ${"badge" in it && it.badge === "overdue" ? "bg-red-600 text-white" : "bg-ember text-ink"}`}>
+                          {count}
+                        </span>
+                      ) : null}
                     </Link>
                   </li>
                 );

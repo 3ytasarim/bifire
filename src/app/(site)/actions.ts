@@ -2,6 +2,7 @@
 
 import { z } from "zod";
 import { prisma } from "@/lib/db";
+import { safeIntakeRequest } from "@/lib/crm/intake";
 import { getIpHash } from "@/lib/request-meta";
 import { isFormRateLimited } from "@/lib/rate-limit";
 import { PROJECT_STAGES, PROJECT_TIMELINES, PROJECT_TOPICS } from "@/content/company";
@@ -98,7 +99,7 @@ export async function submitRequest(_prev: RequestFormState, formData: FormData)
       d.categoryId ? prisma.productCategory.findFirst({ where: { id: d.categoryId, active: true }, select: { id: true, name: true } }) : null,
     ]);
 
-    await prisma.contactRequest.create({
+    const created = await prisma.contactRequest.create({
       data: {
         type: d.type,
         name: d.name,
@@ -121,6 +122,8 @@ export async function submitRequest(_prev: RequestFormState, formData: FormData)
         ipHash,
       },
     });
+    // CRM: müşteri eşleştirme + proje + ilk dönüş görevi (başarısız olsa da form akışı bozulmaz).
+    await safeIntakeRequest(created.id);
   } catch {
     return { status: "error", message: "Talebiniz şu an kaydedilemedi. Lütfen tekrar deneyin ya da telefonla ulaşın.", values };
   }
