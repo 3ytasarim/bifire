@@ -21,7 +21,7 @@ import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { JsonLd } from "@/components/site/JsonLd";
 import { ProductGallery } from "@/components/site/ProductGallery";
-import { ConceptImage, ImageNote, isThirdPartyBrand, ManufacturerPanel, NoPhotoPanel } from "@/components/site/ProductBrandParts";
+import { ConceptImage, ImageNote, isThirdPartyBrand, ManufacturerPanel, NoPhotoPanel, ConceptHero } from "@/components/site/ProductBrandParts";
 import { ShareSpaceButton } from "@/components/site/ShareSpaceButton";
 import { Button3D } from "@/components/ui/button-3d";
 import { RequestForm } from "@/components/site/RequestForm";
@@ -185,8 +185,10 @@ export default async function ProductPage({ params }: Props) {
           <Breadcrumbs items={crumbs} />
           <div className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-7" y={20}>
-              {gallery.length || !thirdParty ? (
+              {gallery.length || (!thirdParty && !product.conceptImage) ? (
                 <ProductGallery images={gallery} name={product.name} />
+              ) : product.conceptImage ? (
+                <ConceptHero url={product.conceptImage} alt={product.conceptImageAlt || product.name} note={product.imageNote} />
               ) : (
                 <NoPhotoPanel brand={product.brand!} name={product.name} specs={product.specifications.filter((sp) => !sp.variant).slice(0, 2).map((sp) => ({ label: sp.label, value: sp.value }))} hasConcept={Boolean(product.conceptImage)} />
               )}
@@ -399,7 +401,7 @@ export default async function ProductPage({ params }: Props) {
           </section>
         ) : null}
 
-        {product.conceptImage ? <ConceptImage url={product.conceptImage} alt={product.conceptImageAlt || product.name} note={product.imageNote} productName={product.name} /> : null}
+        {product.conceptImage && gallery.length ? <ConceptImage url={product.conceptImage} alt={product.conceptImageAlt || product.name} note={product.imageNote} productName={product.name} /> : null}
 
         {details.length ? (
           <section aria-labelledby="detaylar" className="bg-ink py-16 text-white sm:py-24">
