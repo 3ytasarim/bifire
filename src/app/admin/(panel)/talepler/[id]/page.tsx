@@ -8,6 +8,7 @@ import { prisma } from "@/lib/db";
 import { telHref } from "@/lib/settings";
 import { deleteRequest, markUnread } from "../actions";
 import { intakeExistingRequest } from "../../crm/actions";
+import { FEATURES } from "@/lib/features";
 import { RequestStatusForm } from "./RequestForm";
 
 export const metadata = { title: "Talep" };
@@ -40,7 +41,7 @@ export default async function RequestDetail({ params }: { params: Promise<{ id: 
     <div>
       <div className="flex flex-wrap items-start justify-between gap-4">
         <PageHeader title={r.name} back={{ label: "Talepler", href: "/admin/talepler" }} />
-        {r.crmProjectId ? (
+        {!FEATURES.crm ? null : r.crmProjectId ? (
           <Link href={`/admin/crm/proje/${r.crmProjectId}`} className="inline-flex min-h-10 items-center gap-2 bg-ink px-4 text-sm font-semibold text-white hover:bg-graphite">
             CRM kartını aç
           </Link>

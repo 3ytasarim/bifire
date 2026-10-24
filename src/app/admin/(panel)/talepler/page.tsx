@@ -28,7 +28,7 @@ export default async function RequestsPage({ searchParams }: { searchParams: Pro
 
   return (
     <div>
-      <PageHeader title="Talepler" description={`${total} talep — web formlarından gelenler; her talep CRM'de müşteri ve proje kaydına bağlanır`} />
+      <PageHeader title="Talepler" description={`${total} talep — iletişim ve teklif formlarından gelenler`} />
       <ListToolbar
         q={q}
         placeholder="Ad, telefon, e-posta, ürün…"

@@ -28,10 +28,11 @@ import {
   X,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/login/actions";
+import { FEATURES } from "@/lib/features";
 
 const NAV = [
   { group: "Genel", items: [{ href: "/admin", label: "Panel", icon: Gauge }, { href: "/admin/talepler", label: "Talepler", icon: Inbox, badge: "requests" as const }] },
-  {
+  ...(FEATURES.crm ? [{
     group: "CRM",
     items: [
       { href: "/admin/crm", label: "Genel bakış", icon: LayoutDashboard, exact: true },
@@ -40,7 +41,7 @@ const NAV = [
       { href: "/admin/crm/gorevler", label: "Görevler", icon: ListChecks, badge: "overdue" as const },
       { href: "/admin/crm/mesajlar", label: "Hazır mesajlar", icon: MessageSquareText },
     ],
-  },
+  }] : []),
   {
     group: "Katalog",
     items: [
