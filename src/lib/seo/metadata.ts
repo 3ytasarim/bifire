@@ -154,7 +154,7 @@ export async function buildStaticPageMetadata(key: StaticPageKey, overrides?: { 
     keywords: row?.keywords?.trim() || pageDefaults(key).keywords,
     path: overrides?.path ?? def.path,
     canonical: row?.canonicalUrl,
-    image: row?.ogImage,
+    image: row?.ogImage || pageDefaults(key).image,
     ogTitle: row?.ogTitle,
     ogDescription: row?.ogDescription,
     index: overrides?.index ?? row?.robotsIndex ?? true,

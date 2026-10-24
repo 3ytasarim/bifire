@@ -1,5 +1,6 @@
 "use client";
 
+import Image from "next/image";
 import Link from "next/link";
 import { useState } from "react";
 import { ArrowUpRight, Search } from "lucide-react";
@@ -13,7 +14,7 @@ const norm = (s: string) => s.toLocaleLowerCase("tr").normalize("NFD").replace(/
  * İl sayfasındaki ilçe kartları: anlık filtre + kart başına içerik odağı. Kartlar SSR'da tam listelenir.
  * `highlight`: vurgulanan ilçeler (ör. İstanbul öncelikli görüşme bölgeleri).
  */
-export function DistrictGrid({ provinceSlug, districts, highlight = [] }: { provinceSlug: string; districts: { name: string; slug: string; focus: string }[]; highlight?: string[] }) {
+export function DistrictGrid({ provinceSlug, districts, highlight = [], imageNote }: { provinceSlug: string; districts: { name: string; slug: string; focus: string; image?: string | null }[]; highlight?: string[]; imageNote?: string | null }) {
   const [q, setQ] = useState("");
   const needle = norm(q.trim());
   const shown = districts.filter((d) => !needle || norm(d.name).includes(needle));
@@ -45,7 +46,12 @@ export function DistrictGrid({ provinceSlug, districts, highlight = [] }: { prov
                   href={routes.region(provinceSlug, d.slug)}
                   className={`group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-2xl border p-5 transition-[border-color,box-shadow] duration-500 hover:shadow-[0_20px_40px_-28px_rgb(12_12_13/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${hi ? "border-ember/40 bg-ember/[0.04] hover:border-ember" : "border-linen bg-white hover:border-ember/40"}`}
                 >
-                  <span className="min-w-0">
+                  {d.image ? (
+                    <span className="relative block h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-bone">
+                      <Image src={d.image} alt="" fill sizes="64px" className="object-cover transition-transform duration-700 group-hover:scale-110" />
+                    </span>
+                  ) : null}
+                  <span className="min-w-0 flex-1">
                     <span className="block font-display text-lg font-semibold text-ink">{d.name}</span>
                     <span className="mt-1 block text-[13px] leading-relaxed text-steel">{d.focus}</span>
                   </span>
@@ -59,6 +65,7 @@ export function DistrictGrid({ provinceSlug, districts, highlight = [] }: { prov
         </AnimatePresence>
       </ul>
       {!shown.length ? <p className="mt-6 text-[15px] text-steel">Bu adla bir ilçe yok. Konumunuzu başvuru formunda paylaşabilirsiniz.</p> : null}
+      {imageNote && shown.some((d) => d.image) ? <p className="mt-4 text-[12.5px] leading-relaxed text-stone">Kart görselleri: {imageNote.charAt(0).toLocaleLowerCase("tr") + imageNote.slice(1)}</p> : null}
     </MotionConfig>
   );
 }

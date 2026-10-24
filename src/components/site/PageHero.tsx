@@ -1,6 +1,7 @@
 import Image from "next/image";
 import type { Crumb } from "@/lib/seo/json-ld";
 import { Breadcrumbs } from "./Breadcrumbs";
+import { ImageNote } from "./ProductBrandParts";
 
 /**
  * İç sayfa başlığı (açık tema): sıcak kırık beyaz zemin, breadcrumb, tek H1. Görsel varsa sağda yuvarlak çerçeveli
@@ -13,6 +14,7 @@ export function PageHero({
   crumbs,
   image,
   imageAlt,
+  imageCaption,
   children,
 }: {
   title: string;
@@ -21,6 +23,8 @@ export function PageHero({
   crumbs: Crumb[];
   image?: string | null;
   imageAlt?: string | null;
+  /** Görselin hemen altında görünen not (ör. yapay zekâ temsili görsel uyarısı). */
+  imageCaption?: string | null;
   children?: React.ReactNode;
 }) {
   return (
@@ -45,6 +49,11 @@ export function PageHero({
               <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)]">
                 <Image src={image} alt={imageAlt || ""} fill priority sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
               </div>
+              {imageCaption ? (
+                <figcaption className="relative mt-5">
+                  <ImageNote text={imageCaption} />
+                </figcaption>
+              ) : null}
             </figure>
           ) : null}
         </div>

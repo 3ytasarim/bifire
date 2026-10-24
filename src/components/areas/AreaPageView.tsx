@@ -13,7 +13,7 @@ import { PRIORITY_DISTRICTS } from "@/content/regions";
 import { districtOption, PROVINCES, SHOWROOM_AREA, type AreaPage, type Province } from "@/content/service-areas";
 import { routes } from "@/lib/catalog";
 import type { ProductCardData } from "@/lib/queries";
-import { breadcrumbNode, faqNode, graph, serviceNode, webPageNode } from "@/lib/seo/json-ld";
+import { breadcrumbNode, faqNode, graph, imageNode, serviceNode, webPageNode } from "@/lib/seo/json-ld";
 import { AreaArticle } from "./AreaArticle";
 import { DistrictGrid } from "./DistrictGrid";
 
@@ -44,14 +44,15 @@ export function AreaPageView({ province, district, products, form }: { province:
     <>
       <JsonLd
         data={graph(
-          webPageNode({ path, name: page.h1, description: page.meta, hasBreadcrumb: true }),
+          page.image ? imageNode(path, { url: page.image.url, alt: page.image.alt, meta: { width: page.image.width, height: page.image.height, type: "image/webp" } }) : null,
+          webPageNode({ path, name: page.h1, description: page.meta, hasBreadcrumb: true, hasPrimaryImage: Boolean(page.image) }),
           breadcrumbNode(path, crumbs),
           serviceNode({ path, name: page.h1, description: page.meta, serviceType: "Şömine tasarımı, üretimi ve montajı", areaServed: [place] }),
           faqNode(path, page.faqs),
         )}
       />
 
-      <PageHero crumbs={crumbs} eyebrow={district ? `${province.name} · ${district.name}` : `Hizmet bölgesi · ${province.name}`} title={page.h1} intro={page.intro[0]}>
+      <PageHero crumbs={crumbs} eyebrow={district ? `${province.name} · ${district.name}` : `Hizmet bölgesi · ${province.name}`} title={page.h1} intro={page.intro[0]} image={page.image?.url} imageAlt={page.image?.alt} imageCaption={page.image?.caption}>
         {page.intro.slice(1).map((p) => (
           <p key={p.slice(0, 40)} className="-mt-2 mb-6 max-w-2xl text-[16px] leading-relaxed text-steel">
             {p}
@@ -129,7 +130,7 @@ export function AreaPageView({ province, district, products, form }: { province:
               </div>
               <p className="text-[16px] leading-relaxed text-steel lg:col-span-5">Her ilçe sayfası, o bölgedeki projelerde öne çıkan hazırlık konularını anlatır. Hizmet kapsamı adres ve proje bilgisine göre netleşir.</p>
             </Reveal>
-            <DistrictGrid provinceSlug={province.slug} districts={province.districts.map((d) => ({ name: d.name, slug: d.slug, focus: d.focus }))} highlight={priority} />
+            <DistrictGrid provinceSlug={province.slug} districts={province.districts.map((d) => ({ name: d.name, slug: d.slug, focus: d.focus, image: d.image?.url ?? null }))} imageNote={province.districts.find((d) => d.image)?.image?.caption} highlight={priority} />
           </div>
         </section>
       ) : null}

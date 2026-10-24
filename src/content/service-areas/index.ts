@@ -41,6 +41,8 @@ export type AreaPage = {
   closing: AreaSection | null;
   /** Önerilen düğme metni (ör. "Çayırova Projem İçin Görüşme Talep Et"). */
   cta: string;
+  /** Sayfa görseli (hizmet bölgeleri görsel paketi; yapay zekâ temsili tasarım — caption görünür altyazıdır). */
+  image?: { url: string; alt: string; width: number; height: number; caption: string };
 };
 export type Province = { name: string; slug: string; page: AreaPage; districts: AreaPage[] };
 

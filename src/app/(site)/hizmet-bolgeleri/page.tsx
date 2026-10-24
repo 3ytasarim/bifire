@@ -1,3 +1,4 @@
+import Image from "next/image";
 import type { Metadata } from "next";
 import Link from "next/link";
 import { ArrowUpRight } from "lucide-react";
@@ -11,6 +12,7 @@ import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { PRIORITY_DISTRICTS, REGION_FAQS, REGION_JOURNEY } from "@/content/regions";
+import { PROVINCES } from "@/content/service-areas";
 import { PROVINCE_NAMES } from "@/content/service-areas/names";
 import { routes } from "@/lib/catalog";
 import { breadcrumbNode, faqNode, graph, itemListNode, serviceNode, webPageNode } from "@/lib/seo/json-ld";
@@ -30,6 +32,9 @@ const CRUMBS = [
  * Hizmet Bölgeleri: 17 il ve 271 ilçe. Bölge bulucu (anlık arama + il sekmeleri), il kartları, proje yolculuğu
  * (kaydırdıkça dolan çizgi), SSS ve showroom. Fabrika showroom Tuzla'dadır; ilçe sayfaları şube iddiası taşımaz.
  */
+/** İl sayfası görseli (kartlarda küçük önizleme). */
+const provinceImage = (slug: string) => PROVINCES.find((p) => p.slug === slug)?.page.image?.url ?? null;
+
 export default function RegionsPage() {
   const districtCount = PROVINCE_NAMES.reduce((n, p) => n + p.districts.length, 0);
   const description = STATIC_PAGES["hizmet-bolgeleri"].defaults.description;
@@ -114,6 +119,11 @@ export default function RegionsPage() {
                   className="group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-linen bg-paper p-6 transition-[border-color,box-shadow,background-color] duration-500 hover:border-ember/40 hover:bg-white hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)]"
                 >
                   <span aria-hidden="true" className="pointer-events-none absolute -top-20 -right-20 h-44 w-44 rounded-full bg-ember/0 blur-3xl transition-colors duration-700 group-hover:bg-ember/20" />
+                  {provinceImage(p.slug) ? (
+                    <span className="relative -mx-6 -mt-6 mb-6 block aspect-[16/9] overflow-hidden">
+                      <Image src={provinceImage(p.slug)!} alt="" fill sizes="(min-width: 1280px) 22vw, (min-width: 640px) 45vw, 92vw" className="object-cover transition-transform duration-[1.2s] group-hover:scale-105" />
+                    </span>
+                  ) : null}
                   <span className="relative flex items-start justify-between gap-4">
                     <span className="font-display text-sm font-semibold text-stone tabular-nums">{String(i + 1).padStart(2, "0")}</span>
                     <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink transition-colors duration-500 group-hover:bg-ember">
@@ -127,6 +137,7 @@ export default function RegionsPage() {
               </StaggerItem>
             ))}
           </Stagger>
+          <p className="mt-6 text-[12.5px] leading-relaxed text-stone">Kart görselleri: yapay zekâyla oluşturulmuş temsili şömine tasarımlarıdır; gerçek Bifire uygulaması değildir.</p>
         </div>
       </section>
 

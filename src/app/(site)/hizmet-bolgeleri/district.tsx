@@ -26,7 +26,7 @@ export async function districtMetadata(il: string, ilce: string): Promise<Metada
   const data = loadDistrict(il, ilce);
   if (!data) return {};
   if (isDistrictIndexable(il)) return buildStaticPageMetadata(`bolge-${ilce}` as StaticPageKey);
-  return buildMetadata({ title: data.district.seoTitle, description: data.district.meta, keywords: data.district.keywords, path: routes.region(il, ilce), index: false, follow: true });
+  return buildMetadata({ title: data.district.seoTitle, description: data.district.meta, keywords: data.district.keywords, image: data.district.image?.url, imageAlt: data.district.image?.alt, path: routes.region(il, ilce), index: false, follow: true });
 }
 
 export async function DistrictContent({ data }: { data: NonNullable<ReturnType<typeof loadDistrict>> }) {

@@ -16,7 +16,7 @@ export default async function SeoPageEdit({ params, searchParams }: { params: Pr
     <div>
       <PageHeader title={`SEO: ${def.label}`} description={def.path} back={{ label: "SEO", href: "/admin/seo" }} />
       <Flash message={kaydedildi ? "SEO ayarları kaydedildi." : null} />
-      <SeoPageForm key={row?.updatedAt.toISOString() ?? "new"} pageKey={key} path={def.path} row={row} defaults={{ ...pageDefaults(key), keywords: pageDefaults(key).keywords ?? "", ogImage: settings.defaultOgImage || "/og/bifire-og.png" }} />
+      <SeoPageForm key={row?.updatedAt.toISOString() ?? "new"} pageKey={key} path={def.path} row={row} defaults={{ ...pageDefaults(key), keywords: pageDefaults(key).keywords ?? "", ogImage: pageDefaults(key).image || settings.defaultOgImage || "/og/bifire-og.png" }} />
     </div>
   );
 }

@@ -7,16 +7,16 @@ function serviceEntry(slug: string) {
   const s = serviceBySlug(slug)!;
   return { label: `Hizmet: ${s.name}`, path: `/hizmetler/${slug}`, defaults: { title: /bifire/i.test(s.metaTitle) ? s.metaTitle : `${s.metaTitle} | Bifire`, description: s.metaDescription } };
 }
-type AreaEntry = { label: string; path: string; defaults: { title: string; description: string; keywords?: string } };
+type AreaEntry = { label: string; path: string; defaults: { title: string; description: string; keywords?: string; image?: string } };
 /**
  * Hizmet bölgeleri: il sayfaları ("il-<il>") ve indekslenen ilçe sayfaları ("bolge-<ilçe>", şimdilik İstanbul).
  * Varsayılanlar Word paketindeki SEO başlığı ve meta açıklamasıdır. noindex ilçe taslakları burada değildir.
  */
 const AREA_ENTRIES = Object.fromEntries(
   PROVINCES.flatMap((p) => [
-    [`il-${p.slug}`, { label: `Hizmet bölgesi (il): ${p.name}`, path: `/hizmet-bolgeleri/${p.slug}`, defaults: { title: p.page.seoTitle, description: p.page.meta, keywords: p.page.keywords } }],
+    [`il-${p.slug}`, { label: `Hizmet bölgesi (il): ${p.name}`, path: `/hizmet-bolgeleri/${p.slug}`, defaults: { title: p.page.seoTitle, description: p.page.meta, keywords: p.page.keywords, image: p.page.image?.url } }],
     ...(isDistrictIndexable(p.slug)
-      ? p.districts.map((d) => [`bolge-${d.slug}`, { label: `Hizmet bölgesi: ${d.name} (${p.name})`, path: routes.region(p.slug, d.slug), defaults: { title: d.seoTitle, description: d.meta, keywords: d.keywords } }])
+      ? p.districts.map((d) => [`bolge-${d.slug}`, { label: `Hizmet bölgesi: ${d.name} (${p.name})`, path: routes.region(p.slug, d.slug), defaults: { title: d.seoTitle, description: d.meta, keywords: d.keywords, image: d.image?.url } }])
       : []),
   ]),
 ) as Record<`il-${string}` | `bolge-${string}`, AreaEntry>;
@@ -130,6 +130,6 @@ export function isStaticPageKey(key: string): key is StaticPageKey {
 }
 
 /** Sayfanın varsayılan SEO'su (anahtar kelime yalnızca bazı sayfalarda tanımlı). */
-export function pageDefaults(key: StaticPageKey): { title: string; description: string; keywords?: string } {
-  return STATIC_PAGES[key].defaults as { title: string; description: string; keywords?: string };
+export function pageDefaults(key: StaticPageKey): { title: string; description: string; keywords?: string; image?: string } {
+  return STATIC_PAGES[key].defaults as { title: string; description: string; keywords?: string; image?: string };
 }
