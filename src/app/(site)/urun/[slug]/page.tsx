@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Image from "next/image";
 import Link from "next/link";
 import { notFound } from "next/navigation";
-import { ArrowRight, Check, FileText, Phone } from "lucide-react";
+import { ArrowRight, Check, ExternalLink, FileText, Phone } from "lucide-react";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { PostCard, ProductCard, ProjectCard } from "@/components/site/Cards";
 import { CountUp, ParallaxFrame, Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
@@ -21,6 +21,7 @@ import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
 import { JsonLd } from "@/components/site/JsonLd";
 import { ProductGallery } from "@/components/site/ProductGallery";
+import { ConceptImage, ImageNote, isThirdPartyBrand, ManufacturerPanel, NoPhotoPanel } from "@/components/site/ProductBrandParts";
 import { ShareSpaceButton } from "@/components/site/ShareSpaceButton";
 import { Button3D } from "@/components/ui/button-3d";
 import { RequestForm } from "@/components/site/RequestForm";
@@ -104,6 +105,8 @@ export default async function ProductPage({ params }: Props) {
     ...product.images.filter((i) => i.url !== product.coverImage).map((i, n) => ({ url: i.url, alt: i.alt || `${product.name} — görsel ${n + 2}`, width: i.width, height: i.height })),
   ];
   const facts = keyFacts(product);
+  // Üretici markalı cihaz (ör. Zaya): cihaz kimliği ile Bifire'nin tasarım/kaplama/montaj hizmeti ayrı anlatılır.
+  const thirdParty = isThirdPartyBrand(product.brand);
   // Seçeneğe bağlı (variant) satırlar ölçüye göre değişen değerlerdir; diğerleri tüm ölçüler için geçerlidir.
   const rows = technicalRows(product, product.specifications.filter((sp) => !sp.variant));
   const variantSpecs = product.specifications.filter((sp) => sp.variant);
@@ -182,7 +185,12 @@ export default async function ProductPage({ params }: Props) {
           <Breadcrumbs items={crumbs} />
           <div className="mt-8 grid gap-10 lg:mt-12 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-7" y={20}>
-              <ProductGallery images={gallery} name={product.name} />
+              {gallery.length || !thirdParty ? (
+                <ProductGallery images={gallery} name={product.name} />
+              ) : (
+                <NoPhotoPanel brand={product.brand!} name={product.name} specs={product.specifications.filter((sp) => !sp.variant).slice(0, 2).map((sp) => ({ label: sp.label, value: sp.value }))} hasConcept={Boolean(product.conceptImage)} />
+              )}
+              {product.imageNote && gallery.length ? <ImageNote text={product.imageNote} /> : null}
               <ShareSpaceButton productName={product.name} productSlug={product.slug} />
               {family ? (
                 <dl className="mt-5 grid gap-3 rounded-[1.5rem] border border-linen bg-white p-5 sm:grid-cols-3 sm:p-6">
@@ -216,7 +224,14 @@ export default async function ProductPage({ params }: Props) {
                   {category.name}
                 </Link>
                 <h1 className="display-2 mt-5">{product.name}</h1>
-                {product.modelCode ? <p className="mt-3 text-sm tracking-[0.14em] text-stone uppercase">Model: {product.modelCode}</p> : null}
+                {thirdParty ? (
+                  <p className="mt-4 flex flex-wrap items-center gap-2 text-[13px]">
+                    <span className="rounded-full bg-ink px-3 py-1 font-semibold text-white">Üretici: {product.brand}</span>
+                    {product.modelCode ? <span className="rounded-full border border-sand px-3 py-1 font-semibold tracking-[0.06em] text-steel">Model kodu: {product.modelCode}</span> : null}
+                  </p>
+                ) : product.modelCode ? (
+                  <p className="mt-3 text-sm tracking-[0.14em] text-stone uppercase">Model: {product.modelCode}</p>
+                ) : null}
                 {product.shortDescription ? <p className="lead mt-6 text-steel">{product.shortDescription}</p> : null}
 
                 {facts.length ? (
@@ -249,23 +264,35 @@ export default async function ProductPage({ params }: Props) {
                       </a>
                     ) : null}
                   </div>
-                  <p className="text-[13px] leading-relaxed text-stone">Hazne, kaplama, baca ve montaj kapsamı projenize göre birlikte netleştirilir.</p>
+                  <p className="text-[13px] leading-relaxed text-stone">
+                    {product.fuelType === "ELECTRIC" ? "Cihaz, kaplama, elektrik hazırlığı ve montaj kapsamı projenize göre birlikte netleştirilir." : "Hazne, kaplama, baca ve montaj kapsamı projenize göre birlikte netleştirilir."}
+                  </p>
                 </div>
 
-                <div className="mt-8 border-t border-sand pt-6">
-                  <TrustPoints compact />
-                </div>
+                {thirdParty ? (
+                  <ManufacturerPanel brand={product.brand!} modelCode={product.modelCode} />
+                ) : (
+                  <div className="mt-8 border-t border-sand pt-6">
+                    <TrustPoints compact />
+                  </div>
+                )}
 
                 {product.documents.length ? (
                   <div className="mt-10">
-                    <h2 className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">Dokümanlar</h2>
+                    <h2 className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">{thirdParty ? "Üretici teknik belgeleri" : "Dokümanlar"}</h2>
                     <ul className="mt-3 divide-y divide-sand border-y border-sand">
                       {product.documents.map((d) => (
                         <li key={d.id}>
-                          <a href={d.url} target="_blank" rel="noopener" className="flex min-h-14 items-center gap-3 text-[15px] font-medium text-ink hover:text-ember-ink">
+                          <a href={d.url} target="_blank" rel={/^https?:/.test(d.url) ? "noopener noreferrer nofollow" : "noopener"} className="flex min-h-14 items-center gap-3 text-[15px] font-medium text-ink hover:text-ember-ink">
                             <FileText aria-hidden="true" className="h-5 w-5 text-ember" />
                             <span className="flex-1">{d.title}</span>
-                            <span className="text-xs text-stone">PDF · {(d.size / 1024 / 1024).toFixed(1)} MB</span>
+                            {d.size ? (
+                              <span className="text-xs text-stone">PDF · {(d.size / 1024 / 1024).toFixed(1)} MB</span>
+                            ) : (
+                              <span className="inline-flex items-center gap-1 text-xs text-stone">
+                                {d.mimeType.includes("pdf") ? "PDF" : "DXF"} · üretici sitesi <ExternalLink aria-hidden="true" className="h-3 w-3" />
+                              </span>
+                            )}
                           </a>
                         </li>
                       ))}
@@ -307,11 +334,13 @@ export default async function ProductPage({ params }: Props) {
                 <p className="mt-4 max-w-sm text-[15px] leading-relaxed text-steel">
                   {variantGroup
                     ? "Bir modelin görünümü kadar, projenize nasıl yerleşeceği de önemlidir. Seri ve ölçüyü değiştirerek teknik bilgileri ve ölçü çizimlerini inceleyebilirsiniz."
-                    : "Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir."}
+                    : thirdParty
+                      ? `Değerler ${product.brand} ürün sayfasından aktarılmıştır; kaynakta verilmeyen değerler gösterilmez.`
+                      : "Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir."}
                 </p>
               </Reveal>
               <div className="lg:col-span-8">
-                <ProductSpecs groups={variantGroups} variants={variants} rows={variantRows} items={specItems} common={specCommon} note={variantGroup ? (family?.specNote ?? undefined) : undefined} />
+                <ProductSpecs groups={variantGroups} variants={variants} rows={variantRows} items={specItems} common={specCommon} note={variantGroup ? (family?.specNote ?? undefined) : (product.specNote ?? undefined)} />
                 {variantGroup || drawings.length ? <ProductDrawings drawings={drawings} groups={variantGroups} fallback={variants[0] ?? ""} /> : null}
               </div>
             </div>
@@ -354,7 +383,8 @@ export default async function ProductPage({ params }: Props) {
 
               {bullets.length ? (
                 <div className="mt-16">
-                  <h2 className="display-3">Öne çıkan özellikler</h2>
+                  <h2 className="display-3">{thirdParty ? "Üretici teknik özellikleri" : "Öne çıkan özellikler"}</h2>
+                  {!family && product.detailNote ? <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-steel">{product.detailNote}</p> : null}
                   <Stagger className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {bullets.map((f) => (
                       <StaggerItem key={f.id} className="flex gap-3 rounded-2xl border border-linen bg-white p-5 text-[15px] font-medium text-ink">
@@ -368,6 +398,8 @@ export default async function ProductPage({ params }: Props) {
             </div>
           </section>
         ) : null}
+
+        {product.conceptImage ? <ConceptImage url={product.conceptImage} alt={product.conceptImageAlt || product.name} note={product.imageNote} productName={product.name} /> : null}
 
         {details.length ? (
           <section aria-labelledby="detaylar" className="bg-ink py-16 text-white sm:py-24">

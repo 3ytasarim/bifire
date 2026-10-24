@@ -279,6 +279,11 @@ model Product {
   description      String?
   coverImage       String?
   coverImageAlt    String?
+  /// Ürün görsellerinin altında görünen not (ör. "Yapay zekâyla oluşturulmuş temsili mekân tasarımıdır…").
+  imageNote        String?
+  /// Ana galeriye konmayan temsili tasarım/konsept görseli (ayrı "Temsili tasarım önerisi" bölümünde, imageNote ile).
+  conceptImage     String?
+  conceptImageAlt  String?
 
   // Filtrelenebilir temel teknik alanlar (hepsi opsiyonel — her şömine türünde anlamlı değil).
   fuelType       FuelType?

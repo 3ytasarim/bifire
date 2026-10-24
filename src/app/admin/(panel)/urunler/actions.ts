@@ -41,6 +41,9 @@ const schema = z.object({
   description: z.string().max(200_000),
   coverImage: optionalImage,
   coverImageAlt: optional(250),
+  imageNote: optional(300),
+  conceptImage: optionalImage,
+  conceptImageAlt: optional(250),
   fuelType: z
     .string()
     .transform((v) => (v === "" ? null : v))
@@ -96,9 +99,13 @@ const schema = z.object({
   documents: jsonArray(
     z.object({
       title: z.string().trim().min(1, "Doküman başlığı boş olamaz.").max(160),
-      url: localPath.refine((v) => v.startsWith("/uploads/") && v.endsWith(".pdf"), "Geçersiz doküman."),
-      mimeType: z.literal("application/pdf"),
-      size: z.number().int().min(1),
+      // Yüklenen PDF ya da üretici sitesindeki teknik belge bağlantısı (PDF/DXF, https; boyut bilinmez → 0).
+      url: z.union([
+        localPath.refine((v) => v.startsWith("/uploads/") && v.endsWith(".pdf"), "Geçersiz doküman."),
+        z.string().trim().max(500).url().refine((v) => v.startsWith("https://"), "Dış bağlantı https olmalı."),
+      ]),
+      mimeType: z.enum(["application/pdf", "image/vnd.dxf"]),
+      size: z.number().int().min(0),
     }),
   ),
   ...seoShape,

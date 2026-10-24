@@ -52,7 +52,7 @@ export function DocumentsEditor({ name, defaultValue }: { name: string; defaultV
               <a href={d.url} target="_blank" rel="noopener" className="text-neutral-500 underline">
                 Aç
               </a>
-              <span className="text-neutral-400">{(d.size / 1024 / 1024).toFixed(1)} MB</span>
+              <span className="text-neutral-400">{d.size ? `${(d.size / 1024 / 1024).toFixed(1)} MB` : "Dış bağlantı"}</span>
               <button type="button" onClick={() => setDocs((prev) => prev.filter((_, n) => n !== i))} aria-label="Dokümanı kaldır" className="flex h-9 w-9 items-center justify-center text-red-700 hover:bg-red-50">
                 <Trash2 className="h-4 w-4" />
               </button>
