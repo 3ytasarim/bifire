@@ -1,6 +1,6 @@
 /**
  * İstanbul ilçelerinin ek bilgileri (yaka, öncelik, kart cümlesi, önerilen ürünler) ve bölge sayfası ortak metinleri.
- * Tüm il/ilçe sayfa metinleri `content/service-areas` altındadır (11 il, 175 ilçe). İlçe sayfası o ilçede şube
+ * Tüm il/ilçe sayfa metinleri `content/service-areas` altındadır (17 il, 271 ilçe). İlçe sayfası o ilçede şube
  * olduğu anlamına gelmez; metinlerde de böyle bir iddia yoktur — fabrika showroom Tuzla'dadır.
  */
 
@@ -97,7 +97,7 @@ export const REGION_FAQS = [
   },
   {
     q: "İstanbul dışındaki projelere hizmet veriyor musunuz?",
-    a: "Bilecik hariç Marmara’daki 10 il ile Ankara’dan gelen talepler proje bazında değerlendirilir. Keşif, sevkiyat, montaj ve satış sonrası kapsamı konum ve ekip uygunluğuyla netleşir. Fabrika showroomumuz Tuzla’dadır.",
+    a: "Bilecik hariç Marmara’daki 10 il ile Ankara, İzmir, Muğla, Aydın, Antalya, Bolu ve Düzce’den gelen talepler proje bazında değerlendirilir. Keşif, sevkiyat, montaj ve satış sonrası kapsamı konum ve ekip uygunluğuyla netleşir. Fabrika showroomumuz Tuzla’dadır.",
   },
 ];
 

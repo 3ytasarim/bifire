@@ -13,7 +13,7 @@ const norm = (s: string) => s.toLocaleLowerCase("tr").normalize("NFD").replace(/
 type Hit = { name: string; province: string; href: string; focus: string; kind: "il" | "ilçe" };
 
 /**
- * Bölge bulucu: üstte 175 ilçe + 11 il içinde anlık arama (klavye ile ↑ ↓ Enter), altta il sekmeleri.
+ * Bölge bulucu: üstte tüm ilçe ve iller içinde anlık arama (klavye ile ↑ ↓ Enter), altta il sekmeleri.
  * Sekme değişince il paneli ve ilçe çipleri animasyonla gelir. Veri: names.json (yalnız ad/slug/odak).
  */
 export function RegionFinder({ provinces, priority = [] }: { provinces: ProvinceName[]; priority?: string[] }) {

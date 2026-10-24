@@ -44,7 +44,7 @@ export function serializeJsonLd(data: unknown): string {
 
 /** Doğrulanmış firma konumu (fabrika showroom) ve öncelikli hizmet bölgesi — yerel SEO için. */
 const LOCALITY = { locality: "Tuzla", region: "İstanbul", country: "TR" } as const;
-/** Hizmet bölgesi illeri (content/service-areas; Bilecik hariç Marmara'daki 10 il + Ankara). */
+/** Hizmet bölgesi illeri (content/service-areas: 17 il). */
 const AREA_SERVED = PROVINCE_NAMES.map((p) => p.name);
 
 export function organizationNode(s: SiteSettings, logo?: { url: string; meta: ImageMeta | null }): Node {

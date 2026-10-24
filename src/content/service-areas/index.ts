@@ -9,10 +9,17 @@ import tekirdag from "./data/08-tekirdag.json";
 import edirne from "./data/09-edirne.json";
 import kirklareli from "./data/10-kirklareli.json";
 import ankara from "./data/11-ankara.json";
+import izmir from "./data/12-izmir.json";
+import mugla from "./data/13-mugla.json";
+import bolu from "./data/14-bolu.json";
+import duzce from "./data/15-duzce.json";
+import aydin from "./data/16-aydin.json";
+import antalya from "./data/17-antalya.json";
 
 /**
- * Hizmet bölgeleri: 11 il (Bilecik hariç Marmara'daki 10 il + Ankara) ve 175 ilçe sayfasının metni.
- * Kaynak: "Bifire Hizmet Bölgeleri" Word paketi (21 Ekim 2026) → data/*.json (dönüştürücü: Word başlık yapısı).
+ * Hizmet bölgeleri: 17 il (Bilecik hariç Marmara'daki 10 il + Ankara; 2026-10-25 eki: İzmir, Muğla, Bolu, Düzce, Aydın,
+ * Antalya) ve 271 ilçe sayfasının metni. Kaynak: "Bifire Hizmet Bölgeleri" Word paketleri (21 ve 25 Ekim 2026) →
+ * data/*.json (dönüştürücü: Word başlık yapısı; anahtar kelimeler "Ana anahtar kelime" + "Yardımcı ifadeler").
  * Metinlerde şube, fiyat, süre veya proje iddiası yoktur; fabrika showroom Tuzla'dadır.
  * SUNUCU modülü: istemci bileşenlerinde names.ts kullanın (bu dosya tüm metni içerir).
  * İl/ilçe eklenir veya adı değişirse names.json yeniden üretilmeli (data/*.json → ad/slug/odak).
@@ -37,7 +44,7 @@ export type AreaPage = {
 };
 export type Province = { name: string; slug: string; page: AreaPage; districts: AreaPage[] };
 
-export const PROVINCES: Province[] = [istanbul, kocaeli, sakarya, yalova, bursa, balikesir, canakkale, tekirdag, edirne, kirklareli, ankara] as Province[];
+export const PROVINCES: Province[] = [istanbul, kocaeli, sakarya, yalova, bursa, balikesir, canakkale, tekirdag, edirne, kirklareli, ankara, izmir, mugla, bolu, duzce, aydin, antalya] as Province[];
 
 export const SHOWROOM_AREA = { province: "istanbul", district: "tuzla", name: "Tuzla" } as const;
 export const DISTRICT_TOTAL = PROVINCES.reduce((n, p) => n + p.districts.length, 0);

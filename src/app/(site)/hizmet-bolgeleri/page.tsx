@@ -27,7 +27,7 @@ const CRUMBS = [
 ];
 
 /**
- * Hizmet Bölgeleri: 11 il ve 175 ilçe. Bölge bulucu (anlık arama + il sekmeleri), il kartları, proje yolculuğu
+ * Hizmet Bölgeleri: 17 il ve 271 ilçe. Bölge bulucu (anlık arama + il sekmeleri), il kartları, proje yolculuğu
  * (kaydırdıkça dolan çizgi), SSS ve showroom. Fabrika showroom Tuzla'dadır; ilçe sayfaları şube iddiası taşımaz.
  */
 export default function RegionsPage() {
@@ -54,7 +54,7 @@ export default function RegionsPage() {
         crumbs={CRUMBS}
         eyebrow="Hizmet bölgeleri"
         title="Tuzla’daki üretimimizden projenize."
-        intro="İstanbul başta olmak üzere Marmara’daki 10 il ve Ankara’daki şömine projelerini kendi üretimimiz ve kendi montaj ekibimizle değerlendiriyoruz. Kapsam ve takvim, proje konumu ve ekip uygunluğuyla netleşir."
+        intro="İstanbul başta olmak üzere Marmara’daki 10 il, Ankara, İzmir, Muğla, Aydın, Antalya, Bolu ve Düzce’deki şömine projelerini kendi üretimimiz ve kendi montaj ekibimizle değerlendiriyoruz. Kapsam ve takvim, proje konumu ve ekip uygunluğuyla netleşir."
       >
         <div className="flex flex-wrap items-center gap-3">
           <ArrowFillButton href="#bolge-bul" tone="ink">
@@ -101,9 +101,9 @@ export default function RegionsPage() {
       <section aria-labelledby="iller" className="bg-white py-16 sm:py-24">
         <div className="shell">
           <Reveal>
-            <p className="eyebrow text-ember-ink">11 il</p>
+            <p className="eyebrow text-ember-ink">{PROVINCE_NAMES.length} il</p>
             <h2 id="iller" className="display-3 mt-5">
-              Marmara’dan Ankara’ya.
+              Marmara’dan Ege’ye, Akdeniz’e ve Ankara’ya.
             </h2>
           </Reveal>
           <Stagger as="ol" className="mt-12 grid gap-4 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4" gap={0.06}>

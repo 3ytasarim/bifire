@@ -21,11 +21,19 @@ const POS: Record<string, [number, number, "r" | "l" | "t" | "b"]> = {
   kocaeli: [452, 150, "r"],
   sakarya: [520, 222, "r"],
   ankara: [596, 318, "l"],
+  duzce: [585, 150, "r"],
+  bolu: [640, 252, "l"],
+  izmir: [92, 408, "r"],
+  aydin: [150, 470, "r"],
+  mugla: [236, 524, "r"],
+  antalya: [430, 520, "r"],
 };
+/** Marmara dışındaki iller kesikli rota ile gösterilir. */
+const FAR = new Set(["ankara", "duzce", "bolu", "izmir", "aydin", "mugla", "antalya"]);
 const HUB_POS = [372, 182] as const; // Tuzla — üretim ve fabrika showroom
 
-const W = 660;
-const H = 380;
+const W = 700;
+const H = 570;
 const EASE = [0.16, 1, 0.3, 1] as const;
 
 /** Merkezden ile hafif kavisli rota (ikinci derece Bézier). */
@@ -38,7 +46,7 @@ function route(to: readonly [number, number]) {
 }
 
 /**
- * Ana sayfa bölge haritası: Tuzla'daki üretim merkezinden 11 ile rota çizgileri (görünüme girince sırayla
+ * Ana sayfa bölge haritası: Tuzla'daki üretim merkezinden hizmet verilen illere rota çizgileri (görünüme girince sırayla
  * çizilir), rotalar üzerinde dolaşan ışık noktaları, nabız atan merkez. İl düğümüne gelince adı ve ilçe sayısı
  * öne çıkar; tıklayınca il sayfası açılır. Azaltılmış hareket tercihinde çizgiler sabit, ışıklar kapalıdır.
  */
@@ -52,7 +60,7 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
     <MotionConfig reducedMotion="user">
       <div className="relative overflow-hidden rounded-[1.75rem] border border-linen bg-[radial-gradient(120%_90%_at_30%_20%,#fff_0%,var(--color-paper)_60%,var(--color-bone)_100%)] p-3 sm:p-5">
         <svg viewBox={`0 0 ${W} ${H}`} className="block h-auto w-full" role="img" aria-labelledby="regions-map-title">
-          <title id="regions-map-title">Tuzla üretim merkezinden hizmet verilen 11 il</title>
+          <title id="regions-map-title">{`Tuzla üretim merkezinden hizmet verilen ${nodes.length} il`}</title>
           <defs>
             <pattern id="rm-dots" width="14" height="14" patternUnits="userSpaceOnUse">
               <circle cx="1" cy="1" r="1" fill="rgb(12 12 13 / 0.07)" />
@@ -74,7 +82,7 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
                   fill="none"
                   stroke={on ? "rgb(224 105 31)" : "rgb(224 105 31 / 0.45)"}
                   strokeWidth={on ? 2 : 1.2}
-                  strokeDasharray={n.slug === "ankara" ? "4 5" : undefined}
+                  strokeDasharray={FAR.has(n.slug) ? "4 5" : undefined}
                   initial={{ pathLength: reduced ? 1 : 0 }}
                   whileInView={{ pathLength: 1 }}
                   viewport={{ once: true, amount: 0.4 }}

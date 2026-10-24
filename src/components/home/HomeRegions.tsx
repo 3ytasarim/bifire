@@ -8,7 +8,7 @@ import { routes } from "@/lib/catalog";
 import { RegionsMap } from "./RegionsMap";
 
 /**
- * Ana sayfa yerel SEO bölümü: Tuzla merkezli animasyonlu rota haritası (11 il) + öncelikli İstanbul ilçeleri.
+ * Ana sayfa yerel SEO bölümü: Tuzla merkezli animasyonlu rota haritası (tüm hizmet illeri) + öncelikli İstanbul ilçeleri.
  * Tüm bağlantılar gerçek <a> (il ve ilçe sayfaları), harita yalnızca görsel katmandır.
  */
 export function HomeRegions() {
@@ -20,10 +20,10 @@ export function HomeRegions() {
           <Reveal>
             <p className="eyebrow text-ember-ink">Hizmet bölgeleri</p>
             <h2 id="home-regions" className="display-2 mt-5 text-balance text-ink">
-              Tuzla&apos;dan projenize, Marmara&apos;dan Ankara&apos;ya.
+              Tuzla&apos;dan projenize, Marmara&apos;dan Ege&apos;ye, Akdeniz&apos;e.
             </h2>
             <p className="mt-6 max-w-md text-[17px] leading-relaxed text-steel">
-              Önceliğimiz Tuzla ve çevresi, Anadolu Yakası ve Sarıyer. Marmara’daki 10 il ve Ankara’daki projeleri de kapsam ve takvim uygunluğuyla birlikte değerlendiriyoruz.
+              Önceliğimiz Tuzla ve çevresi, Anadolu Yakası ve Sarıyer. Marmara’daki 10 il, Ankara, İzmir, Muğla, Aydın, Antalya, Bolu ve Düzce’deki projeleri de kapsam ve takvim uygunluğuyla birlikte değerlendiriyoruz.
             </p>
           </Reveal>
           <Stagger as="ul" className="mt-8 flex flex-wrap gap-2" gap={0.06}>

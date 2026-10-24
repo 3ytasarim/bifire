@@ -9,7 +9,7 @@ function serviceEntry(slug: string) {
 }
 type AreaEntry = { label: string; path: string; defaults: { title: string; description: string; keywords?: string } };
 /**
- * Hizmet bölgeleri: 11 il sayfası ("il-<il>") ve indekslenen ilçe sayfaları ("bolge-<ilçe>", şimdilik İstanbul).
+ * Hizmet bölgeleri: il sayfaları ("il-<il>") ve indekslenen ilçe sayfaları ("bolge-<ilçe>", şimdilik İstanbul).
  * Varsayılanlar Word paketindeki SEO başlığı ve meta açıklamasıdır. noindex ilçe taslakları burada değildir.
  */
 const AREA_ENTRIES = Object.fromEntries(
@@ -114,8 +114,8 @@ export const STATIC_PAGES = {
     label: "Hizmet Bölgeleri",
     path: "/hizmet-bolgeleri",
     defaults: {
-      title: "Şömine Hizmet Bölgeleri | İstanbul, Marmara ve Ankara | Bifire",
-      description: "Tuzla’daki üretim ve fabrika showroomumuzdan İstanbul, Marmara’daki 10 il ve Ankara’daki şömine projelerine: özel tasarım, sevkiyat ve montaj.",
+      title: "Şömine Hizmet Bölgeleri | İstanbul, Marmara, Ege ve Akdeniz | Bifire",
+      description: "Tuzla’daki üretim ve showroomumuzdan İstanbul, Marmara, Ege, Akdeniz, Bolu, Düzce ve Ankara’daki şömine projelerine tasarım, sevkiyat ve montaj.",
     },
   },
   ...AREA_ENTRIES,
