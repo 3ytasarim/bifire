@@ -144,7 +144,8 @@ export function technicalRows(p: ProductTech, specs: Pick<ProductSpecification, 
   const add = (label: string, value: string | null | undefined, unit?: string, rawValue?: string) => {
     if (value) rows.push({ label, value, raw: rawValue, unit, group: "Genel" });
   };
-  add("Marka", p.brand);
+  // Üretici markalı cihazlarda (Bifire dışı) marka ziyaretçiye gösterilmez; yalnız admin kaydında tutulur.
+  add("Marka", p.brand && /bifire/i.test(p.brand) ? p.brand : null);
   add("Model kodu", p.modelCode);
   add("Yakıt türü", p.fuelType ? FUEL_LABELS[p.fuelType] : null);
   add("Cam / görünüm", p.viewType ? VIEW_LABELS[p.viewType] : null);

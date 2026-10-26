@@ -19,9 +19,9 @@ export function ImageNote({ text, dark }: { text: string; dark?: boolean }) {
  * Üretici markalı cihazlarda (Zaya…) cihazın kimliği ile Bifire'nin hizmetini ayırır: cihaz üreticinindir;
  * dış tasarım, kaplama ve montaj Bifire'nindir. Bifire'nin bayilik/teşhir/servis iddiası içermez.
  */
-export function ManufacturerPanel({ brand, modelCode }: { brand: string; modelCode: string | null }) {
+export function ManufacturerPanel() {
   const items = [
-    { icon: Factory, title: `Cihaz: ${brand}`, text: `Elektrikli cihaz ${brand} tarafından üretilir${modelCode ? `; üretici model kodu ${modelCode}` : ""}.` },
+    { icon: Factory, title: "Elektrikli cihaz", text: "Donanım ve ölçü bilgileri teknik tabloda yer alır; seçtiğiniz ölçüye göre birlikte netleştiririz." },
     { icon: PencilRuler, title: "Dış tasarım ve kaplama: Bifire", text: "Cihazın çevresini mekânınıza göre birlikte tasarlarız." },
     { icon: Hammer, title: "Uygulama: Bifire montaj ekibi", text: "Kaplama ve montajı kendi ekibimizle yaparız." },
   ];
@@ -86,14 +86,14 @@ export function ConceptImage({ url, alt, note, productName }: { url: string; alt
  * Gerçek ürün fotoğrafı olmayan üretici ürünlerinde galerinin yerine geçen panel: boş görsel kutusu yerine
  * durumu açıkça söyler ve varsa temsili tasarım bölümüne yönlendirir. Ürün fotoğrafı eklenince galeri görünür.
  */
-export function NoPhotoPanel({ brand, name, specs, hasConcept }: { brand: string; name: string; specs: { label: string; value: string }[]; hasConcept: boolean }) {
+export function NoPhotoPanel({ name, specs, hasConcept }: { name: string; specs: { label: string; value: string }[]; hasConcept: boolean }) {
   return (
     <div className="relative flex aspect-[4/5] w-full flex-col justify-between overflow-hidden rounded-2xl bg-ink p-7 text-white sm:aspect-square sm:p-10">
       <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.45),transparent_65%)] motion-safe:animate-[pulse_6s_ease-in-out_infinite]" />
       <span aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.2),transparent_65%)]" />
       <div className="relative">
         <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[12px] font-semibold tracking-[0.06em] text-white/80 backdrop-blur">
-          <Factory aria-hidden="true" className="h-3.5 w-3.5 text-ember" /> {brand} üretimi
+          <Factory aria-hidden="true" className="h-3.5 w-3.5 text-ember" /> Elektrikli şömine
         </span>
         <p className="mt-6 max-w-sm font-display text-3xl leading-tight font-semibold text-balance sm:text-4xl">{name}</p>
       </div>

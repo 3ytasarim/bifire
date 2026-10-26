@@ -114,7 +114,7 @@ export function ModelView({
             images: gallery.map((g) => g.url),
             category: product.category.name,
             modelCode: model.code,
-            brand: product.brand,
+            brand: /bifire/i.test(product.brand ?? "") ? product.brand : null,
             properties: tableRows.map((r) => ({ name: r.label, value: r.value, unitText: r.unit })),
           }),
           faqNode(path, faqs),

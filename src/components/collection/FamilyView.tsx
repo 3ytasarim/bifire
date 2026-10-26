@@ -80,7 +80,7 @@ export function FamilyView({
             description,
             images: gallery.map((g) => g.url),
             category: product.category.name,
-            brand: product.brand,
+            brand: /bifire/i.test(product.brand ?? "") ? product.brand : null,
             properties: models.flatMap((m) => keyValues(m, 3).map((r) => ({ name: `${r.label} (${m.code})`, value: r.value, unitText: r.unit }))),
           }),
           itemListNode(path, grid.map((g) => ({ name: `${g.name} (${g.code})`, path: g.href }))),

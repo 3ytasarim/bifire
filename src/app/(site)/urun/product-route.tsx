@@ -104,7 +104,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
   // Üretici markalı cihaz (ör. Zaya): cihaz kimliği ile Bifire'nin tasarım/kaplama/montaj hizmeti ayrı anlatılır.
   const thirdParty = isThirdPartyBrand(product.brand);
   // Seçeneğe bağlı (variant) satırlar ölçüye göre değişen değerlerdir; diğerleri tüm ölçüler için geçerlidir.
-  const rows = technicalRows(product, product.specifications.filter((sp) => !sp.variant));
+  const rows = technicalRows(product, product.specifications.filter((sp) => !sp.variant)).filter((r) => !(isThirdPartyBrand(product.brand) && r.label === "Marka"));
   const variantSpecs = product.specifications.filter((sp) => sp.variant);
   const variantRows: VariantRow[] = [];
   for (const sp of variantSpecs) {
@@ -166,7 +166,8 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
             images: gallery.map((g) => g.url),
             category: category.name,
             modelCode: product.modelCode,
-            brand: product.brand,
+            // Üretici markalı cihazda marka yapısal veriye yazılmaz (ziyaretçiye üretici adı gösterilmez).
+            brand: thirdParty ? null : product.brand,
             properties: [
               ...rows.filter((r) => r.label !== "Marka" && r.label !== "Model kodu").map((r) => ({ name: r.label, value: r.raw ?? r.value, unitText: r.unit })),
               ...variantRows.flatMap((r) => variants.map((v) => ({ name: `${r.label} (${v})`, value: r.values[v] ?? "", unitText: r.unit }))).filter((x) => x.value),
@@ -186,7 +187,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
               ) : product.conceptImage ? (
                 <ConceptHero url={product.conceptImage} alt={product.conceptImageAlt || product.name} note={product.imageNote} />
               ) : (
-                <NoPhotoPanel brand={product.brand!} name={product.name} specs={product.specifications.filter((sp) => !sp.variant).slice(0, 2).map((sp) => ({ label: sp.label, value: sp.value }))} hasConcept={Boolean(product.conceptImage)} />
+                <NoPhotoPanel name={product.name} specs={product.specifications.filter((sp) => !sp.variant).slice(0, 2).map((sp) => ({ label: sp.label, value: sp.value }))} hasConcept={Boolean(product.conceptImage)} />
               )}
               {product.imageNote && gallery.length ? <ImageNote text={product.imageNote} /> : null}
               <ShareSpaceButton productName={product.name} productSlug={product.slug} />
@@ -224,7 +225,6 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
                 <h1 className="display-2 mt-5">{product.name}</h1>
                 {thirdParty ? (
                   <p className="mt-4 flex flex-wrap items-center gap-2 text-[13px]">
-                    <span className="rounded-full bg-ink px-3 py-1 font-semibold text-white">Üretici: {product.brand}</span>
                     {product.modelCode ? <span className="rounded-full border border-sand px-3 py-1 font-semibold tracking-[0.06em] text-steel">Model kodu: {product.modelCode}</span> : null}
                   </p>
                 ) : product.modelCode ? (
@@ -268,7 +268,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
                 </div>
 
                 {thirdParty ? (
-                  <ManufacturerPanel brand={product.brand!} modelCode={product.modelCode} />
+                  <ManufacturerPanel />
                 ) : (
                   <div className="mt-8 border-t border-sand pt-6">
                     <TrustPoints compact />
@@ -277,7 +277,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
 
                 {product.documents.length ? (
                   <div className="mt-10">
-                    <h2 className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">{thirdParty ? "Üretici teknik belgeleri" : "Dokümanlar"}</h2>
+                    <h2 className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">{thirdParty ? "Teknik belgeler" : "Dokümanlar"}</h2>
                     <ul className="mt-3 divide-y divide-sand border-y border-sand">
                       {product.documents.map((d) => (
                         <li key={d.id}>
@@ -333,7 +333,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
                   {variantGroup
                     ? "Bir modelin görünümü kadar, projenize nasıl yerleşeceği de önemlidir. Seri ve ölçüyü değiştirerek teknik bilgileri ve ölçü çizimlerini inceleyebilirsiniz."
                     : thirdParty
-                      ? `Değerler ${product.brand} ürün sayfasından aktarılmıştır; kaynakta verilmeyen değerler gösterilmez.`
+                      ? "Değerler cihazın teknik bilgilerinden aktarılmıştır; verilmeyen değerler gösterilmez. Montaj ölçüsü teknik çizimle netleşir."
                       : "Değerler üretici verisidir; uygulama koşullarına göre farklılık gösterebilir."}
                 </p>
               </Reveal>
@@ -381,7 +381,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
 
               {bullets.length ? (
                 <div className="mt-16">
-                  <h2 className="display-3">{thirdParty ? "Üretici teknik özellikleri" : "Öne çıkan özellikler"}</h2>
+                  <h2 className="display-3">{thirdParty ? "Cihazın teknik özellikleri" : "Öne çıkan özellikler"}</h2>
                   {!family && product.detailNote ? <p className="mt-4 max-w-3xl text-[15px] leading-relaxed text-steel">{product.detailNote}</p> : null}
                   <Stagger className="mt-8 grid gap-3 sm:grid-cols-2 lg:grid-cols-3">
                     {bullets.map((f) => (
