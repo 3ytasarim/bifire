@@ -51,6 +51,9 @@ export type Service = {
   faqs: { q: string; a: string }[];
   /** Uzun SEO metni (HTML): bölümler, SSS, kapanış ve rehber bağlantıları — SeoArticle ile gösterilir. */
   article: string;
+  /** Hizmet sayfası başlık görseli (paketten; boşsa site ayarlarındaki görsel). */
+  image: string | null;
+  imageAlt: string | null;
 };
 
 const BASE_SERVICES: Omit<Service, keyof ServiceArticle>[] = [

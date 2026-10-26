@@ -44,7 +44,11 @@ export default async function ServicePage({ params }: Props) {
     { name: service.name, path },
   ];
   const [[categories, products], s] = await Promise.all([getFormOptions(), getSiteSettings()]);
-  const hero = service.slug === "somine-montaji" ? { url: s.aboutImage, alt: s.aboutImageAlt } : { url: s.featureImage, alt: s.featureImageAlt };
+  const hero = service.image
+    ? { url: service.image, alt: service.imageAlt }
+    : service.slug === "somine-montaji"
+      ? { url: s.aboutImage, alt: s.aboutImageAlt }
+      : { url: s.featureImage, alt: s.featureImageAlt };
 
   return (
     <>
