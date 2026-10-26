@@ -24,6 +24,13 @@ const ALLOWED_TAGS = [
   "hr",
   "br",
   "img",
+  // Karşılaştırma tabloları (rehber makaleleri, ürün metinleri)
+  "table",
+  "thead",
+  "tbody",
+  "tr",
+  "th",
+  "td",
 ];
 
 export function sanitizeRichText(html: string | null | undefined): string {

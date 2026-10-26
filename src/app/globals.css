@@ -202,6 +202,16 @@
   .rich :where(a) {
     @apply underline-offset-4;
   }
+  /* Tablolar: mobilde yatay kaydırılabilir kart, başlık satırı vurgulu */
+  .rich :where(table) {
+    @apply my-8 block w-full overflow-x-auto rounded-2xl border border-linen bg-white text-[15px];
+  }
+  .rich :where(th) {
+    @apply bg-paper px-4 py-3 text-left font-display text-[14px] font-semibold text-ink;
+  }
+  .rich :where(td) {
+    @apply border-t border-linen px-4 py-3 align-top text-steel;
+  }
   /* Uzun metin kartlarında (SeoArticle) madde işaretleri: halkalı ember nokta */
   .article-card .rich :where(ul) {
     @apply list-none pl-0;
