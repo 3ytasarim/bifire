@@ -212,6 +212,13 @@
   .rich :where(td) {
     @apply border-t border-linen px-4 py-3 align-top text-steel;
   }
+  /* prose ilk/son sütunun iç boşluğunu sıfırlar; kart görünümünde korunur */
+  .rich table :is(th, td):first-child {
+    padding-inline-start: 1.25rem;
+  }
+  .rich table :is(th, td):last-child {
+    padding-inline-end: 1.25rem;
+  }
   /* Uzun metin kartlarında (SeoArticle) madde işaretleri: halkalı ember nokta */
   .article-card .rich :where(ul) {
     @apply list-none pl-0;

@@ -3,6 +3,7 @@ import { ArrowUpRight, BookOpen } from "lucide-react";
 import { CountUp, GrowLine, Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { ArticleNav } from "@/components/site/ArticleNav";
 import { FaqList } from "@/components/site/FaqList";
+import { GuideInvite } from "@/components/site/GuideInvite";
 import { RichText } from "@/components/site/RichText";
 import { extractFaq, isFaqTitle, splitHtmlSections } from "@/lib/html-sections";
 
@@ -131,6 +132,8 @@ export function SeoArticle({ html, name }: { html: string | null | undefined; na
           </div>
         </section>
       ) : null}
+
+      <GuideInvite />
 
       {guides.length ? (
         <section aria-labelledby="ilgili-rehber" className="border-t border-sand bg-white py-16 sm:py-20">
