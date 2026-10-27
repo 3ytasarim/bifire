@@ -102,12 +102,55 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
   const isActive = (href: string) => (href === "/" ? pathname === "/" : pathname === href || pathname.startsWith(`${href}/`));
   const productsActive = ["/urun", "/somine-modelleri", "/elektrikli-somineler", "/barbeku-modelleri"].some((p) => pathname.startsWith(p));
 
+  // Modern menü başlığı: hover'da metin yukarı kayar, alttan bronz kopyası gelir; aktif sayfada bronz nokta.
   const linkClass = (active: boolean) =>
-    `relative inline-flex h-full items-center gap-1.5 py-2 text-[14px] font-medium whitespace-nowrap transition-colors duration-300 ${
+    `group/nl relative inline-flex h-full items-center gap-1.5 py-2 text-[14px] font-medium tracking-[-0.005em] whitespace-nowrap transition-colors duration-300 ${
       active ? "text-ink" : "text-steel hover:text-ink"
-    } after:absolute after:inset-x-0 after:bottom-6 after:h-px after:origin-left after:bg-ember after:transition-transform after:duration-500 ${
-      active ? "after:scale-x-100" : "after:scale-x-0 hover:after:scale-x-100"
+    } after:absolute after:bottom-[22px] after:left-1/2 after:h-1 after:w-1 after:-translate-x-1/2 after:rounded-full after:bg-ember after:transition-[opacity,transform] after:duration-500 ${
+      active ? "after:opacity-100" : "after:scale-0 after:opacity-0"
     }`;
+  const rollLabel = (label: string) => (
+    <span className="relative block overflow-hidden">
+      <span className="block transition-transform duration-500 ease-(--ease-premium) group-hover/nl:-translate-y-full motion-reduce:transition-none">{label}</span>
+      <span aria-hidden="true" className="absolute inset-0 translate-y-full text-ember-ink transition-transform duration-500 ease-(--ease-premium) group-hover/nl:translate-y-0 motion-reduce:transition-none">
+        {label}
+      </span>
+    </span>
+  );
+
+  // Koleksiyonlar menüsü (referans tasarım): görselsiz başlık sütunları.
+  const odunlu = categories.find((c) => c.slug === "odunlu-somineler") ?? categories[0];
+  const outdoor = categories.find((c) => c.slug === "bahce-ve-tamamlayici-urunler");
+  const isAccessory = (slug: string) => /aksesuar/.test(slug);
+  const otherCollections = [
+    ...categories.filter((c) => c !== odunlu && c !== outdoor).map((c) => ({ id: c.id, name: c.name, href: c.href })),
+    ...(outdoor?.children.filter((c) => isAccessory(c.slug)) ?? []),
+  ];
+  const outdoorLinks = outdoor ? (outdoor.children.length ? outdoor.children.filter((c) => !isAccessory(c.slug)) : [{ id: outdoor.id, name: outdoor.name, href: outdoor.href }]) : [];
+  const megaColumns: { title: string; links: { id: string; name: string; href: string }[] }[][] = [
+    [{ title: odunlu?.name ?? "Odunlu şömineler", links: odunlu ? (odunlu.children.length ? odunlu.children : [{ id: odunlu.id, name: odunlu.name, href: odunlu.href }]) : [] }],
+    [
+      { title: "Diğer koleksiyonlar", links: otherCollections },
+      ...(outdoorLinks.length ? [{ title: "Açık havada", links: outdoorLinks }] : []),
+    ],
+    [
+      {
+        title: "Projeniz için",
+        links: [
+          { id: "p1", name: "Mekâna özel tasarım", href: "/mekaniniza-ozel-tasarim" },
+          { id: "p2", name: "Özel ölçü ve montaj", href: "/hizmetler" },
+          { id: "p3", name: "Tuzla fabrika showroom", href: "/fabrika-showroom" },
+          { id: "p4", name: "Teklif alın", href: "/teklif-al" },
+        ],
+      },
+    ],
+  ];
+  const megaLink =
+    "group/ml relative flex min-h-9 items-center gap-0 text-[15px] text-ink transition-[color,gap] duration-500 ease-(--ease-premium) hover:gap-3 hover:text-ember-ink focus-visible:gap-3";
+  const megaDash = (
+    <span aria-hidden="true" className="block h-px w-0 bg-ember transition-[width] duration-500 ease-(--ease-premium) group-hover/ml:w-4 group-focus-visible/ml:w-4" />
+  );
+  let megaIndex = 0;
 
   return (
     <>
@@ -160,7 +203,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
                 <ul className="flex h-full items-center gap-6 xl:gap-9">
                   <li className="group/mega h-full" onMouseEnter={() => setMegaDismissed(false)} onFocus={() => setMegaDismissed(false)}>
                     <Link href="/urunler" onClick={closeOnLinkClick} className={linkClass(productsActive)} aria-current={pathname === "/urunler" ? "page" : undefined}>
-                      Koleksiyonlar
+                      {rollLabel("Koleksiyonlar")}
                       <ChevronDown aria-hidden="true" className="h-3.5 w-3.5 transition-transform duration-300 group-hover/mega:rotate-180" />
                     </Link>
                     {categories.length ? (
@@ -172,53 +215,53 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
                             : "group-focus-within/mega:visible group-focus-within/mega:translate-y-0 group-focus-within/mega:opacity-100 group-hover/mega:visible group-hover/mega:translate-y-0 group-hover/mega:opacity-100"
                         }`}
                       >
-                        <div className="border-y border-sand bg-paper shadow-[0_30px_60px_-30px_rgb(40_42_40/0.3)]">
-                          <div className="shell grid grid-cols-12 gap-8 py-9">
-                            {/* Yalnız kategori görseli + başlık (alt kategoriler sayfa içinde). Açılışta kartlar sırayla belirir. */}
-                            <ul className={`col-span-9 grid gap-4 ${categories.length >= 4 ? "grid-cols-4" : "grid-cols-3"}`}>
-                              {categories.map((c, i) => (
-                                <li
-                                  key={c.id}
-                                  style={{ transitionDelay: `${80 + i * 60}ms` }}
-                                  className="translate-y-3 opacity-0 transition-[opacity,translate] duration-500 ease-(--ease-premium) group-focus-within/mega:translate-y-0 group-focus-within/mega:opacity-100 group-hover/mega:translate-y-0 group-hover/mega:opacity-100"
-                                >
-                                  <Link href={c.href} className="group/cat relative block overflow-hidden rounded-2xl bg-bone focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember">
-                                    <span className="relative block aspect-[4/5]">
-                                      {c.image ? (
-                                        <Image src={c.image} alt="" fill sizes="260px" className="object-cover transition-transform duration-700 ease-(--ease-premium) group-hover/cat:scale-[1.04]" />
-                                      ) : (
-                                        <span className="ember-placeholder absolute inset-0" />
-                                      )}
-                                      <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/80 via-ink/15 to-transparent transition-opacity duration-500 group-hover/cat:opacity-90" />
-                                    </span>
-                                    <span className="absolute inset-x-0 bottom-0 flex items-end justify-between gap-3 p-4">
-                                      <span className="font-display text-[17px] leading-snug font-semibold text-white">{c.name}</span>
-                                      <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-white/15 text-white backdrop-blur-md transition-colors duration-500 group-hover/cat:bg-ember">
-                                        <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover/cat:rotate-45" />
-                                      </span>
-                                    </span>
-                                    <span aria-hidden="true" className="absolute inset-x-4 bottom-0 h-[2px] origin-left scale-x-0 rounded-full bg-ember transition-transform duration-700 ease-(--ease-premium) group-hover/cat:scale-x-100" />
-                                  </Link>
-                                </li>
-                              ))}
-                            </ul>
-                            <div className="col-span-3 flex flex-col justify-between rounded-2xl bg-bone p-7">
-                              <div>
-                                <p className="eyebrow text-ember-ink">Koleksiyonlar</p>
-                                <p className="mt-4 font-display text-xl leading-snug font-semibold text-ink">Mekânınıza göre doğru şömineyi birlikte seçelim.</p>
+                        <div className="border-y border-sand bg-white shadow-[0_30px_60px_-30px_rgb(40_42_40/0.3)]">
+                          <div className="shell grid grid-cols-4 gap-10 py-10">
+                            {/* Başlık sütunları; açılışta bağlantılar sırayla belirir. */}
+                            {megaColumns.map((col, ci) => (
+                              <div key={ci} className="space-y-7">
+                                {col.map((group) => (
+                                  <div key={group.title}>
+                                    <p className="text-[12px] font-semibold tracking-[0.18em] text-ember-ink uppercase">{group.title}</p>
+                                    <ul className="mt-3">
+                                      {group.links.map((l) => (
+                                        <li
+                                          key={l.id}
+                                          style={{ transitionDelay: `${60 + megaIndex++ * 35}ms` }}
+                                          className="translate-y-2 opacity-0 transition-[opacity,translate] duration-500 ease-(--ease-premium) group-focus-within/mega:translate-y-0 group-focus-within/mega:opacity-100 group-hover/mega:translate-y-0 group-hover/mega:opacity-100"
+                                        >
+                                          <Link href={l.href} className={megaLink}>
+                                            {megaDash}
+                                            {l.name}
+                                          </Link>
+                                        </li>
+                                      ))}
+                                      {ci === 2 ? (
+                                        <li>
+                                          <button type="button" data-guide-open="" aria-haspopup="dialog" className={`${megaLink} cursor-pointer`}>
+                                            {megaDash}
+                                            <Sparkles aria-hidden="true" className="h-4 w-4 text-ember" /> Şömine seçim rehberi
+                                          </button>
+                                        </li>
+                                      ) : null}
+                                    </ul>
+                                  </div>
+                                ))}
                               </div>
-                              <div className="mt-8 flex flex-col gap-3">
+                            ))}
+                            <div className="flex flex-col">
+                              <div className="relative aspect-[16/10] overflow-hidden rounded-2xl bg-bone">
+                                {odunlu?.image ? (
+                                  <Image src={odunlu.image} alt="" fill sizes="300px" className="object-cover transition-transform duration-[1.2s] ease-(--ease-premium) group-hover/mega:scale-[1.04]" />
+                                ) : (
+                                  <span className="ember-placeholder absolute inset-0" />
+                                )}
+                              </div>
+                              <p className="mt-4 text-[14px] leading-relaxed text-steel">Malzemeden yerleşime, projenizi birlikte ele alalım.</p>
+                              <div className="mt-5">
                                 <ArrowFillButton href="/urunler" tone="ink" size="sm">
                                   Tüm koleksiyonlar
                                 </ArrowFillButton>
-                                <button
-                                  type="button"
-                                  data-guide-open=""
-                                  aria-haspopup="dialog"
-                                  className="inline-flex min-h-11 items-center justify-center gap-2 rounded-full border border-sand bg-white px-5 text-[13px] font-semibold text-ink transition-colors hover:border-ink"
-                                >
-                                  <Sparkles aria-hidden="true" className="h-4 w-4 text-ember" /> Birlikte bulalım
-                                </button>
                               </div>
                             </div>
                           </div>
@@ -229,7 +272,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
                   {NAV_MAIN.map((item) => (
                     <li key={item.href} className="h-full">
                       <Link href={item.href} className={linkClass(isActive(item.href))} aria-current={isActive(item.href) ? "page" : undefined}>
-                        {item.label}
+                        {rollLabel(item.label)}
                       </Link>
                     </li>
                   ))}

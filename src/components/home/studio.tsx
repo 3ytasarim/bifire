@@ -1,18 +1,11 @@
-import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 
-/** Ana sayfa bölümleri için ince "metin + ↗" bağlantısı: hover'da alt çizgi dolar, ok çapraz kayar. */
-export function StudioLink({ href, children, tone = "dark", className = "" }: { href: string; children: React.ReactNode; tone?: "dark" | "light"; className?: string }) {
+/** Ana sayfa bölüm bağlantısı: sitenin ortak ArrowFillButton bileşeni (açık zeminde light, koyu zeminde glass). */
+export function StudioLink({ href, children, tone = "dark", className = "" }: { href: string; children: string; tone?: "dark" | "light"; className?: string }) {
   return (
-    <Link
-      href={href}
-      className={`group inline-flex min-h-11 items-center gap-1.5 text-[14px] font-medium transition-colors ${
-        tone === "dark" ? "text-ember-ink hover:text-ink" : "text-amber hover:text-white"
-      } ${className}`}
-    >
-      <span className="link-underline">{children}</span>
-      <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 ease-(--ease-premium) group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-    </Link>
+    <ArrowFillButton href={href} tone={tone === "dark" ? "light" : "glass"} size="sm" className={className}>
+      {children}
+    </ArrowFillButton>
   );
 }
 

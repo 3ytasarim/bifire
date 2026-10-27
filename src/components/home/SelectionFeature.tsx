@@ -1,5 +1,5 @@
 import Image from "next/image";
-import { ArrowUpRight } from "lucide-react";
+import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { Reveal } from "@/components/motion/Motion";
 
 /**
@@ -19,16 +19,9 @@ export function SelectionFeature({ image, imageAlt }: { image: string | null; im
             Mekânınızı ve beklentilerinizi tanıyalım; model, malzeme ve yerleşim seçeneklerini birlikte değerlendirelim.
           </p>
           <div className="mt-7 flex flex-wrap items-center gap-x-5 gap-y-3">
-            <button
-              type="button"
-              data-guide-open=""
-              aria-haspopup="dialog"
-              className="group relative inline-flex min-h-12 cursor-pointer items-center gap-2 overflow-hidden rounded-full border border-glow px-6 text-[14px] font-medium text-white"
-            >
-              <span aria-hidden="true" className="absolute inset-0 origin-left scale-x-0 bg-glow transition-transform duration-500 ease-(--ease-premium) group-hover:scale-x-100" />
-              <span className="relative transition-colors duration-500 group-hover:text-ink">Şöminenizi Seçmeye Başlayın</span>
-              <ArrowUpRight aria-hidden="true" className="relative h-4 w-4 transition-[transform,color] duration-500 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:text-ink" />
-            </button>
+            <ArrowFillButton tone="ember" size="lg" data-guide-open="" aria-haspopup="dialog">
+              Şöminenizi Seçmeye Başlayın
+            </ArrowFillButton>
             <span className="text-[13px] text-white/55">Üç kısa soruyla başlayın.</span>
           </div>
         </Reveal>

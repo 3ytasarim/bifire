@@ -2,7 +2,7 @@
 
 import Image from "next/image";
 import { useState } from "react";
-import { ArrowUpRight } from "lucide-react";
+import { Button3D } from "@/components/ui/button-3d";
 import { Reveal } from "@/components/motion/Motion";
 import { StudioEyebrow, StudioLink } from "./studio";
 
@@ -70,15 +70,9 @@ export function DesignInvite({ image, imageAlt }: { image: string | null; imageA
             </div>
           </div>
           <div className="mt-9 flex flex-wrap items-center gap-x-7 gap-y-3">
-            <button
-              type="button"
-              data-design-open=""
-              aria-haspopup="dialog"
-              className="group inline-flex min-h-12 cursor-pointer items-center gap-2 rounded-full border border-ember bg-transparent px-6 text-[14px] font-medium text-ink transition-colors duration-300 hover:bg-ember hover:text-white"
-            >
+            <Button3D type="button" tone="ember" data-design-open="" aria-haspopup="dialog">
               Mekânım için başlayalım
-              <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-            </button>
+            </Button3D>
             <StudioLink href="/mekaniniza-ozel-tasarim">Süreci inceleyin</StudioLink>
           </div>
         </Reveal>

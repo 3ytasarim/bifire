@@ -2,8 +2,7 @@
 
 import { getImageProps } from "next/image";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import Link from "next/link";
-import { ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 
 export type HeroSlideData = {
@@ -207,21 +206,17 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
           {slide.ctaUrl || slide.secondaryCtaUrl ? (
             <div
               key={`c-${current}`}
-              className={`mt-9 flex flex-wrap gap-x-7 gap-y-4 sm:items-center ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "items-center sm:justify-center" : slide.textPosition === "RIGHT" ? "items-end sm:justify-end" : "items-start"}`}
+              className={`mt-10 flex flex-col gap-3 sm:flex-row ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "items-center sm:justify-center" : slide.textPosition === "RIGHT" ? "items-end sm:justify-end" : "items-start"}`}
             >
               {slide.ctaUrl ? (
-                <ArrowFillButton href={slide.ctaUrl} tone="light">
-                  {slide.ctaText || "Koleksiyonları keşfedin"}
+                <ArrowFillButton href={slide.ctaUrl} tone="ember" size="lg">
+                  {slide.ctaText || "Ürünleri keşfet"}
                 </ArrowFillButton>
               ) : null}
               {slide.secondaryCtaUrl ? (
-                <Link
-                  href={slide.secondaryCtaUrl}
-                  className="group link-underline inline-flex min-h-11 items-center gap-1.5 text-[13px] font-medium tracking-[0.04em] text-white/90 hover:text-white"
-                >
-                  {slide.secondaryCtaText || "İletişim"}
-                  <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-                </Link>
+                <ArrowFillButton href={slide.secondaryCtaUrl} tone="glass" size="lg">
+                  {slide.secondaryCtaText || "Projenizi konuşalım"}
+                </ArrowFillButton>
               ) : null}
             </div>
           ) : null}
