@@ -63,11 +63,11 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
           <title id="regions-map-title">{`Tuzla üretim merkezinden hizmet verilen ${nodes.length} il`}</title>
           <defs>
             <pattern id="rm-dots" width="14" height="14" patternUnits="userSpaceOnUse">
-              <circle cx="1" cy="1" r="1" fill="rgb(12 12 13 / 0.07)" />
+              <circle cx="1" cy="1" r="1" fill="rgb(40 42 40 / 0.07)" />
             </pattern>
             <radialGradient id="rm-hub">
-              <stop offset="0%" stopColor="rgb(224 105 31 / 0.35)" />
-              <stop offset="100%" stopColor="rgb(224 105 31 / 0)" />
+              <stop offset="0%" stopColor="rgb(146 113 78 / 0.35)" />
+              <stop offset="100%" stopColor="rgb(146 113 78 / 0)" />
             </radialGradient>
           </defs>
           <rect width={W} height={H} fill="url(#rm-dots)" />
@@ -80,7 +80,7 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
                 <motion.path
                   d={d}
                   fill="none"
-                  stroke={on ? "rgb(224 105 31)" : "rgb(224 105 31 / 0.45)"}
+                  stroke={on ? "rgb(146 113 78)" : "rgb(146 113 78 / 0.45)"}
                   strokeWidth={on ? 2 : 1.2}
                   strokeDasharray={FAR.has(n.slug) ? "4 5" : undefined}
                   initial={{ pathLength: reduced ? 1 : 0 }}
@@ -89,7 +89,7 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
                   transition={{ duration: 1.1, delay: 0.25 + i * 0.09, ease: EASE }}
                 />
                 {!reduced ? (
-                  <circle r="2.6" fill="rgb(224 105 31)" opacity="0.9">
+                  <circle r="2.6" fill="rgb(146 113 78)" opacity="0.9">
                     <animateMotion dur={`${3 + (i % 4) * 0.6}s`} begin={`${1.4 + i * 0.25}s`} repeatCount="indefinite" path={d} />
                   </circle>
                 ) : null}
@@ -104,8 +104,8 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
             return (
               <Link key={n.slug} href={`/hizmet-bolgeleri/${n.slug}`} aria-label={`${n.name} — ${n.count} ilçe`} onMouseEnter={() => setHover(n.slug)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(n.slug)} onBlur={() => setHover(null)}>
                 <motion.g initial={{ opacity: 0, scale: 0.6 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.6 + i * 0.09, ease: EASE }} style={{ transformOrigin: `${x}px ${y}px` }}>
-                  <circle cx={x} cy={y} r={on ? 11 : 8} fill="rgb(255 255 255)" stroke="rgb(224 105 31)" strokeWidth={on ? 2.5 : 1.5} className="transition-all duration-300" />
-                  <circle cx={x} cy={y} r={3} fill={on ? "rgb(224 105 31)" : "rgb(12 12 13)"} />
+                  <circle cx={x} cy={y} r={on ? 11 : 8} fill="rgb(255 255 255)" stroke="rgb(146 113 78)" strokeWidth={on ? 2.5 : 1.5} className="transition-all duration-300" />
+                  <circle cx={x} cy={y} r={3} fill={on ? "rgb(146 113 78)" : "rgb(40 42 40)"} />
                   <text x={labelLeft ? x - 14 : x + 14} y={y + 4} textAnchor={labelLeft ? "end" : "start"} className={`font-display text-[13px] font-semibold transition-colors ${on ? "fill-ember-ink" : "fill-ink"}`}>
                     {n.name}
                     {on ? <tspan className="fill-steel text-[11px] font-medium">{`  ${n.count} ilçe`}</tspan> : null}
@@ -117,12 +117,12 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
 
           <circle cx={hx} cy={hy} r="38" fill="url(#rm-hub)" />
           {!reduced ? (
-            <circle cx={hx} cy={hy} r="10" fill="none" stroke="rgb(224 105 31)" strokeWidth="1.5">
+            <circle cx={hx} cy={hy} r="10" fill="none" stroke="rgb(146 113 78)" strokeWidth="1.5">
               <animate attributeName="r" from="10" to="30" dur="2.4s" repeatCount="indefinite" />
               <animate attributeName="opacity" from="0.8" to="0" dur="2.4s" repeatCount="indefinite" />
             </circle>
           ) : null}
-          <circle cx={hx} cy={hy} r="9" fill="rgb(12 12 13)" stroke="rgb(224 105 31)" strokeWidth="3" />
+          <circle cx={hx} cy={hy} r="9" fill="rgb(40 42 40)" stroke="rgb(146 113 78)" strokeWidth="3" />
           <text x={hx} y={hy + 30} textAnchor="middle" className="fill-ember-ink text-[11px] font-semibold tracking-[0.14em] uppercase">
             Tuzla · üretim
           </text>

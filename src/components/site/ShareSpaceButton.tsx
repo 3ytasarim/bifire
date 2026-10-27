@@ -12,9 +12,9 @@ export function ShareSpaceButton({ productName, productSlug }: { productName: st
       data-design-product={productName}
       data-design-product-slug={productSlug}
       aria-haspopup="dialog"
-      className="group relative mt-4 flex w-full items-center gap-4 overflow-hidden rounded-[1.4rem] border border-ember/30 bg-gradient-to-r from-ember/[0.08] via-white to-white p-4 text-left transition-[border-color,box-shadow] duration-500 hover:border-ember hover:shadow-[0_20px_40px_-26px_rgb(224_105_31/0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:p-5"
+      className="group relative mt-4 flex w-full items-center gap-4 overflow-hidden rounded-[1.4rem] border border-ember/30 bg-gradient-to-r from-ember/[0.08] via-white to-white p-4 text-left transition-[border-color,box-shadow] duration-500 hover:border-ember hover:shadow-[0_20px_40px_-26px_rgb(146_113_78/0.6)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:p-5"
     >
-      <span aria-hidden="true" className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ember text-ink transition-transform duration-500 group-hover:-rotate-6">
+      <span aria-hidden="true" className="relative flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-ember text-white transition-transform duration-500 group-hover:-rotate-6">
         <span className="absolute inset-0 rounded-full bg-ember/50 motion-safe:animate-ping [animation-duration:2.4s]" />
         <ImageUp className="relative h-5 w-5" />
       </span>

@@ -1,18 +1,15 @@
 import type { Metadata } from "next";
-import { ArchitectureFeature } from "@/components/home/ArchitectureFeature";
-import { CategoryShowcase } from "@/components/home/CategoryShowcase";
+import { BiwoolBand } from "@/components/home/BiwoolBand";
+import { DesignInvite } from "@/components/home/DesignInvite";
 import { FeaturedProducts } from "@/components/home/FeaturedProducts";
 import { FeaturedProjects } from "@/components/home/FeaturedProjects";
 import { HeroFallback } from "@/components/home/HeroFallback";
 import { HeroSlider } from "@/components/home/HeroSlider";
+import { HomeCollections } from "@/components/home/HomeCollections";
+import { HomeGuide } from "@/components/home/HomeGuide";
 import { HomeRegions } from "@/components/home/HomeRegions";
-import { TrustFlow } from "@/components/home/TrustFlow";
-import { ProcessSteps } from "@/components/site/ProcessSteps";
-import { ShowroomBlock } from "@/components/site/ShowroomBlock";
-import { Journal } from "@/components/home/Journal";
-import { Manifesto } from "@/components/home/Manifesto";
-import { WhyBifire } from "@/components/home/WhyBifire";
-import { FinalCta } from "@/components/site/FinalCta";
+import { HomeShowroom } from "@/components/home/HomeShowroom";
+import { SelectionFeature } from "@/components/home/SelectionFeature";
 import { JsonLd } from "@/components/site/JsonLd";
 import { HOME } from "@/content/home";
 import { getFeaturedProducts, getHeroSlides, getHomePosts, getNavCategories, getProjects } from "@/lib/queries";
@@ -80,18 +77,16 @@ export default async function HomePage() {
       ) : (
         <HeroFallback />
       )}
-      <TrustFlow />
-      <CategoryShowcase categories={categories} />
-      <Manifesto image={settings.aboutImage} imageAlt={settings.aboutImageAlt} caption={settings.aboutImageCaption} video={settings.aboutVideo} />
+      {/* Sadeleştirilmiş akış: koleksiyonlar → Bifire × Biwool → özel tasarım → showroom → hizmet bölgeleri → rehber → seçim */}
+      <HomeCollections categories={categories} />
       {FEATURES.homeFeaturedProducts ? <FeaturedProducts products={featured} /> : null}
-      <ArchitectureFeature image={settings.featureImage} imageAlt={settings.featureImageAlt} video={settings.featureVideo} />
+      <BiwoolBand />
+      <DesignInvite image={settings.designAfterImage || settings.featureImage} imageAlt={settings.designAfterImage ? null : settings.featureImageAlt} />
       {FEATURES.projects ? <FeaturedProjects projects={projects} /> : null}
-      <ProcessSteps eyebrow="Projenizin adımları" title="İlk fikirden uygulamaya." id="home-process" />
-      <WhyBifire />
-      <ShowroomBlock />
+      <HomeShowroom image={settings.showroomImage} imageAlt={settings.showroomImageAlt} />
       <HomeRegions />
-      <Journal posts={posts} />
-      <FinalCta />
+      <HomeGuide posts={posts} />
+      <SelectionFeature image={settings.aboutImage} imageAlt={settings.aboutImageAlt} />
     </>
   );
 }

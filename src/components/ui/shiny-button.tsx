@@ -6,7 +6,7 @@ import type { CSSProperties, ReactNode } from "react";
  * kenar + nefes alan iç ışık + noktalı doku. Stiller globals.css `.shiny-btn`. Bifire: antrasit dolgu + ateş turuncusu ışık.
  * Kullanım: sayfa sonu ana dönüşüm eylemi (tek yerde — abartı yok).
  */
-const STYLE = { "--shiny-fill": "#0c0c0d", "--shiny-inset": "#1b1b1d", "--shiny-accent": "#e0691f", "--shiny-accent-soft": "#f6c28b" } as CSSProperties;
+const STYLE = { "--shiny-fill": "#282a28", "--shiny-inset": "#1b1b1d", "--shiny-accent": "#92714e", "--shiny-accent-soft": "#d9b388" } as CSSProperties;
 
 export function ShinyButton({ href, children, external }: { href: string; children: ReactNode; external?: boolean }) {
   return external ? (

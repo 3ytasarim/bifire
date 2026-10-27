@@ -86,7 +86,7 @@ export function ArticleNav({ items, target }: { items: Item[]; target: string })
       </nav>
 
       {/* Masaüstü */}
-      <nav aria-label="Sayfa içeriği" className="hidden overflow-hidden rounded-[1.75rem] border border-white/80 bg-white/65 p-6 shadow-[0_30px_60px_-40px_rgb(12_12_13/0.45)] backdrop-blur-xl lg:block">
+      <nav aria-label="Sayfa içeriği" className="hidden overflow-hidden rounded-[1.75rem] border border-white/80 bg-white/65 p-6 shadow-[0_30px_60px_-40px_rgb(40_42_40/0.45)] backdrop-blur-xl lg:block">
         <div className="flex items-center gap-4 border-b border-sand/70 pb-5">
           <span className="relative flex h-14 w-14 shrink-0 items-center justify-center">
             <svg viewBox="0 0 48 48" className="absolute inset-0 -rotate-90" aria-hidden="true">

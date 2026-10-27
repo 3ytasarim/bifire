@@ -116,7 +116,7 @@ export default function RegionsPage() {
               <StaggerItem key={p.slug} className="h-full">
                 <Link
                   href={routes.province(p.slug)}
-                  className="group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-linen bg-paper p-6 transition-[border-color,box-shadow,background-color] duration-500 hover:border-ember/40 hover:bg-white hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)]"
+                  className="group relative flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-linen bg-paper p-6 transition-[border-color,box-shadow,background-color] duration-500 hover:border-ember/40 hover:bg-white hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)]"
                 >
                   <span aria-hidden="true" className="pointer-events-none absolute -top-20 -right-20 h-44 w-44 rounded-full bg-ember/0 blur-3xl transition-colors duration-700 group-hover:bg-ember/20" />
                   {provinceImage(p.slug) ? (
@@ -126,7 +126,7 @@ export default function RegionsPage() {
                   ) : null}
                   <span className="relative flex items-start justify-between gap-4">
                     <span className="font-display text-sm font-semibold text-stone tabular-nums">{String(i + 1).padStart(2, "0")}</span>
-                    <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink transition-colors duration-500 group-hover:bg-ember">
+                    <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-white text-ink transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
                     </span>
                   </span>

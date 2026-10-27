@@ -48,7 +48,7 @@ export default async function RequestDetail({ params }: { params: Promise<{ id: 
         ) : (
           <form action={intakeExistingRequest}>
             <input type="hidden" name="id" value={r.id} />
-            <button type="submit" className="inline-flex min-h-10 items-center gap-2 bg-ember px-4 text-sm font-semibold text-ink hover:bg-ember/90">
+            <button type="submit" className="inline-flex min-h-10 items-center gap-2 bg-ember px-4 text-sm font-semibold text-white hover:bg-ember/90">
               CRM&apos;e aktar
             </button>
           </form>

@@ -36,7 +36,7 @@ export function DecoratedImage({
       <div className="relative">
         <span aria-hidden="true" className="absolute -inset-3 rounded-[2rem] border border-ember/45" />
         <span aria-hidden="true" className="absolute -inset-3 -z-10 translate-x-3 translate-y-3 rounded-[2rem] bg-gradient-to-br from-ember/20 to-transparent" />
-        <div className={`relative overflow-hidden rounded-[1.5rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)] ${aspect}`}>
+        <div className={`relative overflow-hidden rounded-[1.5rem] bg-bone shadow-[0_30px_60px_-30px_rgb(40_42_40/0.35)] ${aspect}`}>
           {src ? (
             <Image
               src={src}

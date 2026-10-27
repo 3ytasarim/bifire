@@ -11,7 +11,7 @@ import { MoveHorizontal } from "lucide-react";
 export function BeforeAfter({ before, after, beforeLabel, afterLabel }: { before: { url: string; alt: string }; after: { url: string; alt: string }; beforeLabel: string; afterLabel: string }) {
   const [pos, setPos] = useState(50);
   return (
-    <div className="relative aspect-[4/3] w-full touch-pan-y has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-ember overflow-hidden rounded-[1.75rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)] select-none sm:aspect-[16/9]">
+    <div className="relative aspect-[4/3] w-full touch-pan-y has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-4 has-[:focus-visible]:outline-ember overflow-hidden rounded-[1.75rem] bg-bone shadow-[0_30px_60px_-30px_rgb(40_42_40/0.35)] select-none sm:aspect-[16/9]">
       <Image src={after.url} alt={after.alt} fill sizes="(min-width: 1024px) 80vw, 100vw" className="object-cover" />
       <div className="absolute inset-0" style={{ clipPath: `inset(0 ${100 - pos}% 0 0)` }}>
         <Image src={before.url} alt={before.alt} fill sizes="(min-width: 1024px) 80vw, 100vw" className="object-cover" />

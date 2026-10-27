@@ -79,7 +79,7 @@ export function ArchitectureFeature({ image, imageAlt, video }: { image: string 
             <div className="relative order-1 mx-auto w-[calc(100%-2.5rem)] max-w-2xl lg:order-2 lg:w-full lg:max-w-none">
               <div className="relative">
                 <div aria-hidden="true" className="absolute -inset-3 -z-10 rounded-[2rem] border border-ember/25" />
-                <div className="relative aspect-[3/2] overflow-hidden rounded-[1.75rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)]">
+                <div className="relative aspect-[3/2] overflow-hidden rounded-[1.75rem] bg-bone shadow-[0_30px_60px_-30px_rgb(40_42_40/0.35)]">
                   {image ? (
                     <Image src={image} alt={imageAlt || ""} fill sizes="(min-width: 1024px) 50vw, 90vw" className="object-cover" />
                   ) : (
@@ -99,7 +99,7 @@ export function ArchitectureFeature({ image, imageAlt, video }: { image: string 
                   aria-hidden="true"
                   animate={{ y: [0, 10, 0] }}
                   transition={{ duration: 6, repeat: Infinity, ease: "easeInOut" }}
-                  className="absolute -bottom-5 -left-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-ink/15 bg-white/90 text-ink shadow-[0_18px_36px_-18px_rgb(12_12_13/0.4)] backdrop-blur"
+                  className="absolute -bottom-5 -left-5 flex h-16 w-16 items-center justify-center rounded-2xl border border-ink/15 bg-white/90 text-ink shadow-[0_18px_36px_-18px_rgb(40_42_40/0.4)] backdrop-blur"
                 >
                   <Award className="h-7 w-7" strokeWidth={1.6} />
                 </motion.div>
@@ -148,7 +148,7 @@ function ServiceItem({ title, description, delay, direction }: { title: string; 
       <div className={`flex items-center gap-3 ${direction === "right" ? "" : "lg:flex-row-reverse"}`}>
         <span
           aria-hidden="true"
-          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-ember/25 bg-ember/5 text-ember-ink transition-colors duration-300 group-hover:bg-ember group-hover:text-ink"
+          className="flex h-11 w-11 shrink-0 items-center justify-center rounded-xl border border-ember/25 bg-ember/5 text-ember-ink transition-colors duration-300 group-hover:bg-ember group-hover:text-white"
         >
           <CheckCircle className="h-5 w-5" />
         </span>

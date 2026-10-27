@@ -160,7 +160,7 @@ export function MediaLibrary({
               onSelect(selected);
               onClose();
             }}
-            className="inline-flex min-h-10 items-center bg-ember px-5 text-sm font-semibold text-ink hover:bg-amber disabled:opacity-50"
+            className="inline-flex min-h-10 items-center bg-ember px-5 text-sm font-semibold text-white hover:bg-amber disabled:opacity-50"
           >
             Seç
           </button>

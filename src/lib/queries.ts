@@ -54,15 +54,15 @@ export const getNavCategories = cache(async () => {
       children: {
         where: { active: true },
         orderBy: [{ sortOrder: "asc" }, { name: "asc" }],
-        select: { id: true, name: true, slug: true, products: navProducts },
+        select: { id: true, name: true, slug: true, image: true, products: navProducts },
       },
       _count: { select: { products: { where: { active: true } } } },
     },
   });
   return rows.map(({ products, children, ...c }) => ({
     ...c,
-    // Kategori görseli yoksa (ör. tek ürünlü kategori) kendi veya alt kategorisinin ilk ürün kapağı kullanılır.
-    image: c.image ?? [...products, ...children.flatMap((ch) => ch.products)].find((p) => p.coverImage)?.coverImage ?? null,
+    // Kategori görseli yoksa önce alt kategori görseli, sonra kendi veya alt kategorisinin ilk ürün kapağı kullanılır.
+    image: c.image ?? children.find((ch) => ch.image)?.image ?? [...products, ...children.flatMap((ch) => ch.products)].find((p) => p.coverImage)?.coverImage ?? null,
     href: categoryHref({ slug: c.slug, products, childCount: children.length }),
     children: children.map(({ products: chProducts, ...ch }) => ({ ...ch, href: categoryHref({ slug: ch.slug, products: chProducts }) })),
   }));

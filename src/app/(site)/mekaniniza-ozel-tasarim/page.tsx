@@ -82,7 +82,7 @@ export default async function DesignPage() {
       </section>
 
       <section aria-labelledby="adim-otesi" className="relative overflow-hidden bg-white py-16 sm:py-24">
-        <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.12),transparent_65%)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.12),transparent_65%)]" />
         <div className="shell relative grid gap-10 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-5">
             <p className="eyebrow text-ember-ink">Mekânınızdan başlayan tasarım</p>
@@ -140,8 +140,8 @@ export default async function DesignPage() {
           </Reveal>
           <Stagger as="ol" className="mt-12 grid gap-4 md:grid-cols-3" gap={0.12}>
             {DESIGN_STEPS.map((st, i) => (
-              <StaggerItem key={st.title} className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-paper p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] sm:p-8">
-                <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full border border-ember/30 bg-white font-display text-sm font-semibold text-ember-ink tabular-nums transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+              <StaggerItem key={st.title} className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-paper p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)] sm:p-8">
+                <span aria-hidden="true" className="flex h-11 w-11 items-center justify-center rounded-full border border-ember/30 bg-white font-display text-sm font-semibold text-ember-ink tabular-nums transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                   {String(i + 1).padStart(2, "0")}
                 </span>
                 <span aria-hidden="true" className="absolute inset-x-0 bottom-0 h-[3px] origin-left scale-x-0 bg-ember transition-transform duration-700 ease-(--ease-premium) group-hover:scale-x-100" />

@@ -152,7 +152,7 @@ export function CategoryCard({
           </div>
           <span
             aria-hidden="true"
-            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-ink transition-colors duration-500 group-hover:bg-ember"
+            className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-white text-ink transition-colors duration-500 group-hover:bg-ember group-hover:text-white"
           >
             <ArrowUpRight className="h-5 w-5 transition-transform duration-500 group-hover:rotate-45" />
           </span>

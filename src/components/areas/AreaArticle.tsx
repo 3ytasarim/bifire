@@ -24,7 +24,7 @@ export function AreaArticle({ sections, aside, labelledBy }: { sections: AreaSec
         {sections.map((s, i) => (
           <li key={s.title} id={anchor(i)} className="scroll-mt-32">
             <Reveal y={18}>
-              <article className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-white p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] sm:p-9">
+              <article className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-white p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)] sm:p-9">
                 <span aria-hidden="true" className="absolute top-6 right-7 font-display text-5xl leading-none font-semibold tracking-[-0.04em] text-sand transition-colors duration-500 group-hover:text-ember/40">
                   {String(i + 1).padStart(2, "0")}
                 </span>

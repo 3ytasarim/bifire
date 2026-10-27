@@ -82,7 +82,7 @@ export async function CategoryRoute({ kategori, at }: { kategori: string; at: st
             <ul className="flex flex-wrap gap-2">
               {groups.map((g) => (
                 <li key={g.id}>
-                  <a href={`#grup-${g.slug}`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 bg-white/70 px-4 text-[13px] font-semibold text-ink backdrop-blur transition-colors hover:border-ember hover:bg-ember">
+                  <a href={`#grup-${g.slug}`} className="inline-flex min-h-11 items-center gap-2 rounded-full border border-ink/15 bg-white/70 px-4 text-[13px] font-semibold text-ink backdrop-blur transition-colors hover:border-ember hover:bg-ember hover:text-white">
                     {g.name} <span className="text-stone tabular-nums">{g.products.length}</span>
                   </a>
                 </li>
@@ -109,7 +109,7 @@ export async function CategoryRoute({ kategori, at }: { kategori: string; at: st
               <GridImageNote products={g.products.slice(0, 8)} />
               {g.products.length > 8 && g.slug !== category.slug ? (
                 <div className="mt-10">
-                  <Link href={routes.category(g.slug, category.slug)} className="group inline-flex min-h-12 items-center gap-3 rounded-full bg-ink pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-ember hover:text-ink">
+                  <Link href={routes.category(g.slug, category.slug)} className="group inline-flex min-h-12 items-center gap-3 rounded-full bg-ink pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-ember hover:text-white">
                     Tüm {g.name.toLocaleLowerCase("tr")} ({g.products.length})
                     <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-transform duration-300 group-hover:translate-x-0.5">→</span>
                   </Link>
@@ -146,7 +146,7 @@ export async function CategoryRoute({ kategori, at }: { kategori: string; at: st
             <ul className="flex flex-wrap gap-2">
               {category.children.map((ch) => (
                 <li key={ch.id}>
-                  <Link href={routes.category(ch.slug, category.slug)} className="inline-flex min-h-11 items-center border border-white/25 px-4 text-[13px] font-semibold tracking-[0.1em] text-white uppercase transition-colors hover:border-ember hover:bg-ember hover:text-ink">
+                  <Link href={routes.category(ch.slug, category.slug)} className="inline-flex min-h-11 items-center border border-white/25 px-4 text-[13px] font-semibold tracking-[0.1em] text-white uppercase transition-colors hover:border-ember hover:bg-ember hover:text-white">
                     {ch.name}
                   </Link>
                 </li>

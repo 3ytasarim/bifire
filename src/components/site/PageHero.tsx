@@ -31,7 +31,7 @@ export function PageHero({
     <section className="relative isolate overflow-hidden bg-paper">
       <span
         aria-hidden="true"
-        className="absolute -top-40 -right-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.14),transparent_65%)]"
+        className="absolute -top-40 -right-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.14),transparent_65%)]"
       />
       <div className="shell relative pt-10 pb-14 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24">
         <Breadcrumbs items={crumbs} />
@@ -46,7 +46,7 @@ export function PageHero({
             <figure className="relative mx-3 animate-rise [animation-delay:120ms] lg:col-span-6 lg:mx-0 lg:ml-6">
               <span aria-hidden="true" className="absolute -inset-3 rounded-[2rem] border border-ember/40" />
               <span aria-hidden="true" className="absolute -inset-3 -z-10 translate-x-3 translate-y-3 rounded-[2rem] bg-gradient-to-br from-ember/15 to-transparent" />
-              <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-bone shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)]">
+              <div className="relative aspect-[4/3] overflow-hidden rounded-[1.5rem] bg-bone shadow-[0_30px_60px_-30px_rgb(40_42_40/0.35)]">
                 <Image src={image} alt={imageAlt || ""} fill priority sizes="(min-width: 1024px) 45vw, 100vw" className="object-cover" />
               </div>
               {imageCaption ? (

@@ -3,28 +3,30 @@
 
 /*
  * BIFIRE tasarım sistemi
- * Karakter: ateş + mimari. Taş, metal, cam, ahşap. AÇIK TEMA: zemin beyaz / sıcak kırık beyaz, metin antrasit;
- * ateş turuncusu yalnızca vurgu ve ana eylemler. Koyu yüzey yalnızca fotoğraflı hero ve tek bir CTA bandında.
- * Kontrast: ember (#E0691F) koyu zeminde metin için uygun; açık zeminde metin gerekiyorsa ember-ink (AA 4.5:1+).
+ * Karakter: taş + bronz + mimari. Ana zemin sıcak taş (#F3F0E9), kartlar #FBFAF7, metin antrasit (#282A28),
+ * ikincil metin #6E6F65, çizgiler #D8D3C9, koyu bölüm #30332E, alternatif açık bölüm #E9E4DA.
+ * Bronz (ember, #92714E) dengeli kullanılır: vurgu ve ana eylemler. Açık zeminde metin için ember-ink (AA 4.5:1+),
+ * koyu zeminde metin için amber (#BC9B78). Token adları (ember/ink/paper…) bileşenleri bozmamak için korunmuştur.
  */
 @theme {
-  --color-ink: #0c0c0d;
-  --color-anthracite: #161719;
-  --color-smoke: #232427;
-  --color-graphite: #34363a;
-  --color-steel: #5d5f64;
-  --color-stone: #8a857e;
-  --color-sand: #d8d1c6;
-  --color-linen: #ebe6de;
-  --color-bone: #f4f1ec;
-  --color-paper: #faf8f5;
-  --color-ember: #e0691f;
-  --color-ember-ink: #a3440e;
-  --color-amber: #e8a868;
-  --color-glow: #f6c28b;
+  --color-white: #fbfaf7;
+  --color-ink: #282a28;
+  --color-anthracite: #30332e;
+  --color-smoke: #2b2e29;
+  --color-graphite: #3d403a;
+  --color-steel: #6e6f65;
+  --color-stone: #8b8b80;
+  --color-sand: #d8d3c9;
+  --color-linen: #e3ddd2;
+  --color-bone: #e9e4da;
+  --color-paper: #f3f0e9;
+  --color-ember: #92714e;
+  --color-ember-ink: #7a5a3a;
+  --color-amber: #bc9b78;
+  --color-glow: #d9b388;
 
-  --font-sans: var(--font-inter), ui-sans-serif, system-ui, sans-serif;
-  --font-display: var(--font-manrope), var(--font-inter), ui-sans-serif, system-ui, sans-serif;
+  --font-sans: var(--font-dmsans), ui-sans-serif, system-ui, sans-serif;
+  --font-display: var(--font-manrope), var(--font-dmsans), ui-sans-serif, system-ui, sans-serif;
 
   --ease-premium: cubic-bezier(0.16, 1, 0.3, 1);
   --ease-soft: cubic-bezier(0.22, 0.61, 0.36, 1);
@@ -79,9 +81,8 @@
     scroll-padding-top: 6rem;
   }
   body {
-    @apply bg-white font-sans text-ink antialiased;
+    @apply bg-paper font-sans text-base text-ink antialiased;
     text-rendering: optimizeLegibility;
-    font-feature-settings: "ss01", "cv11";
   }
   h1,
   h2,
@@ -94,7 +95,7 @@
     text-wrap: pretty;
   }
   ::selection {
-    @apply bg-ember text-ink;
+    @apply bg-ember text-white;
   }
   :focus-visible {
     outline: 2px solid var(--color-ember);
@@ -106,9 +107,9 @@
 }
 
 @layer components {
-  /* Sayfa kabı: 320px → 2560px, 16px mobil kenar boşluğu */
+  /* Sayfa kabı: içerik en fazla 1280px, 16px mobil kenar boşluğu */
   .shell {
-    @apply mx-auto w-full max-w-[1480px] px-4 sm:px-6 lg:px-10 2xl:px-12;
+    @apply mx-auto w-full max-w-[1360px] px-4 sm:px-6 lg:px-10;
   }
 
   .eyebrow {
@@ -127,6 +128,16 @@
   }
   .display-3 {
     @apply font-display text-2xl leading-tight font-semibold tracking-[-0.02em] sm:text-3xl;
+  }
+  /* Ana sayfa (referans tasarım) bölüm ritmi ve başlıkları: 88px masaüstü / 56px mobil, ince ağırlıklı başlık */
+  .section-pad {
+    @apply py-14 lg:py-[88px];
+  }
+  .studio-eyebrow {
+    @apply text-[11px] font-semibold tracking-[0.2em] uppercase;
+  }
+  .studio-h2 {
+    @apply font-display text-[2rem] leading-[1.08] font-normal tracking-[-0.032em] sm:text-[2.4rem] lg:text-[2.65rem];
   }
   .lead {
     @apply text-base leading-relaxed sm:text-lg;
@@ -159,15 +170,15 @@
   /* Görsel yokken kullanılan sıcak, açık yer tutucu (taş tonu + közün yumuşak ışığı) */
   .ember-placeholder {
     background:
-      radial-gradient(90% 60% at 50% 115%, rgb(224 105 31 / 0.28), transparent 65%),
-      radial-gradient(60% 45% at 50% 100%, rgb(246 194 139 / 0.4), transparent 70%),
+      radial-gradient(90% 60% at 50% 115%, rgb(146 113 78 / 0.28), transparent 65%),
+      radial-gradient(60% 45% at 50% 100%, rgb(217 179 136 / 0.4), transparent 70%),
       linear-gradient(180deg, #f4f1ec 0%, #ebe6de 100%);
   }
   /* Koyu bağlam (görselsiz hero) için */
   .ember-placeholder-dark {
     background:
-      radial-gradient(120% 70% at 50% 110%, rgb(224 105 31 / 0.55), transparent 60%),
-      radial-gradient(60% 40% at 50% 100%, rgb(246 194 139 / 0.35), transparent 70%),
+      radial-gradient(120% 70% at 50% 110%, rgb(146 113 78 / 0.55), transparent 60%),
+      radial-gradient(60% 40% at 50% 100%, rgb(217 179 136 / 0.35), transparent 70%),
       linear-gradient(180deg, #232427 0%, #121314 100%);
   }
 
@@ -177,7 +188,7 @@
   }
   .lift-card:hover,
   .lift-card:focus-within {
-    @apply -translate-y-1.5 shadow-[0_24px_48px_-24px_rgb(12_12_13/0.28)];
+    @apply -translate-y-1.5 shadow-[0_24px_48px_-24px_rgb(40_42_40/0.28)];
   }
 
   /* Zengin metin içeriği */
@@ -228,7 +239,7 @@
   }
   .article-card .rich :where(ul > li)::before {
     content: "";
-    @apply absolute top-[0.7em] left-1 h-2 w-2 rounded-full bg-ember shadow-[0_0_0_5px_rgb(224_105_31/0.15)];
+    @apply absolute top-[0.7em] left-1 h-2 w-2 rounded-full bg-ember shadow-[0_0_0_5px_rgb(146_113_78/0.15)];
   }
 }
 
@@ -464,7 +475,7 @@
   inset: -6px;
   z-index: -1;
   border-radius: inherit;
-  background: radial-gradient(closest-side, rgb(224 105 31 / 0.45), transparent);
+  background: radial-gradient(closest-side, rgb(146 113 78 / 0.45), transparent);
   opacity: 0;
   animation: beacon-glow 2.8s ease-in-out infinite;
 }
@@ -509,4 +520,10 @@
   .beacon-cta-arrow {
     animation: none !important;
   }
+}
+
+/* Koyu yüzeylerde bronz metin/ikon açık bronz (#BC9B78) olur: #92714E koyu zeminde AA kontrastı sağlamaz. */
+:where(.bg-ink, .bg-anthracite, .bg-smoke, .bg-graphite, .dark-surface) .text-ember,
+:where(.bg-ink, .bg-anthracite, .bg-smoke, .bg-graphite, .dark-surface) .group:hover .group-hover\:text-ember {
+  color: var(--color-amber);
 }

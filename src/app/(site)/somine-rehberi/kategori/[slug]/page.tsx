@@ -103,7 +103,7 @@ export default async function GuideCategoryPage({ params, searchParams }: Props)
         <section aria-labelledby="merkez-rehber" className="bg-paper pt-12 sm:pt-16">
           <div className="shell">
             <Reveal>
-              <Link href={routes.post(hub.slug)} className="group grid overflow-hidden rounded-[1.75rem] border border-linen bg-white transition-shadow duration-500 hover:shadow-[0_30px_60px_-34px_rgb(12_12_13/0.4)] md:grid-cols-12">
+              <Link href={routes.post(hub.slug)} className="group grid overflow-hidden rounded-[1.75rem] border border-linen bg-white transition-shadow duration-500 hover:shadow-[0_30px_60px_-34px_rgb(40_42_40/0.4)] md:grid-cols-12">
                 <span className="relative block aspect-[16/10] bg-bone md:col-span-7 md:aspect-auto md:min-h-[20rem]">
                   {hub.coverImage ? <Image src={hub.coverImage} alt="" fill sizes="(min-width: 768px) 58vw, 100vw" className="object-cover" /> : <span className="ember-placeholder absolute inset-0" />}
                 </span>
@@ -145,7 +145,7 @@ export default async function GuideCategoryPage({ params, searchParams }: Props)
             <Stagger as="ul" className="grid gap-4 sm:grid-cols-2 lg:grid-cols-3" gap={0.06}>
               {list.map((p) => (
                 <StaggerItem key={p.id} className="h-full">
-                  <Link href={routes.post(p.slug)} className="group flex h-full flex-col overflow-hidden rounded-[1.4rem] border border-linen bg-white transition-[border-color,box-shadow] duration-500 hover:border-ember/40 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)]">
+                  <Link href={routes.post(p.slug)} className="group flex h-full flex-col overflow-hidden rounded-[1.4rem] border border-linen bg-white transition-[border-color,box-shadow] duration-500 hover:border-ember/40 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)]">
                     <span className="relative block aspect-[16/9] overflow-hidden bg-bone">
                       {p.coverImage ? <Image src={p.coverImage} alt="" fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition-transform duration-700 ease-(--ease-premium) group-hover:scale-[1.03]" /> : <span className="ember-placeholder absolute inset-0" />}
                       {p.subtopic ? <span className="absolute top-3 left-3 rounded-full border border-white/40 bg-white/70 px-3 py-1 text-[10px] font-semibold tracking-[0.12em] text-ink uppercase backdrop-blur-md">{p.subtopic}</span> : null}
@@ -169,7 +169,7 @@ export default async function GuideCategoryPage({ params, searchParams }: Props)
       </section>
 
       <section aria-labelledby="rehber-cta" className="relative overflow-hidden bg-ink py-14 text-white sm:py-16">
-        <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-24 h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.28),transparent_65%)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-24 h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.28),transparent_65%)]" />
         <Reveal className="shell relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
           <div>
             <p className="eyebrow text-ember">Aradığınız yanıt burada yok mu?</p>

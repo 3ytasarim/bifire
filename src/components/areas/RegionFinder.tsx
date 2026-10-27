@@ -74,7 +74,7 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
               if (e.key === "Escape") setQ("");
             }}
             placeholder="İlçenizi yazın: Çankaya, Nilüfer, Sarıyer…"
-            className="block min-h-16 w-full rounded-full border border-sand bg-white pr-6 pl-14 text-[17px] text-ink shadow-[0_20px_40px_-30px_rgb(12_12_13/0.4)] outline-none placeholder:text-stone/70 focus:border-ink"
+            className="block min-h-16 w-full rounded-full border border-sand bg-white pr-6 pl-14 text-[17px] text-ink shadow-[0_20px_40px_-30px_rgb(40_42_40/0.4)] outline-none placeholder:text-stone/70 focus:border-ink"
           />
         </div>
         <AnimatePresence>
@@ -84,7 +84,7 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -6 }}
               transition={{ duration: 0.2, ease: EASE }}
-              className="absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-3xl border border-sand bg-white shadow-[0_30px_60px_-30px_rgb(12_12_13/0.45)]"
+              className="absolute inset-x-0 top-full z-20 mt-2 overflow-hidden rounded-3xl border border-sand bg-white shadow-[0_30px_60px_-30px_rgb(40_42_40/0.45)]"
             >
               {hits.length ? (
                 <ul ref={listRef} id={`${id}-list`} role="listbox" aria-label="Bölge sonuçları" className="max-h-96 overflow-y-auto py-2">
@@ -145,13 +145,13 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
             transition={{ duration: 0.4, ease: EASE }}
             className="relative overflow-hidden rounded-[1.75rem] border border-linen bg-white p-6 sm:p-10"
           >
-            <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.16),transparent_65%)]" />
+            <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.16),transparent_65%)]" />
             <div className="relative grid gap-8 lg:grid-cols-12">
               <div className="lg:col-span-4">
                 <p className="text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase">{province.districts.length} ilçe</p>
                 <h3 className="mt-3 font-display text-4xl leading-none font-semibold tracking-[-0.03em] text-ink">{province.name}</h3>
                 <p className="mt-4 text-[15px] leading-relaxed text-steel">{province.focus}</p>
-                <Link href={`/hizmet-bolgeleri/${province.slug}`} className="group mt-6 inline-flex min-h-12 items-center gap-3 rounded-full bg-ink pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-ember hover:text-ink">
+                <Link href={`/hizmet-bolgeleri/${province.slug}`} className="group mt-6 inline-flex min-h-12 items-center gap-3 rounded-full bg-ink pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-ember hover:text-white">
                   {province.name} sayfasını inceleyin
                   <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-transform duration-300 group-hover:rotate-45">
                     <ArrowUpRight className="h-4 w-4" />

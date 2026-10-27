@@ -27,7 +27,7 @@ export function TrustFlow() {
   return (
     <MotionConfig reducedMotion="user">
       <section aria-label="Tasarım, üretim ve montaj" className="relative overflow-hidden border-b border-linen bg-white py-12 sm:py-16">
-        <span aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/3 h-80 w-[40rem] rounded-full bg-[radial-gradient(closest-side,rgb(224_105_31/0.08),transparent)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute -top-40 left-1/3 h-80 w-[40rem] rounded-full bg-[radial-gradient(closest-side,rgb(146_113_78/0.08),transparent)]" />
         <div className="shell relative grid items-center gap-10 lg:grid-cols-12">
           <div className="lg:col-span-3">
             <p className="text-[11px] font-semibold tracking-[0.24em] text-stone uppercase">Tek elden</p>
@@ -73,7 +73,7 @@ export function TrustFlow() {
             {!reduced ? (
               <motion.span
                 aria-hidden="true"
-                className="absolute top-[3.1rem] hidden h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-ember shadow-[0_0_12px_3px_rgb(224_105_31/0.55)] sm:block"
+                className="absolute top-[3.1rem] hidden h-1.5 w-1.5 -translate-y-1/2 rounded-full bg-ember shadow-[0_0_12px_3px_rgb(146_113_78/0.55)] sm:block"
                 initial={{ left: "16%", opacity: 0 }}
                 whileInView={{ left: ["16%", "84%"], opacity: [0, 1, 1, 0] }}
                 viewport={{ once: false, amount: 0.6 }}
@@ -93,15 +93,15 @@ export function TrustFlow() {
                   >
                     <article
                       onMouseMove={spotlight}
-                      className="group relative h-full overflow-hidden rounded-[1.4rem] border border-linen bg-paper/60 p-6 text-center transition-[border-color,box-shadow,transform] duration-500 [--mx:50%] [--my:0%] hover:-translate-y-1 hover:border-ember/40 hover:shadow-[0_26px_50px_-30px_rgb(12_12_13/0.4)]"
+                      className="group relative h-full overflow-hidden rounded-[1.4rem] border border-linen bg-paper/60 p-6 text-center transition-[border-color,box-shadow,transform] duration-500 [--mx:50%] [--my:0%] hover:-translate-y-1 hover:border-ember/40 hover:shadow-[0_26px_50px_-30px_rgb(40_42_40/0.4)]"
                     >
-                      <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:radial-gradient(260px_circle_at_var(--mx)_var(--my),rgb(224_105_31/0.14),transparent_70%)]" />
+                      <span aria-hidden="true" className="pointer-events-none absolute inset-0 opacity-0 transition-opacity duration-500 group-hover:opacity-100 [background:radial-gradient(260px_circle_at_var(--mx)_var(--my),rgb(146_113_78/0.14),transparent_70%)]" />
                       <span aria-hidden="true" className="absolute top-4 right-5 font-display text-sm font-semibold text-sand tabular-nums transition-colors duration-500 group-hover:text-ember/60">
                         {String(i + 1).padStart(2, "0")}
                       </span>
                       <span aria-hidden="true" className="relative mx-auto flex h-12 w-12 items-center justify-center">
                         <span className="absolute inset-0 rounded-full border border-dashed border-ember/40 transition-transform duration-[1.6s] ease-out group-hover:rotate-180" />
-                        <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white text-ember-ink shadow-[0_6px_16px_-8px_rgb(224_105_31/0.6)] transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+                        <span className="relative flex h-9 w-9 items-center justify-center rounded-full bg-white text-ember-ink shadow-[0_6px_16px_-8px_rgb(146_113_78/0.6)] transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                           <Icon className="h-4 w-4" strokeWidth={1.8} />
                         </span>
                       </span>

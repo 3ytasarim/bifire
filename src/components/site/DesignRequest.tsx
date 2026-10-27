@@ -229,7 +229,7 @@ export function DesignRequest() {
                             className="group mt-6 flex cursor-pointer flex-col items-center justify-center rounded-2xl border-2 border-dashed border-sand bg-white px-6 py-12 text-center transition-colors hover:border-ember has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ember"
                           >
                             <input name="photoPicker" type="file" accept={DESIGN_PHOTO_TYPES.join(",")} className="sr-only" onChange={(e) => void pick(e.target.files?.[0])} />
-                            <span aria-hidden="true" className="flex h-16 w-16 items-center justify-center rounded-full bg-bone text-ember transition-colors duration-300 group-hover:bg-ember group-hover:text-ink">
+                            <span aria-hidden="true" className="flex h-16 w-16 items-center justify-center rounded-full bg-bone text-ember transition-colors duration-300 group-hover:bg-ember group-hover:text-white">
                               {busy ? <Loader2 className="h-7 w-7 animate-spin" /> : <ImageUp className="h-7 w-7" />}
                             </span>
                             <span className="mt-4 font-display text-lg font-semibold text-ink">{busy ? "Fotoğraf hazırlanıyor…" : "Fotoğraf seçin"}</span>

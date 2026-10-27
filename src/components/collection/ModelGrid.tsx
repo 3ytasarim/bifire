@@ -80,7 +80,7 @@ export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel
             <motion.li key={m.href} layout initial={{ opacity: 0, y: 16 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.97 }} transition={{ duration: 0.4, ease: EASE }}>
               <Link
                 href={m.href}
-                className="group relative flex h-full flex-col overflow-hidden rounded-[1.6rem] border border-linen bg-white transition-[border-color,box-shadow,transform] duration-500 hover:-translate-y-1 hover:border-ember/40 hover:shadow-[0_30px_60px_-34px_rgb(12_12_13/0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                className="group relative flex h-full flex-col overflow-hidden rounded-[1.6rem] border border-linen bg-white transition-[border-color,box-shadow,transform] duration-500 hover:-translate-y-1 hover:border-ember/40 hover:shadow-[0_30px_60px_-34px_rgb(40_42_40/0.45)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
               >
                 {/* Ürün kapak görseli: seri, kod ve ölçü görselin üzerinde */}
                 <span className="relative block aspect-[4/3] overflow-hidden bg-linen">
@@ -91,7 +91,7 @@ export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel
                   )}
                   <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/10" />
                   <span className="absolute inset-x-4 top-4 flex items-center justify-between gap-3">
-                    {m.series ? <span className="rounded-full bg-ember px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-ink shadow-sm">{m.series}</span> : <span />}
+                    {m.series ? <span className="rounded-full bg-ember px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-white shadow-sm">{m.series}</span> : <span />}
                     <span className="rounded-full bg-white/15 px-2.5 py-1 font-mono text-[10.5px] tracking-[0.06em] text-white backdrop-blur-md">{m.code}</span>
                   </span>
                   <span className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3 text-white">
@@ -99,7 +99,7 @@ export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel
                       <span className="block text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">Ölçü</span>
                       <span className="block font-display text-[2.4rem] leading-none font-semibold tracking-[-0.03em]">{m.size}</span>
                     </span>
-                    <span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-md transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+                    <span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-md transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                       <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
                     </span>
                   </span>

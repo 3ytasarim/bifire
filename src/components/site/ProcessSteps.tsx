@@ -20,7 +20,7 @@ export function ProcessSteps({ eyebrow = "Mekânınız için planlayalım", titl
               <StaggerItem key={s.key} className="group relative rounded-2xl border border-linen bg-paper p-6 transition-colors duration-500 hover:border-ember/40 hover:bg-white sm:p-7">
                 <span
                   aria-hidden="true"
-                  className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border border-ember/30 bg-white font-display text-sm font-semibold text-ember-ink tabular-nums transition-colors duration-500 group-hover:bg-ember group-hover:text-ink"
+                  className="relative z-10 flex h-11 w-11 items-center justify-center rounded-full border border-ember/30 bg-white font-display text-sm font-semibold text-ember-ink tabular-nums transition-colors duration-500 group-hover:bg-ember group-hover:text-white"
                 >
                   {String(i + 1).padStart(2, "0")}
                 </span>

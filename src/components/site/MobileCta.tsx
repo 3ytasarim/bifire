@@ -45,9 +45,9 @@ export function MobileCta({ label, targetId = "teklif", note }: { label: string;
             animate={{ y: 0, opacity: 1 }}
             exit={{ y: 96, opacity: 0 }}
             transition={{ duration: 0.4, ease: [0.16, 1, 0.3, 1] }}
-            className="fixed inset-x-0 bottom-0 z-40 border-t border-linen bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-12px_30px_-18px_rgb(12_12_13/0.35)] backdrop-blur lg:hidden"
+            className="fixed inset-x-0 bottom-0 z-40 border-t border-linen bg-white/95 px-4 pt-3 pb-[max(0.75rem,env(safe-area-inset-bottom))] shadow-[0_-12px_30px_-18px_rgb(40_42_40/0.35)] backdrop-blur lg:hidden"
           >
-            <a href={`#${targetId}`} className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-ember px-6 text-[15px] font-semibold text-ink">
+            <a href={`#${targetId}`} className="flex min-h-12 items-center justify-center gap-2 rounded-full bg-ember px-6 text-[15px] font-semibold text-white">
               {label} <ArrowRight aria-hidden="true" className="h-4 w-4" />
             </a>
             {note ? <p className="mt-1.5 text-center text-[12px] text-stone">{note}</p> : null}

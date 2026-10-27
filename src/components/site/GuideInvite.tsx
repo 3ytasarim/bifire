@@ -16,10 +16,10 @@ export function GuideInvite({ context }: { context?: string }) {
             type="button"
             data-guide-open=""
             aria-haspopup="dialog"
-            className="group relative flex h-full w-full flex-col justify-between gap-8 overflow-hidden rounded-[1.75rem] bg-ink p-7 text-left text-white transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgb(224_105_31/0.6)] sm:p-9"
+            className="group relative flex h-full w-full flex-col justify-between gap-8 overflow-hidden rounded-[1.75rem] bg-ink p-7 text-left text-white transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgb(146_113_78/0.6)] sm:p-9"
           >
-            <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.45),transparent_65%)] transition-transform duration-700 group-hover:scale-110" />
-            <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-ember text-ink">
+            <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-20 h-64 w-64 rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.45),transparent_65%)] transition-transform duration-700 group-hover:scale-110" />
+            <span className="relative flex h-12 w-12 items-center justify-center rounded-full bg-ember text-white">
               <Compass aria-hidden="true" className="h-5 w-5 transition-transform duration-700 group-hover:rotate-45" />
             </span>
             <span className="relative">
@@ -36,7 +36,7 @@ export function GuideInvite({ context }: { context?: string }) {
         <Reveal delay={0.08}>
           <Link
             href={routes.showroom}
-            className="group relative flex h-full flex-col justify-between gap-8 overflow-hidden rounded-[1.75rem] border border-linen bg-white p-7 transition-[border-color,box-shadow] duration-500 hover:border-ember/50 hover:shadow-[0_30px_60px_-34px_rgb(12_12_13/0.35)] sm:p-9"
+            className="group relative flex h-full flex-col justify-between gap-8 overflow-hidden rounded-[1.75rem] border border-linen bg-white p-7 transition-[border-color,box-shadow] duration-500 hover:border-ember/50 hover:shadow-[0_30px_60px_-34px_rgb(40_42_40/0.35)] sm:p-9"
           >
             <span className="flex h-12 w-12 items-center justify-center rounded-full bg-ember/10 text-ember-ink">
               <MapPin aria-hidden="true" className="h-5 w-5" />

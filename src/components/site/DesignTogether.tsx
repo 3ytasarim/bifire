@@ -109,10 +109,10 @@ export function DesignTogether({
         type="button"
         onClick={() => setOpen(true)}
         aria-haspopup="dialog"
-        className="group relative mt-5 flex w-full items-center gap-5 overflow-hidden rounded-[1.5rem] border border-linen bg-white p-5 text-left transition-[border-color,box-shadow] duration-500 hover:border-ember/50 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:p-6"
+        className="group relative mt-5 flex w-full items-center gap-5 overflow-hidden rounded-[1.5rem] border border-linen bg-white p-5 text-left transition-[border-color,box-shadow] duration-500 hover:border-ember/50 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember sm:p-6"
       >
         <span aria-hidden="true" className="pointer-events-none absolute -top-16 -right-16 h-40 w-40 rounded-full bg-ember/0 blur-3xl transition-colors duration-700 group-hover:bg-ember/20" />
-        <span aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-ink text-ember transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+        <span aria-hidden="true" className="flex h-14 w-14 shrink-0 items-center justify-center rounded-full bg-ink text-ember transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
           <Sparkles className="h-6 w-6" />
         </span>
         <span className="relative min-w-0 flex-1">
@@ -179,7 +179,7 @@ export function DesignTogether({
                                   <label
                                     key={opt.value}
                                     className={`relative flex min-h-[4.5rem] cursor-pointer gap-3 rounded-2xl border bg-white p-4 transition-[border-color,box-shadow] duration-300 has-[:focus-visible]:outline-2 has-[:focus-visible]:outline-offset-2 has-[:focus-visible]:outline-ember ${
-                                      on ? "border-ember shadow-[0_16px_32px_-24px_rgb(224_105_31/0.8)]" : "border-sand hover:border-ink"
+                                      on ? "border-ember shadow-[0_16px_32px_-24px_rgb(146_113_78/0.8)]" : "border-sand hover:border-ink"
                                     }`}
                                   >
                                     <input
@@ -191,7 +191,7 @@ export function DesignTogether({
                                       onChange={() => setAnswers((a) => normalizeGuide({ ...a, [step]: opt.value }))}
                                       className="sr-only"
                                     />
-                                    <span aria-hidden="true" className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 ${on ? "border-ember bg-ember text-ink" : "border-sand"}`}>
+                                    <span aria-hidden="true" className={`mt-0.5 flex h-5 w-5 shrink-0 items-center justify-center rounded-full border transition-colors duration-300 ${on ? "border-ember bg-ember text-white" : "border-sand"}`}>
                                       {on ? <Check className="h-3 w-3" strokeWidth={3} /> : null}
                                     </span>
                                     <span>

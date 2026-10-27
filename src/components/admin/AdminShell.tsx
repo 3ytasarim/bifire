@@ -104,7 +104,7 @@ export function AdminShell({ user, unread, overdue = 0, children }: { user: { na
                       <Icon aria-hidden="true" className={`h-4 w-4 ${active ? "text-ember" : ""}`} />
                       <span className="flex-1">{it.label}</span>
                       {count > 0 ? (
-                        <span title={"badge" in it && it.badge === "overdue" ? "Tarihi geçen görev ve takipler" : "Okunmamış talepler"} className={`min-w-6 px-1.5 text-center text-xs font-semibold ${"badge" in it && it.badge === "overdue" ? "bg-red-600 text-white" : "bg-ember text-ink"}`}>
+                        <span title={"badge" in it && it.badge === "overdue" ? "Tarihi geçen görev ve takipler" : "Okunmamış talepler"} className={`min-w-6 px-1.5 text-center text-xs font-semibold ${"badge" in it && it.badge === "overdue" ? "bg-red-600 text-white" : "bg-ember text-white"}`}>
                           {count}
                         </span>
                       ) : null}

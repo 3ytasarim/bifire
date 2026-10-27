@@ -86,7 +86,7 @@ export function AreaPageView({ province, district, products, form }: { province:
       </PageHero>
 
       <section aria-labelledby="bolge-icerik" className="relative overflow-hidden bg-paper pb-16 sm:pb-24">
-        <span aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.12),transparent_65%)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.12),transparent_65%)]" />
         <div className="shell relative">
           <h2 id="bolge-icerik" className="sr-only">
             {place} şömine projesi

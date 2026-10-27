@@ -81,7 +81,7 @@ export function GuideLibrary({ posts, initialQuery = "" }: { posts: LibraryPost[
         <AnimatePresence mode="popLayout" initial={false}>
           {shown.map((p) => (
             <motion.li key={p.slug} layout initial={{ opacity: 0, y: 12 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.35, ease: EASE }}>
-              <Link href={p.href} className="group flex h-full flex-col overflow-hidden rounded-[1.4rem] border border-linen bg-white transition-[border-color,box-shadow] duration-500 hover:border-ember/40 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember">
+              <Link href={p.href} className="group flex h-full flex-col overflow-hidden rounded-[1.4rem] border border-linen bg-white transition-[border-color,box-shadow] duration-500 hover:border-ember/40 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember">
                 <span className="relative block aspect-[16/9] overflow-hidden bg-bone">
                   {p.image ? <Image src={p.image} alt="" fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition-transform duration-700 ease-(--ease-premium) group-hover:scale-[1.03]" /> : <span className="ember-placeholder absolute inset-0" />}
                   {catName(p.category) ? (

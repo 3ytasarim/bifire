@@ -1,42 +1,33 @@
 import Image from "next/image";
 
+/** Varsayılan marka logosu (şeffaf PNG, 740×196): BI antrasit, FIRE bronz. */
+const DEFAULT_LOGO = "/brand/bifire-logo.png";
+
 /**
- * Marka işareti. Logo tasarımı tamamlanınca Admin > Site Ayarları'ndan yüklenen logo (logoUrl)
- * otomatik kullanılır; o zamana kadar tipografik "BİFİRE" yazısı gösterilir.
+ * Marka işareti. Admin > Site Ayarları'ndan logo yüklenirse (logoUrl) o kullanılır, yoksa varsayılan logo.
+ * Genişlik: header 184px masaüstü / 160px mobil, footer 168px / 144px.
+ * Koyu zeminde (tone="light") logo tek renk açık tona çevrilir.
  */
 export function Wordmark({
   logoUrl,
   name = "Bifire",
-  tone = "light",
+  tone = "dark",
   size = "md",
 }: {
   logoUrl?: string | null;
   name?: string;
   tone?: "light" | "dark";
-  size?: "md" | "lg";
+  size?: "md" | "footer";
 }) {
-  if (logoUrl) {
-    return (
-      <Image
-        src={logoUrl}
-        alt={name}
-        width={240}
-        height={80}
-        priority
-        sizes="160px"
-        className={size === "lg" ? "h-12 w-auto" : "h-9 w-auto lg:h-10"}
-      />
-    );
-  }
   return (
-    <span className={`inline-flex flex-col items-center leading-none ${tone === "light" ? "text-bone" : "text-ink"}`}>
-      <span
-        className={`font-display font-semibold tracking-[0.34em] ${size === "lg" ? "text-3xl" : "text-[1.35rem] lg:text-[1.55rem]"}`}
-        style={{ marginRight: "-0.34em" }}
-      >
-        BİFİRE
-      </span>
-      <span aria-hidden="true" className="mt-1.5 block h-[2px] w-7 bg-ember" />
-    </span>
+    <Image
+      src={logoUrl || DEFAULT_LOGO}
+      alt={name}
+      width={740}
+      height={196}
+      priority={size === "md"}
+      sizes="(min-width: 1024px) 184px, 160px"
+      className={`h-auto ${size === "footer" ? "w-[144px] lg:w-[168px]" : "w-[160px] lg:w-[184px]"} ${tone === "light" ? "brightness-0 invert" : ""}`}
+    />
   );
 }

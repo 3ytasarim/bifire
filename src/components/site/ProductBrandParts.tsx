@@ -67,7 +67,7 @@ export function ConceptImage({ url, alt, note, productName }: { url: string; alt
         </Reveal>
         <Reveal className="lg:col-span-8" delay={0.08}>
           <figure>
-            <div className="relative aspect-[16/9] overflow-hidden rounded-[1.75rem] bg-linen shadow-[0_30px_60px_-34px_rgb(12_12_13/0.4)]">
+            <div className="relative aspect-[16/9] overflow-hidden rounded-[1.75rem] bg-linen shadow-[0_30px_60px_-34px_rgb(40_42_40/0.4)]">
               <Image src={url} alt={alt} fill sizes="(min-width: 1024px) 60vw, 100vw" className="object-cover" />
             </div>
             {note ? (
@@ -89,8 +89,8 @@ export function ConceptImage({ url, alt, note, productName }: { url: string; alt
 export function NoPhotoPanel({ name, specs, hasConcept }: { name: string; specs: { label: string; value: string }[]; hasConcept: boolean }) {
   return (
     <div className="relative flex aspect-[4/5] w-full flex-col justify-between overflow-hidden rounded-2xl bg-ink p-7 text-white sm:aspect-square sm:p-10">
-      <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.45),transparent_65%)] motion-safe:animate-[pulse_6s_ease-in-out_infinite]" />
-      <span aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.2),transparent_65%)]" />
+      <span aria-hidden="true" className="pointer-events-none absolute -top-24 -right-24 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.45),transparent_65%)] motion-safe:animate-[pulse_6s_ease-in-out_infinite]" />
+      <span aria-hidden="true" className="pointer-events-none absolute -bottom-32 -left-20 h-72 w-72 rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.2),transparent_65%)]" />
       <div className="relative">
         <span className="inline-flex items-center gap-2 rounded-full border border-white/15 bg-white/5 px-3 py-1 text-[12px] font-semibold tracking-[0.06em] text-white/80 backdrop-blur">
           <Factory aria-hidden="true" className="h-3.5 w-3.5 text-ember" /> Elektrikli şömine
@@ -113,7 +113,7 @@ export function NoPhotoPanel({ name, specs, hasConcept }: { name: string; specs:
           Bu model için doğrulanmış ürün fotoğrafı henüz eklenmedi; görünüm, çerçeve ve alev düzeni üreticiyle teyit edilir.
         </p>
         {hasConcept ? (
-          <a href="#temsili-tasarim" className="group mt-5 inline-flex min-h-12 items-center gap-3 rounded-full bg-ember pr-2 pl-6 text-[14px] font-semibold text-ink transition-colors hover:bg-white">
+          <a href="#temsili-tasarim" className="group mt-5 inline-flex min-h-12 items-center gap-3 rounded-full bg-ember pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-white">
             Temsili tasarım önerisini görün
             <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-ink/10 transition-transform duration-300 group-hover:translate-y-0.5">
               <Sparkles className="h-4 w-4" />

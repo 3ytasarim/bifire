@@ -34,7 +34,7 @@ export function ProductDrawings({ drawings, groups, fallback }: { drawings: Draw
                     <button
                       type="button"
                       onClick={() => setOpen(i)}
-                      className="group block w-full overflow-hidden rounded-2xl border border-sand bg-white text-left transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
+                      className="group block w-full overflow-hidden rounded-2xl border border-sand bg-white text-left transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember"
                     >
                       <span className="relative block aspect-[4/3]">
                         <Image src={d.url} alt={d.alt} fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" className="object-contain p-4" />
@@ -58,7 +58,7 @@ export function ProductDrawings({ drawings, groups, fallback }: { drawings: Draw
             href="#teklif"
             className="group mt-4 flex items-center gap-4 rounded-2xl border border-dashed border-sand bg-white p-5 transition-colors duration-300 hover:border-ember sm:p-6"
           >
-            <span aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-bone text-ember transition-colors duration-300 group-hover:bg-ember group-hover:text-ink">
+            <span aria-hidden="true" className="flex h-12 w-12 shrink-0 items-center justify-center rounded-full bg-bone text-ember transition-colors duration-300 group-hover:bg-ember group-hover:text-white">
               <Ruler className="h-5 w-5" />
             </span>
             <span>

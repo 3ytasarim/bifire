@@ -16,7 +16,7 @@ export default function NotFound() {
     <main className="relative isolate flex min-h-[100svh] items-center overflow-hidden bg-paper">
       <span
         aria-hidden="true"
-        className="absolute -right-56 -bottom-72 -z-10 h-[820px] w-[820px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.2),rgb(246_194_139/0.1)_40%,transparent_70%)]"
+        className="absolute -right-56 -bottom-72 -z-10 h-[820px] w-[820px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.2),rgb(217_179_136/0.1)_40%,transparent_70%)]"
       />
       <div className="shell py-24">
         <Link href="/" className="font-display text-xl font-semibold tracking-[0.34em] text-ink">

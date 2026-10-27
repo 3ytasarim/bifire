@@ -79,7 +79,7 @@ export default async function GuidePage({ searchParams }: Props) {
 
       {/* Açılış: solda başlık + cam arama kutusu, sağda büyük görsel ve yüzen cam kartlar */}
       <section className="relative isolate overflow-hidden bg-paper">
-        <span aria-hidden="true" className="pointer-events-none absolute -top-40 -left-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.12),transparent_65%)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute -top-40 -left-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.12),transparent_65%)]" />
         <div className="shell grid gap-10 pt-8 pb-14 sm:pt-10 lg:grid-cols-12 lg:items-center lg:gap-12 lg:pb-20">
           <div className="lg:col-span-5">
             <Breadcrumbs items={CRUMBS} />
@@ -90,13 +90,13 @@ export default async function GuidePage({ searchParams }: Props) {
               <p className="mt-3 max-w-md text-[16px] leading-relaxed text-steel">
                 Şömine seçimi, tasarım, montaj ve kullanım hakkında ihtiyaç duyduğunuz bilgileri bir arada keşfedin; projenizi doğru sorularla planlayın.
               </p>
-              <form action={routes.blog} method="get" role="search" className="mt-8 flex max-w-md items-center gap-2 rounded-full border border-white/80 bg-white/60 p-1.5 pl-5 shadow-[0_20px_40px_-28px_rgb(12_12_13/0.45)] backdrop-blur-xl focus-within:border-ink">
+              <form action={routes.blog} method="get" role="search" className="mt-8 flex max-w-md items-center gap-2 rounded-full border border-white/80 bg-white/60 p-1.5 pl-5 shadow-[0_20px_40px_-28px_rgb(40_42_40/0.45)] backdrop-blur-xl focus-within:border-ink">
                 <Search aria-hidden="true" className="h-4 w-4 shrink-0 text-stone" />
                 <label className="flex-1">
                   <span className="sr-only">Rehberde ara</span>
                   <input type="search" name="ara" defaultValue={query} maxLength={80} placeholder="Rehberde ne arıyorsunuz?" className="block min-h-11 w-full bg-transparent text-[15px] text-ink outline-none placeholder:text-stone/70" />
                 </label>
-                <button type="submit" className="min-h-11 shrink-0 rounded-full bg-ink px-5 text-[13px] font-semibold text-white transition-colors hover:bg-ember hover:text-ink">
+                <button type="submit" className="min-h-11 shrink-0 rounded-full bg-ink px-5 text-[13px] font-semibold text-white transition-colors hover:bg-ember hover:text-white">
                   Ara
                 </button>
               </form>
@@ -106,7 +106,7 @@ export default async function GuidePage({ searchParams }: Props) {
             </Reveal>
           </div>
           <Reveal className="relative lg:col-span-7" delay={0.12} y={24}>
-            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-bone shadow-[0_40px_80px_-40px_rgb(12_12_13/0.45)] sm:aspect-[16/11]">
+            <div className="relative aspect-[4/3] overflow-hidden rounded-[2rem] bg-bone shadow-[0_40px_80px_-40px_rgb(40_42_40/0.45)] sm:aspect-[16/11]">
               {hero?.coverImage ? <Image src={hero.coverImage} alt={hero.coverImageAlt || ""} fill priority sizes="(min-width: 1024px) 56vw, 100vw" className="object-cover" /> : <span className="ember-placeholder absolute inset-0" />}
               <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/35 via-transparent to-transparent" />
             </div>
@@ -115,7 +115,7 @@ export default async function GuidePage({ searchParams }: Props) {
                 { value: posts.length, label: "rehber" },
                 { value: GUIDE_CATEGORIES.filter((c) => counts[c.slug]).length, label: "konu" },
               ].map((s, i) => (
-                <div key={s.label} className="rounded-2xl border border-white/70 bg-white/60 px-5 py-3.5 shadow-[0_20px_40px_-24px_rgb(12_12_13/0.5)] backdrop-blur-xl motion-safe:animate-float" style={{ animationDelay: `${i * -2.5}s` }}>
+                <div key={s.label} className="rounded-2xl border border-white/70 bg-white/60 px-5 py-3.5 shadow-[0_20px_40px_-24px_rgb(40_42_40/0.5)] backdrop-blur-xl motion-safe:animate-float" style={{ animationDelay: `${i * -2.5}s` }}>
                   <p className="font-display text-3xl leading-none font-semibold text-ink tabular-nums">
                     {s.value}
                     <span className="text-ember">.</span>
@@ -131,7 +131,7 @@ export default async function GuidePage({ searchParams }: Props) {
       {posts.length ? (
         <>
           <section id="yollar" aria-labelledby="yollar-baslik" className="relative scroll-mt-28 overflow-hidden bg-[linear-gradient(180deg,var(--color-paper),var(--color-bone))] py-16 sm:py-24">
-            <span aria-hidden="true" className="pointer-events-none absolute top-10 right-0 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.12),transparent_65%)]" />
+            <span aria-hidden="true" className="pointer-events-none absolute top-10 right-0 h-80 w-80 rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.12),transparent_65%)]" />
             <div className="shell relative">
               <Reveal className="mb-10">
                 <p className="eyebrow text-ember-ink">İhtiyaca göre başlangıç</p>
@@ -166,7 +166,7 @@ export default async function GuidePage({ searchParams }: Props) {
                             <span className="block font-display text-lg font-semibold text-ink">{c.name}</span>
                             <span className="mt-0.5 block text-[12px] font-semibold text-stone tabular-nums">{counts[c.slug]} rehber</span>
                           </span>
-                          <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-white transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+                          <span aria-hidden="true" className="flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-ink text-white transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                             <ArrowUpRight className="h-4 w-4 transition-transform duration-500 group-hover:rotate-45" />
                           </span>
                         </span>
@@ -194,7 +194,7 @@ export default async function GuidePage({ searchParams }: Props) {
               <Stagger as="ul" className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-3" gap={0.08}>
                 {featured.map((p) => (
                   <StaggerItem key={p.id} className="h-full">
-                    <Link href={routes.post(p.slug)} className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-linen bg-white transition-[border-color,box-shadow] duration-500 hover:border-ember/40 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)]">
+                    <Link href={routes.post(p.slug)} className="group flex h-full flex-col overflow-hidden rounded-[1.5rem] border border-linen bg-white transition-[border-color,box-shadow] duration-500 hover:border-ember/40 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)]">
                       <span className="relative block aspect-[16/9] overflow-hidden bg-bone">
                         {p.coverImage ? <Image src={p.coverImage} alt="" fill sizes="(min-width: 1024px) 30vw, (min-width: 640px) 45vw, 100vw" className="object-cover transition-transform duration-700 ease-(--ease-premium) group-hover:scale-[1.03]" /> : <span className="ember-placeholder absolute inset-0" />}
                       </span>
@@ -213,7 +213,7 @@ export default async function GuidePage({ searchParams }: Props) {
           </section>
 
           <section aria-labelledby="yol-haritasi" className="relative overflow-hidden bg-ink py-14 text-white sm:py-16">
-            <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-24 h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.28),transparent_65%)]" />
+            <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-24 h-[380px] w-[380px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.28),transparent_65%)]" />
             <Reveal className="shell relative flex flex-col gap-6 lg:flex-row lg:items-center lg:justify-between">
               <div>
                 <h2 id="yol-haritasi" className="display-3 text-white">
@@ -222,7 +222,7 @@ export default async function GuidePage({ searchParams }: Props) {
                 <p className="mt-3 text-[16px] text-white/70">Şömine projenizin yol haritasını keşfedin.</p>
               </div>
               <div className="flex flex-wrap items-center gap-3">
-                <Link href={roadmap ? routes.post(roadmap.slug) : routes.quote} className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[14px] font-semibold text-white backdrop-blur-md transition-colors hover:border-ember hover:bg-ember hover:text-ink">
+                <Link href={roadmap ? routes.post(roadmap.slug) : routes.quote} className="inline-flex min-h-12 items-center gap-2 rounded-full border border-white/40 bg-white/10 px-6 text-[14px] font-semibold text-white backdrop-blur-md transition-colors hover:border-ember hover:bg-ember hover:text-white">
                   Projenizi planlayın <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
                 </Link>
                 {prep ? (

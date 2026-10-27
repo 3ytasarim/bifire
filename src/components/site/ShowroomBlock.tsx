@@ -50,7 +50,7 @@ export async function ShowroomBlock({ title = SHOWROOM.title, intro = SHOWROOM.i
                 <Stagger as="ol" className="mt-7 divide-y divide-white/10 border-y border-white/10" gap={0.12}>
                   {SHOWROOM.steps.map((s, i) => (
                     <StaggerItem key={s.title} className="group relative flex gap-3 py-3.5">
-                      <span aria-hidden="true" className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-ember/60 text-[11px] font-bold text-ember tabular-nums transition-colors duration-300 group-hover:bg-ember group-hover:text-ink">
+                      <span aria-hidden="true" className="mt-0.5 flex h-6 w-6 shrink-0 items-center justify-center rounded-full border border-ember/60 text-[11px] font-bold text-ember tabular-nums transition-colors duration-300 group-hover:bg-ember group-hover:text-white">
                         {i + 1}
                       </span>
                       <span>

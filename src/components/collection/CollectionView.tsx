@@ -75,7 +75,7 @@ export function CollectionView({
               return (
                 <li key={p.id}>
                   <Reveal>
-                    <article className="group relative grid overflow-hidden rounded-[1.75rem] border border-linen bg-paper transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)] md:grid-cols-12">
+                    <article className="group relative grid overflow-hidden rounded-[1.75rem] border border-linen bg-paper transition-shadow duration-500 hover:shadow-[0_30px_60px_-30px_rgb(40_42_40/0.35)] md:grid-cols-12">
                       <div className={`relative aspect-[4/3] md:col-span-6 md:aspect-auto md:min-h-[22rem] ${i % 2 ? "md:order-2" : ""}`}>
                         {p.coverImage || p.conceptImage ? (
                           <ParallaxFrame className="absolute inset-0 overflow-hidden">
@@ -98,7 +98,7 @@ export function CollectionView({
                         <p className="mt-4 text-[15px] leading-relaxed text-steel">{f?.desc ?? p.shortDescription}</p>
                         <p className="mt-8 inline-flex items-center gap-2 text-[14px] font-semibold text-ink">
                           {count ? `${count} model · ` : ""}Koleksiyonu incele
-                          <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white transition-colors duration-500 group-hover:bg-ember group-hover:text-ink">
+                          <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-ink text-white transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                             <ArrowUpRight className="h-4 w-4" />
                           </span>
                         </p>
@@ -114,7 +114,7 @@ export function CollectionView({
 
       {copy.approach?.length ? (
       <section aria-labelledby="yaklasim" className="relative overflow-hidden bg-ink py-16 text-white sm:py-24">
-        <span aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.25),transparent_65%)]" />
+        <span aria-hidden="true" className="pointer-events-none absolute -bottom-40 -left-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.25),transparent_65%)]" />
         <div className="shell relative grid gap-10 lg:grid-cols-12 lg:gap-16">
           <Reveal className="lg:col-span-5">
             <p className="eyebrow text-ember">Bifire yaklaşımı</p>

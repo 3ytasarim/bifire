@@ -6,6 +6,7 @@ import { PRIORITY_DISTRICTS } from "@/content/regions";
 import { PROVINCE_NAMES } from "@/content/service-areas/names";
 import { routes } from "@/lib/catalog";
 import { RegionsMap } from "./RegionsMap";
+import { StudioEyebrow } from "./studio";
 
 /**
  * Ana sayfa yerel SEO bölümü: Tuzla merkezli animasyonlu rota haritası (tüm hizmet illeri) + öncelikli İstanbul ilçeleri.
@@ -14,12 +15,12 @@ import { RegionsMap } from "./RegionsMap";
 export function HomeRegions() {
   const districtCount = PROVINCE_NAMES.reduce((n, p) => n + p.districts.length, 0);
   return (
-    <section aria-labelledby="home-regions" className="relative overflow-hidden bg-white py-20 sm:py-28">
+    <section aria-labelledby="home-regions" className="section-pad relative overflow-hidden bg-bone">
       <div className="shell grid items-center gap-12 lg:grid-cols-12 lg:gap-14">
         <div className="lg:col-span-5">
           <Reveal>
-            <p className="eyebrow text-ember-ink">Hizmet bölgeleri</p>
-            <h2 id="home-regions" className="display-2 mt-5 text-balance text-ink">
+            <StudioEyebrow no="05">Hizmet bölgeleri</StudioEyebrow>
+            <h2 id="home-regions" className="studio-h2 mt-5 text-balance text-ink">
               Tuzla&apos;dan projenize, Marmara&apos;dan Ege&apos;ye, Akdeniz&apos;e.
             </h2>
             <p className="mt-6 max-w-md text-[17px] leading-relaxed text-steel">

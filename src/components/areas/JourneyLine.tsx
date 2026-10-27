@@ -31,7 +31,7 @@ export function JourneyLine({ steps }: { steps: { title: string; text: string }[
           <li key={s.title} className="relative flex gap-5 md:flex-col md:items-center md:text-center">
             <motion.span
               initial={{ backgroundColor: "rgb(255 255 255)" }}
-              whileInView={{ backgroundColor: "rgb(224 105 31)" }}
+              whileInView={{ backgroundColor: "rgb(146 113 78)" }}
               viewport={{ once: true, margin: "-35% 0px -35% 0px" }}
               transition={{ duration: 0.5 }}
               className="relative z-10 flex h-11 w-11 shrink-0 items-center justify-center rounded-full border border-ember/40 font-display text-sm font-semibold text-ink tabular-nums"

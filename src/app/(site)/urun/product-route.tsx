@@ -347,7 +347,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
 
         {product.description || bullets.length ? (
           <section aria-labelledby="urun-aciklama" className="relative overflow-hidden bg-bone py-20 sm:py-28">
-            <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.14),transparent_65%)]" />
+            <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.14),transparent_65%)]" />
             <div className="shell relative">
               <div className="grid gap-10 lg:grid-cols-12 lg:gap-16">
                 <Reveal className={bandImage ? "lg:col-span-5" : "lg:col-span-8"}>
@@ -358,7 +358,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
                   {story.lead ? <RichText html={story.lead} className="lead mt-6 text-steel" /> : null}
                 </Reveal>
                 {bandImage ? (
-                  <ParallaxFrame className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] shadow-[0_30px_60px_-30px_rgb(12_12_13/0.35)] lg:col-span-7">
+                  <ParallaxFrame className="relative aspect-[4/3] overflow-hidden rounded-[1.75rem] shadow-[0_30px_60px_-30px_rgb(40_42_40/0.35)] lg:col-span-7">
                     <Image src={bandImage.url} alt={bandImage.alt} fill sizes="(min-width: 1024px) 55vw, 100vw" className="object-cover" />
                   </ParallaxFrame>
                 ) : null}
@@ -367,7 +367,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
               {story.sections.length ? (
                 <Stagger className="mt-16 grid gap-4 md:grid-cols-2" as="ol">
                   {story.sections.map((sec, i) => (
-                    <StaggerItem key={sec.title} className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-white p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(12_12_13/0.35)] sm:p-9">
+                    <StaggerItem key={sec.title} className="group relative overflow-hidden rounded-[1.5rem] border border-linen bg-white p-7 transition-shadow duration-500 hover:shadow-[0_24px_48px_-28px_rgb(40_42_40/0.35)] sm:p-9">
                       <span aria-hidden="true" className="absolute top-5 right-6 font-display text-6xl leading-none font-semibold tracking-[-0.04em] text-sand transition-colors duration-500 group-hover:text-ember/40">
                         {String(i + 1).padStart(2, "0")}
                       </span>

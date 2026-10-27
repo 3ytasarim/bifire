@@ -143,7 +143,7 @@ export default async function PostPage({ params }: Props) {
                 <p className="eyebrow text-ember">Sonraki adım</p>
                 <p className="mt-4 font-display text-2xl leading-snug font-semibold text-balance">{next.title}</p>
                 <p className="mt-3 text-[15px] leading-relaxed text-white/70">{next.text}</p>
-                <Link href={next.cta.href} className="group mt-6 inline-flex min-h-12 items-center gap-3 rounded-full bg-ember pr-2 pl-6 text-[14px] font-semibold text-ink transition-colors hover:bg-white">
+                <Link href={next.cta.href} className="group mt-6 inline-flex min-h-12 items-center gap-3 rounded-full bg-ember pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-white">
                   {next.cta.label}
                   <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-ink/10 transition-transform duration-300 group-hover:translate-x-0.5">
                     <ArrowRight className="h-4 w-4" />

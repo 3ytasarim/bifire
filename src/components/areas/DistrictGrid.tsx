@@ -44,7 +44,7 @@ export function DistrictGrid({ provinceSlug, districts, highlight = [], imageNot
               <motion.li key={d.slug} layout initial={{ opacity: 0, y: 10 }} animate={{ opacity: 1, y: 0 }} exit={{ opacity: 0, scale: 0.98 }} transition={{ duration: 0.3, ease: EASE }}>
                 <Link
                   href={routes.region(provinceSlug, d.slug)}
-                  className={`group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-2xl border p-5 transition-[border-color,box-shadow] duration-500 hover:shadow-[0_20px_40px_-28px_rgb(12_12_13/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${hi ? "border-ember/40 bg-ember/[0.04] hover:border-ember" : "border-linen bg-white hover:border-ember/40"}`}
+                  className={`group relative flex h-full items-start justify-between gap-4 overflow-hidden rounded-2xl border p-5 transition-[border-color,box-shadow] duration-500 hover:shadow-[0_20px_40px_-28px_rgb(40_42_40/0.35)] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-ember ${hi ? "border-ember/40 bg-ember/[0.04] hover:border-ember" : "border-linen bg-white hover:border-ember/40"}`}
                 >
                   {d.image ? (
                     <span className="relative block h-16 w-16 shrink-0 overflow-hidden rounded-xl bg-bone">
@@ -55,7 +55,7 @@ export function DistrictGrid({ provinceSlug, districts, highlight = [], imageNot
                     <span className="block font-display text-lg font-semibold text-ink">{d.name}</span>
                     <span className="mt-1 block text-[13px] leading-relaxed text-steel">{d.focus}</span>
                   </span>
-                  <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-bone text-ink transition-colors duration-500 group-hover:bg-ember">
+                  <span aria-hidden="true" className="flex h-9 w-9 shrink-0 items-center justify-center rounded-full bg-bone text-ink transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
                     <ArrowUpRight className="h-4 w-4 transition-transform duration-300 group-hover:rotate-45" />
                   </span>
                 </Link>

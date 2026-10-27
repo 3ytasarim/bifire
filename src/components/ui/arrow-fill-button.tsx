@@ -5,7 +5,7 @@ import type { ButtonHTMLAttributes, CSSProperties } from "react";
 /**
  * 21st.dev "Arrow Fill Button" (hyperiux) — Mezbaha Teknolojileri uyarlamasından Bifire'a taşındı: sağda yuvarlak ok;
  * hover/odakta yuvarlak tüm düğmeyi doldurur, yazı clip-path ile ters renge döner, ok soldan kayarak girer.
- * Bifire tonları: ember (ateş turuncusu), ink (antrasit), light (beyaz, ince çerçeveli — açık zeminde ikincil eylem),
+ * Bifire tonları: ember (bronz), ink (antrasit), light (beyaz, ince çerçeveli — açık zeminde ikincil eylem),
  * glass (görsel üzerinde yarı saydam).
  * Kullanım: yönlendiren eylemler (Ürünleri keşfet, Tüm ürünler, Detayları incele...).
  */
@@ -13,10 +13,10 @@ type Tone = "ember" | "ink" | "light" | "glass";
 type Size = "sm" | "md" | "lg";
 
 const TONES: Record<Tone, Record<string, string>> = {
-  ember: { "--btn-bg": "#e0691f", "--btn-border": "#e0691f", "--btn-text": "#0c0c0d", "--btn-fill-bg": "#0c0c0d", "--btn-fill-text": "#ffffff" },
-  ink: { "--btn-bg": "#0c0c0d", "--btn-border": "#0c0c0d", "--btn-text": "#ffffff", "--btn-fill-bg": "#e0691f", "--btn-fill-text": "#0c0c0d" },
-  light: { "--btn-bg": "#ffffff", "--btn-border": "#d8d1c6", "--btn-text": "#0c0c0d", "--btn-fill-bg": "#0c0c0d", "--btn-fill-text": "#ffffff" },
-  glass: { "--btn-bg": "rgb(255 255 255 / 0.12)", "--btn-border": "rgb(255 255 255 / 0.45)", "--btn-text": "#ffffff", "--btn-fill-bg": "#ffffff", "--btn-fill-text": "#0c0c0d" },
+  ember: { "--btn-bg": "#92714e", "--btn-border": "#92714e", "--btn-text": "#fbfaf7", "--btn-fill-bg": "#282a28", "--btn-fill-text": "#ffffff" },
+  ink: { "--btn-bg": "#282a28", "--btn-border": "#282a28", "--btn-text": "#ffffff", "--btn-fill-bg": "#92714e", "--btn-fill-text": "#fbfaf7" },
+  light: { "--btn-bg": "#fbfaf7", "--btn-border": "#d8d3c9", "--btn-text": "#282a28", "--btn-fill-bg": "#282a28", "--btn-fill-text": "#ffffff" },
+  glass: { "--btn-bg": "rgb(255 255 255 / 0.12)", "--btn-border": "rgb(255 255 255 / 0.45)", "--btn-text": "#ffffff", "--btn-fill-bg": "#ffffff", "--btn-fill-text": "#282a28" },
 };
 
 const SIZES: Record<Size, string> = {

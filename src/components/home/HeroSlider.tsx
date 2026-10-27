@@ -2,7 +2,8 @@
 
 import { getImageProps } from "next/image";
 import { useCallback, useEffect, useRef, useState, useSyncExternalStore } from "react";
-import { ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
+import Link from "next/link";
+import { ArrowUpRight, ChevronLeft, ChevronRight, Pause, Play } from "lucide-react";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 
 export type HeroSlideData = {
@@ -39,7 +40,7 @@ const POSITION: Record<HeroSlideData["textPosition"], { wrap: string; text: stri
   LEFT: { wrap: "items-center justify-start", text: "text-left", gradient: "bg-gradient-to-r from-black/55 via-black/15 to-transparent" },
   CENTER: { wrap: "items-center justify-center", text: "text-center items-center", gradient: "bg-radial from-black/45 to-transparent" },
   RIGHT: { wrap: "items-center justify-end", text: "text-right items-end", gradient: "bg-gradient-to-l from-black/55 via-black/15 to-transparent" },
-  BOTTOM_LEFT: { wrap: "items-end justify-start pb-36 sm:pb-40", text: "text-left", gradient: "bg-gradient-to-t from-black/65 via-black/10 to-transparent" },
+  BOTTOM_LEFT: { wrap: "items-end justify-start pb-28 sm:pb-32", text: "text-left", gradient: "bg-gradient-to-t from-black/65 via-black/10 to-transparent" },
 };
 
 /** Mobilde yatay görsel/video bu odakla kırpılır; masaüstünde ortalanır. */
@@ -112,7 +113,8 @@ function SlideVideo({ slide, active }: { slide: HeroSlideData; active: boolean }
  * Ana sayfa hero slider'ı — Norm Yacht HeroSlider mantığı (otomatik geçiş, önceki/sonraki, çizgi göstergeler,
  * metin blokları sırayla giriş). SYMC/Mezbaha Next.js uyarlamalarındaki iyileştirmeler:
  * ilk slayt SSR + priority görsel (LCP), crossfade, durdur/oynat, reduced-motion, aria etiketleri.
- * Bifire: tam viewport, mobil görsel, metin konumu, overlay yoğunluğu, 2 CTA, kaydırma (swipe).
+ * Bifire: header altında ekranı dolduran (en fazla ~800px) banner, mobil görsel, metin konumu, overlay yoğunluğu,
+ * açık birincil düğme + metin bağlantısı, numaralı slayt seçici + sayaç, kaydırma (swipe).
  * H1 sabittir (`heading`): slayt başlıkları döndüğü için sayfanın ana başlığı bunlara bağlanmaz.
  */
 export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; heading: string }) {
@@ -143,7 +145,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
 
   return (
     <section
-      className="relative isolate h-[100svh] min-h-[600px] overflow-hidden bg-ink text-white"
+      className="relative isolate h-[calc(100svh-108px)] max-h-[800px] min-h-[540px] overflow-hidden bg-anthracite text-white lg:h-[calc(100svh-124px)]"
       aria-roledescription="carousel"
       aria-label="Öne çıkan şömine çözümleri"
       onMouseEnter={() => setHovered(true)}
@@ -182,38 +184,44 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
       ))}
       <span aria-hidden="true" className="absolute inset-0 -z-10 bg-black transition-opacity duration-700" style={{ opacity: Math.min(90, Math.max(0, slide.overlay)) / 100 }} />
       <span aria-hidden="true" className={`absolute inset-0 -z-10 ${pos.gradient}`} />
-      <span aria-hidden="true" className="absolute inset-x-0 top-0 -z-10 h-48 bg-gradient-to-b from-black/45 to-transparent" />
 
-      <div className={`shell flex h-full pt-28 lg:pt-32 ${pos.wrap}`}>
-        <div className={`flex max-w-3xl flex-col ${pos.text}`} aria-live={autoplay ? "off" : "polite"}>
-          <h1 className="eyebrow text-amber">{heading}</h1>
+      <div className={`shell flex h-full pt-10 ${pos.wrap}`}>
+        <div className={`flex max-w-[780px] flex-col ${pos.text}`} aria-live={autoplay ? "off" : "polite"}>
+          <h1 className="text-[11px] font-medium tracking-[0.18em] text-[#e6d8bf] uppercase">{heading}</h1>
           {slide.eyebrow ? (
-            <p key={`e-${current}`} className={`mt-6 text-[13px] font-medium tracking-[0.18em] text-white/75 uppercase ${animate}`}>
+            <p key={`e-${current}`} className={`eyebrow mt-4 text-white/70 ${animate}`}>
               {slide.eyebrow}
             </p>
           ) : null}
-          <p key={`t-${current}`} className={`display-1 mt-5 ${animate} [animation-delay:60ms]`}>
+          <p
+            key={`t-${current}`}
+            className={`mt-5 font-display text-[2.4rem] leading-[1.04] font-normal tracking-[-0.038em] text-balance sm:text-[3.2rem] lg:text-[4.05rem] ${animate} [animation-delay:60ms]`}
+          >
             {slide.title}
           </p>
           {slide.description ? (
-            <p key={`d-${current}`} className={`lead mt-6 max-w-xl text-white/80 ${animate} [animation-delay:140ms] ${slide.textPosition === "CENTER" ? "mx-auto" : ""} ${slide.textPosition === "RIGHT" ? "ml-auto" : ""}`}>
+            <p key={`d-${current}`} className={`mt-6 max-w-[510px] text-[15px] leading-relaxed text-white/80 ${animate} [animation-delay:140ms] ${slide.textPosition === "CENTER" ? "mx-auto" : ""} ${slide.textPosition === "RIGHT" ? "ml-auto" : ""}`}>
               {slide.description}
             </p>
           ) : null}
           {slide.ctaUrl || slide.secondaryCtaUrl ? (
             <div
               key={`c-${current}`}
-              className={`mt-10 flex flex-col gap-3 sm:flex-row ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "items-center sm:justify-center" : slide.textPosition === "RIGHT" ? "items-end sm:justify-end" : "items-start"}`}
+              className={`mt-9 flex flex-wrap gap-x-7 gap-y-4 sm:items-center ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "items-center sm:justify-center" : slide.textPosition === "RIGHT" ? "items-end sm:justify-end" : "items-start"}`}
             >
               {slide.ctaUrl ? (
-                <ArrowFillButton href={slide.ctaUrl} tone="ember" size="lg">
-                  {slide.ctaText || "Ürünleri keşfet"}
+                <ArrowFillButton href={slide.ctaUrl} tone="light">
+                  {slide.ctaText || "Koleksiyonları keşfedin"}
                 </ArrowFillButton>
               ) : null}
               {slide.secondaryCtaUrl ? (
-                <ArrowFillButton href={slide.secondaryCtaUrl} tone="glass" size="lg">
-                  {slide.secondaryCtaText || "Projenizi konuşalım"}
-                </ArrowFillButton>
+                <Link
+                  href={slide.secondaryCtaUrl}
+                  className="group link-underline inline-flex min-h-11 items-center gap-1.5 text-[13px] font-medium tracking-[0.04em] text-white/90 hover:text-white"
+                >
+                  {slide.secondaryCtaText || "İletişim"}
+                  <ArrowUpRight aria-hidden="true" className="h-4 w-4 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
+                </Link>
               ) : null}
             </div>
           ) : null}
@@ -223,7 +231,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
       {count > 1 ? (
         <div className="absolute inset-x-0 bottom-0 z-10 pb-6 sm:pb-8">
           <div className="shell flex items-end gap-6">
-            <ol className="flex flex-1 gap-3 sm:max-w-md" aria-label="Slaytlar">
+            <ol className="flex flex-1 gap-4 sm:max-w-xs" aria-label="Slaytlar">
               {slides.map((s, i) => (
                 <li key={s.id} className="flex-1">
                   <button
@@ -234,16 +242,16 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                     }}
                     aria-label={`${i + 1}. slayt: ${s.title}`}
                     aria-current={i === current ? "true" : undefined}
-                    className="group flex h-11 w-full flex-col justify-center gap-2 text-left"
+                    className="group flex h-11 w-full cursor-pointer flex-col justify-center gap-2 text-left"
                   >
-                    <span className="hidden text-[11px] font-semibold tracking-[0.2em] text-white/60 tabular-nums group-aria-[current=true]:text-white sm:block">
+                    <span className="text-[11px] font-medium tracking-[0.2em] text-white/55 tabular-nums transition-colors group-hover:text-white group-aria-[current=true]:text-white">
                       {String(i + 1).padStart(2, "0")}
                     </span>
                     <span className="relative block h-[2px] w-full overflow-hidden bg-white/25">
                       {i === current ? (
                         <span
                           key={`p-${current}`}
-                          className="absolute inset-0 origin-left bg-ember"
+                          className="absolute inset-0 origin-left bg-amber"
                           onAnimationEnd={() => {
                             // Hydration anında reduced-motion henüz okunmamış olabilir (animasyon ~0 sn sürer) → geçme.
                             if (!window.matchMedia(REDUCED).matches) go(current + 1);
@@ -262,15 +270,10 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                 </li>
               ))}
             </ol>
-            <div className="flex gap-2">
-              <button
-                type="button"
-                onClick={() => setPlaying((p) => !p)}
-                aria-label={autoplay ? "Otomatik geçişi durdur" : "Otomatik geçişi başlat"}
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
-              >
-                {autoplay ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
-              </button>
+            <div className="flex items-center gap-2">
+              <p className="mr-3 hidden text-[12px] tracking-[0.16em] text-white/70 tabular-nums sm:block" aria-hidden="true">
+                <span className="text-white">{String(current + 1).padStart(2, "0")}</span> / {String(count).padStart(2, "0")}
+              </p>
               <button
                 type="button"
                 onClick={() => {
@@ -278,9 +281,17 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                   go(current - 1);
                 }}
                 aria-label="Önceki slayt"
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
               >
                 <ChevronLeft className="h-5 w-5" />
+              </button>
+              <button
+                type="button"
+                onClick={() => setPlaying((p) => !p)}
+                aria-label={autoplay ? "Otomatik geçişi durdur" : "Otomatik geçişi başlat"}
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
+              >
+                {autoplay ? <Pause className="h-4 w-4" /> : <Play className="h-4 w-4" />}
               </button>
               <button
                 type="button"
@@ -289,7 +300,7 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
                   go(current + 1);
                 }}
                 aria-label="Sonraki slayt"
-                className="flex h-12 w-12 items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
+                className="flex h-11 w-11 cursor-pointer items-center justify-center rounded-full border border-white/35 bg-white/10 backdrop-blur-sm transition-colors hover:border-white hover:bg-white hover:text-ink"
               >
                 <ChevronRight className="h-5 w-5" />
               </button>

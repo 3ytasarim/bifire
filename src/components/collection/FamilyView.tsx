@@ -141,7 +141,7 @@ export function FamilyView({
 
       {planning.length ? (
         <section aria-labelledby="planlama" className="relative overflow-hidden bg-bone py-16 sm:py-24">
-          <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(224_105_31/0.14),transparent_65%)]" />
+          <span aria-hidden="true" className="pointer-events-none absolute -top-32 -right-32 h-[420px] w-[420px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.14),transparent_65%)]" />
           <div className="shell relative grid gap-10 lg:grid-cols-12 lg:gap-16">
             <Reveal className="lg:col-span-5">
               <p className="eyebrow text-ember-ink">{family ? `${family.title} tasarımını planlarken` : "Planlarken"}</p>
