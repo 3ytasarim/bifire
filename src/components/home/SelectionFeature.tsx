@@ -9,7 +9,7 @@ import { LoopVideo } from "@/components/ui/loop-video";
  */
 export function SelectionFeature({ image, imageAlt, video }: { image: string | null; imageAlt?: string | null; video?: string | null }) {
   return (
-    <section aria-labelledby="home-selection" className="dark-surface bg-smoke py-10 text-white lg:py-12">
+    <section aria-labelledby="home-selection" className="section-pad dark-surface bg-smoke text-white">
       <div className="shell grid items-center gap-8 lg:grid-cols-[1fr_auto] lg:gap-14">
         <Reveal>
           <p className="studio-eyebrow text-amber">Projenizin ilk adımı</p>

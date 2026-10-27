@@ -20,8 +20,8 @@ export function HomeShowroom({ image, imageAlt }: { image?: string | null; image
           </div>
           <StudioLink href="/fabrika-showroom">Ziyaret deneyimini keşfedin</StudioLink>
         </Reveal>
-        <Reveal delay={0.06} className="mt-10 lg:mt-12">
-          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-bone sm:aspect-[16/8] lg:aspect-[1280/440]">
+        <Reveal delay={0.06} className="mt-8 lg:mt-10">
+          <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-bone sm:aspect-[16/8] lg:aspect-[16/5]">
             <ParallaxFrame className="absolute inset-0">
               <Image src={image || DEFAULT_IMAGE} alt={imageAlt || "Bifire Tuzla fabrika showroom: sergilenen şömine modelleri ve görüşme alanı"} fill sizes="(min-width: 1360px) 1280px, 100vw" className="object-cover" />
             </ParallaxFrame>
@@ -30,7 +30,7 @@ export function HomeShowroom({ image, imageAlt }: { image?: string | null; image
             </span>
           </div>
         </Reveal>
-        <Reveal delay={0.1} className="mt-8 grid gap-5 border-t border-sand pt-8 lg:mt-10 lg:grid-cols-2 lg:gap-14">
+        <Reveal delay={0.1} className="mt-6 grid gap-5 border-t border-sand pt-6 lg:mt-8 lg:grid-cols-2 lg:gap-14">
           <h3 className="font-display text-[21px] leading-snug font-normal tracking-[-0.02em] text-ink sm:text-[23px]">
             Modeli, malzemeyi ve üretim yaklaşımını aynı yerde değerlendirin.
           </h3>

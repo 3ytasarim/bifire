@@ -23,7 +23,7 @@ export function HomeGuide({ posts }: { posts: PostCardData[] }) {
           </div>
           <StudioLink href={routes.blog}>Tüm rehberleri inceleyin</StudioLink>
         </Reveal>
-        <Stagger className="mt-10 grid gap-10 sm:grid-cols-2 sm:gap-6 lg:mt-12 lg:grid-cols-3" gap={0.08}>
+        <Stagger className="mt-8 grid gap-10 sm:grid-cols-2 sm:gap-6 lg:mt-10 lg:grid-cols-3" gap={0.08}>
           {posts.map((p) => {
             const cat = guideCategoryBySlug(p.category)?.name ?? p.tags[0]?.name;
             return (

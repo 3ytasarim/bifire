@@ -16,7 +16,7 @@ function CollectionCard({ c, title, big, delay }: { c: NavCategory; title: strin
   return (
     <Reveal delay={delay} className="h-full">
       <Link href={c.href} className="group flex h-full flex-col">
-        <span className={`zoom-media relative block overflow-hidden rounded-2xl bg-bone ${big ? "aspect-[4/3] lg:aspect-auto lg:flex-1" : "aspect-[4/3] lg:aspect-auto lg:h-[238px]"}`}>
+        <span className={`zoom-media relative block overflow-hidden rounded-2xl bg-bone ${big ? "aspect-[4/3] lg:aspect-auto lg:flex-1" : "aspect-[4/3] lg:aspect-auto lg:h-[210px]"}`}>
           {c.image ? (
             <Image
               src={c.image}
@@ -59,7 +59,7 @@ export function HomeCollections({ categories }: { categories: NavCategory[] }) {
           </div>
           <StudioLink href="/urunler">Tüm koleksiyonlar</StudioLink>
         </Reveal>
-        <div className="mt-10 grid gap-8 lg:mt-12 lg:grid-cols-[678fr_565fr] lg:gap-6">
+        <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[678fr_565fr] lg:gap-6">
           <CollectionCard c={first.c} title={first.title} big delay={0} />
           {rest.length ? (
             <div className="grid gap-8 lg:gap-6">

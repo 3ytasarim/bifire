@@ -131,7 +131,7 @@
   }
   /* Ana sayfa (referans tasarım) bölüm ritmi ve başlıkları: 88px masaüstü / 56px mobil, ince ağırlıklı başlık */
   .section-pad {
-    @apply py-14 lg:py-[88px];
+    @apply py-12 lg:py-16;
   }
   .studio-eyebrow {
     @apply text-[11px] font-semibold tracking-[0.2em] uppercase;

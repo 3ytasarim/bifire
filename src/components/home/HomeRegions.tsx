@@ -42,7 +42,7 @@ export function HomeRegions() {
               </StaggerItem>
             ))}
           </Stagger>
-          <Reveal className="mt-10" delay={0.2}>
+          <Reveal className="mt-8" delay={0.2}>
             <ArrowFillButton href={routes.regions} tone="ink">
               {`${PROVINCE_NAMES.length} il · ${districtCount} ilçe`}
             </ArrowFillButton>
