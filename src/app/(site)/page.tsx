@@ -86,7 +86,7 @@ export default async function HomePage() {
       <HomeShowroom image={settings.showroomImage} imageAlt={settings.showroomImageAlt} />
       <HomeRegions />
       <HomeGuide posts={posts} />
-      <SelectionFeature image={settings.aboutImage} imageAlt={settings.aboutImageAlt} />
+      <SelectionFeature image={settings.aboutImage} imageAlt={settings.aboutImageAlt} video={settings.aboutVideo} />
     </>
   );
 }
