@@ -34,17 +34,17 @@ export async function Footer() {
       <h2 id="footer-title" className="sr-only">
         Site bilgileri
       </h2>
-      <div className="shell grid gap-12 py-16 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-24">
+      <div className="shell grid gap-10 py-12 sm:grid-cols-2 lg:grid-cols-12 lg:gap-10 lg:py-14">
         <div className="sm:col-span-2 lg:col-span-4">
           <Link href="/" aria-label={`${s.companyName} ana sayfa`} className="inline-block">
             <Wordmark logoUrl={s.logoUrl} name={s.companyName} size="footer" />
           </Link>
-          <p className="mt-6 max-w-sm text-[15px] leading-relaxed">
+          <p className="mt-5 max-w-sm text-[15px] leading-relaxed">
             {s.footerDescription ||
               "Ateşi mimariyle buluşturan modern şömine çözümleri. Doğru ürün, doğru ölçü ve profesyonel uygulama ile yaşam alanınızın merkezini birlikte tasarlıyoruz."}
           </p>
           {socials.length ? (
-            <ul className="mt-8 flex gap-2">
+            <ul className="mt-6 flex gap-2">
               {socials.map((x) => {
                 const Icon = SOCIAL_ICONS[x.kind];
                 return (
@@ -67,16 +67,16 @@ export async function Footer() {
 
         <nav aria-label="Ürün kategorileri" className="lg:col-span-3">
           <p className="eyebrow text-ember-ink">Ürünler</p>
-          <ul className="mt-6 space-y-1">
+          <ul className="mt-4">
             {categories.map((c) => (
               <li key={c.id}>
-                <Link href={c.href} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-ink">
+                <Link href={c.href} className="link-underline inline-flex min-h-9 items-center text-[15px] transition-colors hover:text-ink">
                   {c.name}
                 </Link>
               </li>
             ))}
             <li>
-              <Link href={routes.products} className="inline-flex min-h-10 items-center gap-1 text-[15px] font-semibold text-ink hover:text-ember-ink">
+              <Link href={routes.products} className="inline-flex min-h-9 items-center gap-1 text-[15px] font-semibold text-ink hover:text-ember-ink">
                 Tüm ürünler <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
               </Link>
             </li>
@@ -85,10 +85,10 @@ export async function Footer() {
 
         <nav aria-label="Kurumsal" className="lg:col-span-2">
           <p className="eyebrow text-ember-ink">Bifire</p>
-          <ul className="mt-6 space-y-1">
+          <ul className="mt-4">
             {CORPORATE.map((l) => (
               <li key={l.href}>
-                <Link href={l.href} className="link-underline inline-flex min-h-10 items-center text-[15px] transition-colors hover:text-ink">
+                <Link href={l.href} className="link-underline inline-flex min-h-9 items-center text-[15px] transition-colors hover:text-ink">
                   {l.label}
                 </Link>
               </li>
@@ -98,7 +98,7 @@ export async function Footer() {
 
         <div className="lg:col-span-3">
           <p className="eyebrow text-ember-ink">İletişim</p>
-          <address className="mt-6 space-y-4 text-[15px] not-italic">
+          <address className="mt-4 space-y-3 text-[15px] not-italic">
             {s.phone ? (
               <a href={telHref(s.phone)} className="flex items-start gap-3 transition-colors hover:text-ink">
                 <Phone aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-ember" />
@@ -137,7 +137,7 @@ export async function Footer() {
       </div>
 
       <div className="border-t border-linen">
-        <div className="shell flex flex-col gap-4 py-6 text-[13px] text-stone md:flex-row md:items-center md:justify-between">
+        <div className="shell flex flex-col gap-2 py-3 text-[13px] text-stone md:flex-row md:items-center md:justify-between">
           <p>
             © {year} {s.companyName}. Tüm hakları saklıdır.
           </p>
