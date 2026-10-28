@@ -72,7 +72,7 @@ export const getCategoryBySlug = cache((slug: string) =>
   prisma.productCategory.findFirst({
     where: { slug, active: true, OR: [{ parentId: null }, { parent: { active: true } }] },
     include: {
-      parent: { select: { name: true, slug: true } },
+      parent: { select: { name: true, slug: true, parent: { select: { name: true, slug: true } } } },
       children: { where: { active: true }, orderBy: [{ sortOrder: "asc" }, { name: "asc" }], select: { id: true, name: true, slug: true, image: true, imageAlt: true } },
     },
   }),

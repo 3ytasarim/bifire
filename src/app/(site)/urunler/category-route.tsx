@@ -50,6 +50,7 @@ export async function CategoryRoute({ kategori, at }: { kategori: string; at: st
   const crumbs: Crumb[] = [
     { name: "Ana Sayfa", path: "/" },
     { name: "Ürünler", path: routes.products },
+    ...(category.parent?.parent ? [{ name: category.parent.parent.name, path: routes.category(category.parent.parent.slug) }] : []),
     ...(category.parent ? [{ name: category.parent.name, path: routes.category(category.parent.slug) }] : []),
     { name: category.name, path },
   ];
@@ -146,7 +147,7 @@ export async function CategoryRoute({ kategori, at }: { kategori: string; at: st
             <ul className="flex flex-wrap gap-2">
               {category.children.map((ch) => (
                 <li key={ch.id}>
-                  <Link href={routes.category(ch.slug, category.slug)} className="inline-flex min-h-11 items-center border border-white/25 px-4 text-[13px] font-semibold tracking-[0.1em] text-white uppercase transition-colors hover:border-ember hover:bg-ember hover:text-white">
+                  <Link href={routes.category(ch.slug, category.slug)} className="inline-flex min-h-11 items-center rounded-full border border-sand bg-white/70 px-4 text-[13px] font-semibold tracking-[0.1em] text-ink uppercase backdrop-blur transition-colors hover:border-ember hover:bg-ember hover:text-white">
                     {ch.name}
                   </Link>
                 </li>
