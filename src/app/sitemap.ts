@@ -5,6 +5,7 @@ import { routes } from "@/lib/catalog";
 import { publishedWhere } from "@/lib/queries";
 import { absoluteUrl, canonicalUrl } from "@/lib/seo/site";
 import { FEATURES } from "@/lib/features";
+import { REGION_GROUPS } from "@/content/region-groups";
 import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 
 export const revalidate = 3600;
@@ -65,6 +66,8 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("showroom", routes.showroom, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("mekan-tasarim", routes.design, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-bolgeleri", routes.regions, { changeFrequency: "monthly", priority: 0.7 }),
+    // Bölge grubu sayfaları (Marmara, Ege, Akdeniz, Bolu ve Düzce).
+    ...REGION_GROUPS.filter((g) => !g.province).map((g) => ({ url: canonicalUrl(routes.regionGroup(g.slug)), changeFrequency: "monthly" as const, priority: 0.65 })),
     // İl sayfaları + indekslenen ilçeler (yerel bilgisi eklenmemiş ilçe taslakları noindex, site haritasında yok).
     ...PROVINCES.flatMap((p) => [
       ...page(`il-${p.slug}`, routes.province(p.slug), { changeFrequency: "monthly", priority: 0.65 }),

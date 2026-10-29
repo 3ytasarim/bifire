@@ -96,6 +96,8 @@ export const routes = {
   design: "/mekaniniza-ozel-tasarim",
   regions: "/hizmet-bolgeleri",
   province: (il: string) => `/hizmet-bolgeleri/${il}`,
+  /** Bölge grubu (Marmara, Ege…) — tek illik gruplar il sayfasına gider. */
+  regionGroup: (slug: string) => `/hizmet-bolgeleri/bolge/${slug}`,
   region: (il: string, ilce: string) => (il === FLAT_REGION_PROVINCE ? `/hizmet-bolgeleri/${ilce}${FLAT_REGION_SUFFIX}` : `/hizmet-bolgeleri/${il}/${ilce}`),
   kvkk: "/kvkk",
   privacy: "/gizlilik-politikasi",
