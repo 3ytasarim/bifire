@@ -36,7 +36,7 @@ function subscribeReducedMotion(cb: () => void) {
 }
 
 const POSITION: Record<HeroSlideData["textPosition"], { wrap: string; text: string; gradient: string }> = {
-  LEFT: { wrap: "items-center justify-start", text: "text-left", gradient: "bg-gradient-to-r from-black/55 via-black/15 to-transparent" },
+  LEFT: { wrap: "items-center justify-start lg:pb-24", text: "text-left", gradient: "bg-gradient-to-r from-black/55 via-black/15 to-transparent" },
   CENTER: { wrap: "items-center justify-center", text: "text-center items-center", gradient: "bg-radial from-black/45 to-transparent" },
   RIGHT: { wrap: "items-center justify-end", text: "text-right items-end", gradient: "bg-gradient-to-l from-black/55 via-black/15 to-transparent" },
   BOTTOM_LEFT: { wrap: "items-end justify-start pb-28 sm:pb-32", text: "text-left", gradient: "bg-gradient-to-t from-black/65 via-black/10 to-transparent" },
@@ -62,6 +62,9 @@ function SlidePicture({ slide, first }: { slide: HeroSlideData & { desktopImage:
 }
 
 const MOBILE = "(max-width: 767px)";
+
+/** "#paylas" ile biten bağlantı mekâna özel tasarım başvurusunu açar ([data-design-open], bkz. DesignRequest). */
+const opensDesign = (url: string) => /#paylas$/.test(url);
 
 /**
  * Arka plan videosu. Kaynak yalnızca slayt ilk kez aktif olduğunda atanır (görünmeyen slaytın videosu indirilmez);
@@ -194,9 +197,14 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
           ) : null}
           <p
             key={`t-${current}`}
-            className={`mt-5 font-display text-[2.4rem] leading-[1.04] font-normal tracking-[-0.038em] text-balance sm:text-[3.2rem] lg:text-[4.05rem] ${animate} [animation-delay:60ms]`}
+            className={`mt-5 font-display text-[2rem] leading-[1.08] font-normal tracking-[-0.035em] text-balance sm:text-[2.5rem] lg:text-[2.5rem] xl:text-[2.85rem] ${animate} [animation-delay:60ms]`}
           >
-            {slide.title}
+            {/* Başlıktaki satır sonları korunur: masaüstünde her satır tek satırda kalır, mobilde doğal kırılır. */}
+            {slide.title.split(/\r?\n/).map((line, i) => (
+              <span key={i} className="block lg:whitespace-nowrap">
+                {line}
+              </span>
+            ))}
           </p>
           {slide.description ? (
             <p key={`d-${current}`} className={`mt-6 max-w-[510px] text-[15px] leading-relaxed text-white/80 ${animate} [animation-delay:140ms] ${slide.textPosition === "CENTER" ? "mx-auto" : ""} ${slide.textPosition === "RIGHT" ? "ml-auto" : ""}`}>
@@ -209,9 +217,15 @@ export function HeroSlider({ slides, heading }: { slides: HeroSlideData[]; headi
               className={`mt-10 flex flex-col gap-3 sm:flex-row ${animate} [animation-delay:220ms] ${slide.textPosition === "CENTER" ? "items-center sm:justify-center" : slide.textPosition === "RIGHT" ? "items-end sm:justify-end" : "items-start"}`}
             >
               {slide.ctaUrl ? (
-                <ArrowFillButton href={slide.ctaUrl} tone="ember" size="lg">
-                  {slide.ctaText || "Ürünleri keşfet"}
-                </ArrowFillButton>
+                opensDesign(slide.ctaUrl) ? (
+                  <ArrowFillButton tone="ember" size="lg" data-design-open="" aria-haspopup="dialog">
+                    {slide.ctaText || "Mekânınız için başlayalım"}
+                  </ArrowFillButton>
+                ) : (
+                  <ArrowFillButton href={slide.ctaUrl} tone="ember" size="lg">
+                    {slide.ctaText || "Ürünleri keşfet"}
+                  </ArrowFillButton>
+                )
               ) : null}
               {slide.secondaryCtaUrl ? (
                 <ArrowFillButton href={slide.secondaryCtaUrl} tone="glass" size="lg">

@@ -9,13 +9,13 @@ const DEFAULT_IMAGE = "/uploads/2026/10/bifire-rehber-034_tuzla-fabrika-showroom
 /** Tuzla fabrika showroom: geniş görsel + iki sütunlu açıklama. */
 export function HomeShowroom({ image, imageAlt }: { image?: string | null; imageAlt?: string | null }) {
   return (
-    <section aria-labelledby="home-showroom" className="section-pad bg-paper">
+    <section aria-labelledby="home-showroom" className="section-pad bg-bone">
       <div className="shell">
         <Reveal className="flex flex-wrap items-end justify-between gap-x-10 gap-y-4">
           <div>
             <StudioEyebrow no="04">Tuzla fabrika showroom</StudioEyebrow>
             <h2 id="home-showroom" className="studio-h2 mt-4 text-ink">
-              Kararınızı showroom&apos;da somutlaştıralım.
+              Kararınızı Fabrika Showroomumuzda Somutlaştıralım.
             </h2>
           </div>
           <StudioLink href="/fabrika-showroom">Ziyaret deneyimini keşfedin</StudioLink>
@@ -32,10 +32,10 @@ export function HomeShowroom({ image, imageAlt }: { image?: string | null; image
         </Reveal>
         <Reveal delay={0.1} className="mt-6 grid gap-5 border-t border-sand pt-6 lg:mt-8 lg:grid-cols-2 lg:gap-14">
           <h3 className="font-display text-[21px] leading-snug font-normal tracking-[-0.02em] text-ink sm:text-[23px]">
-            Modeli, malzemeyi ve üretim yaklaşımını aynı yerde değerlendirin.
+            Şöminenin görünen tasarımını ve ardındaki üretim yaklaşımını aynı yerde keşfedin.
           </h3>
           <p className="text-[15px] leading-relaxed text-steel">
-            Tuzla&apos;daki fabrika showroomumuzda cam geometrilerini, kaplama alternatiflerini ve yalıtım yaklaşımımızı projeniz üzerinden birlikte ele alalım. Mekân fotoğraflarınız ve varsa planınız görüşmemizin başlangıcı olsun.
+            Tuzla fabrika showroomumuzda beklentilerinizi projenizle buluşturalım.
           </p>
         </Reveal>
       </div>

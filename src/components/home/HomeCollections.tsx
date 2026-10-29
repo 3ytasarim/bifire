@@ -54,7 +54,7 @@ export function HomeCollections({ categories }: { categories: NavCategory[] }) {
           <div>
             <StudioEyebrow no="01">Koleksiyonlar</StudioEyebrow>
             <h2 id="home-collections" className="studio-h2 mt-4 text-ink">
-              Mekânınıza uygun şömineyi keşfedin.
+              Mekânınızın Karakterine Uygun Şömineyi Keşfedin.
             </h2>
           </div>
           <StudioLink href="/urunler">Tüm koleksiyonlar</StudioLink>

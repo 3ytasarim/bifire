@@ -1,56 +1,78 @@
+import Image from "next/image";
 import Link from "next/link";
-import { ArrowUpRight } from "lucide-react";
+import { Fragment } from "react";
 import { Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
-import { PRIORITY_DISTRICTS } from "@/content/regions";
 import { PROVINCE_NAMES } from "@/content/service-areas/names";
 import { routes } from "@/lib/catalog";
-import { RegionsMap } from "./RegionsMap";
 import { StudioEyebrow } from "./studio";
 
+/** Mimari görsel: Tuzla bölge sayfasının kapak görseli (üretim merkezimizin bulunduğu ilçe). */
+const IMAGE = "/uploads/2026/10/bifire-bolge-rev-037-istanbul-tuzla-somine-062602.webp";
+
+/** Alt şerit: bölge grupları (il sayfası varsa ona, yoksa hizmet bölgeleri sayfasına). */
+const AREAS = [
+  { label: "İstanbul", province: "istanbul" },
+  { label: "Marmara" },
+  { label: "Ege" },
+  { label: "Akdeniz" },
+  { label: "Ankara", province: "ankara" },
+  { label: "Bolu ve Düzce" },
+];
+
 /**
- * Ana sayfa yerel SEO bölümü: Tuzla merkezli animasyonlu rota haritası (tüm hizmet illeri) + öncelikli İstanbul ilçeleri.
- * Tüm bağlantılar gerçek <a> (il ve ilçe sayfaları), harita yalnızca görsel katmandır.
+ * Ana sayfa hizmet bölgeleri — mimari kompozisyon: solda başlık + davet, sağda geniş şömine görseli,
+ * altta ince çizgiyle ayrılmış bölge şeridi. Dağıtım ağı çağrıştıran çizgili harita kaldırıldı.
  */
 export function HomeRegions() {
-  const districtCount = PROVINCE_NAMES.reduce((n, p) => n + p.districts.length, 0);
+  const has = (slug?: string) => slug && PROVINCE_NAMES.some((p) => p.slug === slug);
   return (
-    <section aria-labelledby="home-regions" className="section-pad relative overflow-hidden bg-bone">
-      <div className="shell grid items-center gap-12 lg:grid-cols-12 lg:gap-14">
-        <div className="lg:col-span-5">
+    <section aria-labelledby="home-regions" className="section-pad relative overflow-hidden bg-paper">
+      <div className="shell">
+        <div className="grid items-center gap-10 lg:grid-cols-[minmax(0,0.85fr)_minmax(0,1fr)] lg:gap-14">
           <Reveal>
-            <StudioEyebrow no="05">Hizmet bölgeleri</StudioEyebrow>
+            <StudioEyebrow>Hizmet bölgelerimiz</StudioEyebrow>
             <h2 id="home-regions" className="studio-h2 mt-5 text-balance text-ink">
-              Tuzla&apos;dan projenize, Marmara&apos;dan Ege&apos;ye, Akdeniz&apos;e.
+              Mekânınıza Özel Şömine, Her Ayrıntısında Bifire.
             </h2>
-            <p className="mt-6 max-w-md text-[17px] leading-relaxed text-steel">
-              Önceliğimiz Tuzla ve çevresi, Anadolu Yakası ve Sarıyer. Marmara’daki 10 il, Ankara, İzmir, Muğla, Aydın, Antalya, Bolu ve Düzce’deki projeleri de kapsam ve takvim uygunluğuyla birlikte değerlendiriyoruz.
+            <p className="mt-6 max-w-[520px] text-[17px] leading-relaxed text-steel">
+              Şöminenizi yaşam alanınızın mimarisi, kullanım beklentileriniz ve malzeme tercihleriniz doğrultusunda birlikte şekillendiriyoruz.
             </p>
+            <p className="mt-5 max-w-[520px] text-[17px] leading-relaxed text-steel">Hizmet bölgelerimizi keşfedin, projenizin ilk adımını birlikte atalım.</p>
+            <div className="mt-8">
+              <ArrowFillButton href={routes.regions} tone="ember" size="lg">
+                Hizmet Bölgelerini Keşfedin
+              </ArrowFillButton>
+            </div>
           </Reveal>
-          <Stagger as="ul" className="mt-8 flex flex-wrap gap-2" gap={0.06}>
-            {PRIORITY_DISTRICTS.map((d) => (
-              <StaggerItem key={d.slug}>
-                <Link
-                  href={routes.region("istanbul", d.slug)}
-                  title={d.hint}
-                  className="group inline-flex min-h-11 items-center gap-2 rounded-full border border-linen bg-paper px-4 text-[14px] font-semibold text-ink transition-[border-color,background-color] duration-300 hover:border-ember/50 hover:bg-white"
-                >
-                  <span aria-hidden="true" className="h-1.5 w-1.5 rounded-full bg-ember transition-transform duration-300 group-hover:scale-150" />
-                  {d.name}
-                  <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 text-ember-ink opacity-0 transition-[opacity,transform] duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5 group-hover:opacity-100" />
-                </Link>
-              </StaggerItem>
-            ))}
-          </Stagger>
-          <Reveal className="mt-8" delay={0.2}>
-            <ArrowFillButton href={routes.regions} tone="ink">
-              {`${PROVINCE_NAMES.length} il · ${districtCount} ilçe`}
-            </ArrowFillButton>
+          <Reveal delay={0.1} y={24}>
+            <div className="zoom-media group relative aspect-[4/3] overflow-hidden rounded-2xl bg-bone lg:aspect-[874/716]">
+              <Image src={IMAGE} alt="Mimari bir yaşam alanında traverten kaplamalı Bifire şömine" fill sizes="(min-width: 1024px) 700px, 100vw" className="object-cover" />
+            </div>
           </Reveal>
         </div>
-        <Reveal className="lg:col-span-7" delay={0.1} y={24}>
-          <RegionsMap provinces={PROVINCE_NAMES.map((p) => ({ name: p.name, slug: p.slug, count: p.districts.length }))} />
-        </Reveal>
+
+        <nav aria-label="Hizmet bölgeleri" className="mt-12 border-t border-sand pt-6 lg:mt-14">
+          <Stagger as="ul" className="flex flex-wrap items-center justify-center gap-x-4 gap-y-2 sm:gap-x-6" gap={0.06}>
+            {AREAS.map((a, i) => (
+              <Fragment key={a.label}>
+                {i > 0 ? (
+                  <li aria-hidden="true" className="text-ember">
+                    ·
+                  </li>
+                ) : null}
+                <StaggerItem>
+                  <Link
+                    href={has(a.province) ? routes.province(a.province!) : routes.regions}
+                    className="link-underline inline-flex min-h-11 items-center font-display text-[17px] tracking-[0.01em] text-ink transition-colors hover:text-ember-ink sm:text-[19px]"
+                  >
+                    {a.label}
+                  </Link>
+                </StaggerItem>
+              </Fragment>
+            ))}
+          </Stagger>
+        </nav>
       </div>
     </section>
   );

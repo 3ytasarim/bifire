@@ -17,7 +17,7 @@ export function HomeGuide({ posts }: { posts: PostCardData[] }) {
           <div>
             <StudioEyebrow no="06">Şömine rehberi</StudioEyebrow>
             <h2 id="home-guide" className="studio-h2 mt-4 text-ink">
-              Doğru seçimin ardındaki bilgi.
+              Şöminenizi Seçerken, Her Ayrıntıyı Bilerek İlerleyin.
             </h2>
             <p className="mt-4 text-[16px] text-steel">Seçim, tasarım, montaj ve kullanıma dair rehberler.</p>
           </div>

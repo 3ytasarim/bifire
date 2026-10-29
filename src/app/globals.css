@@ -137,7 +137,7 @@
     @apply text-[11px] font-semibold tracking-[0.2em] uppercase;
   }
   .studio-h2 {
-    @apply font-display text-[2rem] leading-[1.08] font-normal tracking-[-0.032em] sm:text-[2.4rem] lg:text-[2.65rem];
+    @apply font-display text-[1.75rem] leading-[1.12] font-normal tracking-[-0.028em] sm:text-[2rem] lg:text-[2.25rem];
   }
   .lead {
     @apply text-base leading-relaxed sm:text-lg;

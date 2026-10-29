@@ -169,7 +169,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
       >
         {/* Üst bilgi bandı — marka mesajı + showroom; kaydırınca kapanır */}
         <div
-          className={`overflow-hidden bg-anthracite text-[11px] tracking-[0.14em] text-white/75 uppercase transition-[max-height,opacity] duration-500 ${
+          className={`overflow-hidden border-b border-sand/70 bg-paper text-[11px] tracking-[0.14em] text-steel uppercase transition-[max-height,opacity] duration-500 ${
             scrolled && !open ? "max-h-0 opacity-0" : "max-h-10 opacity-100"
           }`}
         >
@@ -179,12 +179,12 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
             </p>
             <div className="hidden items-center gap-6 sm:flex">
               {phone ? (
-                <a href={phone.href} className="hidden items-center gap-2 transition-colors hover:text-amber md:inline-flex">
-                  <Phone aria-hidden="true" className="h-3.5 w-3.5 text-amber" />
+                <a href={phone.href} className="hidden items-center gap-2 transition-colors hover:text-ink md:inline-flex">
+                  <Phone aria-hidden="true" className="h-3.5 w-3.5 text-ember" />
                   <span className="tracking-[0.08em]">{phone.label}</span>
                 </a>
               ) : null}
-              <Link href="/fabrika-showroom" className="group inline-flex items-center gap-1.5 transition-colors hover:text-amber">
+              <Link href="/fabrika-showroom" className="group inline-flex items-center gap-1.5 text-ember-ink transition-colors hover:text-ink">
                 İstanbul / Tuzla fabrika showroom
                 <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
               </Link>

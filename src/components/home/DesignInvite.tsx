@@ -21,7 +21,7 @@ export function DesignInvite({ image, imageAlt }: { image: string | null; imageA
   const [tone, setTone] = useState<(typeof TONES)[number]["key"]>("tas");
   const active = TONES.find((t) => t.key === tone) ?? TONES[0];
   return (
-    <section aria-labelledby="home-design" className="section-pad bg-bone">
+    <section aria-labelledby="home-design" className="section-pad bg-paper">
       <div className="shell grid items-center gap-10 lg:grid-cols-2 lg:gap-14">
         <Reveal className="lg:order-2">
           <div className="relative aspect-[4/3] overflow-hidden rounded-2xl bg-sand lg:aspect-[605/520]">
@@ -45,7 +45,7 @@ export function DesignInvite({ image, imageAlt }: { image: string | null; imageA
         <Reveal delay={0.06} className="lg:order-1">
           <StudioEyebrow no="03">Mekânınıza özel tasarım</StudioEyebrow>
           <h2 id="home-design" className="studio-h2 mt-5 max-w-[560px] text-balance text-ink">
-            Mekânınızın fotoğrafını paylaşın, şöminenizi birlikte tasarlayalım.
+            Mekânınızın Fotoğrafını Paylaşın, Şöminenizi Birlikte Tasarlayalım.
           </h2>
           <p className="mt-6 max-w-[520px] text-[17px] leading-relaxed text-steel">
             Mekânınız ve tercihleriniz doğrultusunda hazırlayacağımız görsel yerleşim önerisiyle şöminenizin evinizde oluşturacağı etkiyi değerlendirin.

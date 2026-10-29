@@ -6,9 +6,9 @@ import { useEffect, useRef, useState } from "react";
  * Görselin üzerine oturan sessiz, sürekli döngüdeki dekoratif video.
  * Kaynak yalnızca bölüm görünür alana yaklaşınca atanır (sayfa yükünü artırmaz); görünmezken durur.
  * `prefers-reduced-motion` ve Veri Tasarrufu'nda hiç yüklenmez — alttaki görsel kalır.
- * Oynamaya başlayınca yumuşakça belirir; ölçek/zoom yok (videoyu titretir).
+ * Oynamaya başlayınca yumuşakça belirir; ölçek/zoom yok (videoyu titretir). fit="contain": kırpılmadan sığdırılır.
  */
-export function LoopVideo({ src, position }: { src: string; position?: string }) {
+export function LoopVideo({ src, position, fit = "cover" }: { src: string; position?: string; fit?: "cover" | "contain" }) {
   const ref = useRef<HTMLVideoElement>(null);
   const [visible, setVisible] = useState(false);
 
@@ -43,7 +43,7 @@ export function LoopVideo({ src, position }: { src: string; position?: string })
       aria-hidden="true"
       tabIndex={-1}
       onPlaying={() => setVisible(true)}
-      className={`absolute inset-0 h-full w-full object-cover transition-opacity duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
+      className={`absolute inset-0 h-full w-full ${fit === "contain" ? "object-contain" : "object-cover"} transition-opacity duration-700 ${visible ? "opacity-100" : "opacity-0"}`}
       style={position ? { objectPosition: position } : undefined}
     />
   );
