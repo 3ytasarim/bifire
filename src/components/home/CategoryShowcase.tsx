@@ -17,7 +17,7 @@ export function CategoryShowcase({ categories }: { categories: Category[] }) {
   return (
     <section aria-labelledby="home-categories" className="bg-white py-20 sm:py-28 lg:py-36">
       <div className="shell">
-        <SectionHeading id="home-categories" eyebrow={c.eyebrow} title={c.title} intro={c.intro} action={{ label: "Tüm ürünler", href: "/urunler" }} />
+        <SectionHeading id="home-categories" eyebrow={c.eyebrow} title={c.title} intro={c.intro} action={{ label: "Tüm ürünler", href: "/somine-modelleri" }} />
         <div className="mt-14 grid gap-4 sm:mt-20 sm:gap-5 lg:grid-cols-12">
           {first ? (
             // Tek kategori varken tam genişlik (yarım boş satır kalmasın).

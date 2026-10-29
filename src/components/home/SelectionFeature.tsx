@@ -27,17 +27,9 @@ export function SelectionFeature({ image, imageAlt, video }: { image: string | n
           </div>
         </Reveal>
         <Reveal delay={0.08}>
-          {/* Yatay çerçeve: dikey (9:16) video kırpılmadan ortada, arkasında aynı videonun bulanık kopyası zemini doldurur. */}
-          <div className="relative aspect-[16/10] w-full overflow-hidden rounded-2xl bg-ink lg:aspect-[16/9]">
-            {image ? <Image src={image} alt={imageAlt || "Modern şömine uygulaması"} fill sizes="(min-width: 1024px) 640px, 100vw" className={video ? "scale-110 object-cover opacity-60 blur-2xl" : "object-cover"} /> : <span className="ember-placeholder-dark absolute inset-0" />}
-            {video ? (
-              <>
-                <div aria-hidden="true" className="absolute inset-0 scale-110 opacity-55 blur-2xl">
-                  <LoopVideo src={video} />
-                </div>
-                <LoopVideo src={video} fit="contain" />
-              </>
-            ) : null}
+          <div className="relative aspect-[4/3] w-full overflow-hidden rounded-2xl bg-sand">
+            {image ? <Image src={image} alt={imageAlt || "Modern şömine uygulaması"} fill sizes="(min-width: 1024px) 640px, 100vw" className="object-cover" /> : <span className="ember-placeholder absolute inset-0" />}
+            {video ? <LoopVideo src={video} /> : null}
           </div>
         </Reveal>
       </div>

@@ -118,7 +118,7 @@ export function guideRecommendation(a: GuideAnswers) {
   let title = "Ürün gruplarını birlikte karşılaştıralım";
   let why = "Kullanım yerinizi ve günlük beklentinizi konuşarak seçenekleri daraltabiliriz.";
   let alternatives = "Odunlu, elektrikli ve bioethanol ürün grupları farklı kullanım ve kurulum koşullarıyla karşılaştırılabilir.";
-  let links: Link[] = [{ label: "Tüm ürünler", href: "/urunler" }];
+  let links: Link[] = [{ label: "Tüm ürünler", href: "/somine-modelleri" }];
 
   if (a.fuel === "wood") {
     const m = WOOD[a.views ?? ""];

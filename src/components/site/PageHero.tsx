@@ -33,7 +33,7 @@ export function PageHero({
         aria-hidden="true"
         className="absolute -top-40 -right-40 -z-10 h-[520px] w-[520px] rounded-full bg-[radial-gradient(circle,rgb(146_113_78/0.14),transparent_65%)]"
       />
-      <div className="shell relative pt-10 pb-14 sm:pt-12 sm:pb-20 lg:pt-14 lg:pb-24">
+      <div className={`shell relative pt-10 sm:pt-12 lg:pt-14 ${image ? "pb-14 sm:pb-20 lg:pb-24" : "pb-6 sm:pb-8 lg:pb-10"}`}>
         <Breadcrumbs items={crumbs} />
         <div className={`mt-10 grid items-center gap-12 lg:mt-14 ${image ? "lg:grid-cols-12" : ""}`}>
           <div className={image ? "lg:col-span-6" : "max-w-4xl"}>

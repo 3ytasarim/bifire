@@ -15,7 +15,6 @@ import { ProductDrawings } from "@/components/site/ProductDrawings";
 import { DesignTogether } from "@/components/site/DesignTogether";
 import { familyOf } from "@/lib/collection";
 import { CODE_LABEL, splitVariant } from "@/lib/variants";
-import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { SeoArticle } from "@/components/site/SeoArticle";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { WhatsappIcon } from "@/components/site/Icons";
@@ -84,7 +83,7 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
   const parent = category.parent?.active ? category.parent : null;
   const crumbs: Crumb[] = [
     { name: "Ana Sayfa", path: "/" },
-    { name: "Ürünler", path: routes.products },
+    { name: "Şömine Modelleri", path: routes.products },
     ...(parent ? [{ name: parent.name, path: routes.category(parent.slug) }] : []),
     { name: category.name, path: routes.category(category.slug, parent?.slug) },
     { name: product.name, path },
@@ -494,7 +493,6 @@ export async function ProductRoute({ slug, at }: { slug: string; at: string }) {
         </div>
       </section>
 
-      <ShowroomBlock />
 
       {product.blogPosts.length ? (
         <section aria-labelledby="rehber" className="bg-white py-16 sm:py-24">

@@ -527,3 +527,13 @@
 :where(.bg-ink, .bg-anthracite, .bg-smoke, .bg-graphite, .dark-surface) .group:hover .group-hover\:text-ember {
   color: var(--color-amber);
 }
+
+/* Metalik bronz (logodaki FIRE harflerinden örneklenen tonlar): ana eylem düğmeleri. Orta bantta parlak bir
+   yansıma, kenarlarda koyu bronz; metin kontrastı için tonlar koyu tarafta tutuldu. */
+.bronze-metal {
+  background-image: linear-gradient(135deg, #6f5134 0%, #8f6d4a 22%, #b8956c 46%, #97754f 64%, #7a5a3a 82%, #a07d58 100%);
+  box-shadow:
+    inset 0 1px 0 rgb(255 255 255 / 0.28),
+    inset 0 -1px 0 rgb(0 0 0 / 0.18);
+  text-shadow: 0 1px 1px rgb(0 0 0 / 0.25);
+}

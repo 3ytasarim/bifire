@@ -10,7 +10,7 @@ import type { ButtonHTMLAttributes, ReactNode } from "react";
 type Tone = "ember" | "ink" | "light";
 
 const TONES: Record<Tone, string> = {
-  ember: "bg-ember text-white border-[#5f4730] hover:bg-[#a3825e] [--edge:#5f4730] focus-visible:ring-amber",
+  ember: "bronze-metal bg-ember text-white border-[#5f4730] hover:brightness-110 [--edge:#5f4730] focus-visible:ring-amber",
   ink: "bg-ink text-white border-black hover:bg-graphite [--edge:#000000] focus-visible:ring-neutral-400",
   light: "bg-white text-ink border-sand hover:bg-paper [--edge:#d8d3c9] focus-visible:ring-neutral-300",
 };

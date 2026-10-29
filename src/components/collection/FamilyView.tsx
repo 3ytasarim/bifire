@@ -7,7 +7,6 @@ import { JsonLd } from "@/components/site/JsonLd";
 import { MobileCta } from "@/components/site/MobileCta";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
-import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
 import { familyOf, modelName } from "@/lib/collection";
@@ -213,7 +212,6 @@ export function FamilyView({
 
       {categoryArticle ? <SeoArticle html={categoryArticle.content} name={categoryArticle.name} /> : null}
 
-      <ShowroomBlock />
       <MobileCta label="Teklif al" />
     </>
   );

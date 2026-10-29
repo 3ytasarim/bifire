@@ -3,7 +3,6 @@ import Link from "next/link";
 import { ArrowDown, ArrowUpRight } from "lucide-react";
 import { ParallaxFrame, Reveal } from "@/components/motion/Motion";
 import { PageHero } from "@/components/site/PageHero";
-import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
 import { familyOf } from "@/lib/collection";
@@ -138,7 +137,6 @@ export function CollectionView({
 
       {article}
 
-      <ShowroomBlock />
     </>
   );
 }

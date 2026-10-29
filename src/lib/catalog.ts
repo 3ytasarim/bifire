@@ -68,7 +68,7 @@ export const FLAT_REGION_SUFFIX = "-somine";
 export const routes = {
   home: "/",
   about: "/kurumsal",
-  products: "/urunler",
+  products: "/somine-modelleri",
   category: (slug: string, parentSlug?: string | null) => {
     const base = categoryBase(slug, parentSlug);
     if (base === "elektrikli") return slug === ELECTRIC_ROOT ? `/${ELECTRIC_ROOT}` : `/${ELECTRIC_ROOT}/${slug}`;

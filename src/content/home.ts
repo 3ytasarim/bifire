@@ -8,7 +8,7 @@ export const HOME = {
     eyebrow: "Mimari şömine çözümleri",
     title: "Ateşin Mimariyle Buluştuğu Nokta",
     description: "Yaşam alanlarınıza sıcaklık, estetik ve karakter kazandıran modern şömine çözümleri.",
-    cta: { label: "Ürünleri Keşfet", href: "/urunler" },
+    cta: { label: "Ürünleri Keşfet", href: "/somine-modelleri" },
     secondary: { label: "Projenizi Konuşalım", href: "/teklif-al" },
   },
   categories: {

@@ -202,7 +202,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
               <nav aria-label="Ana menü" className="h-full">
                 <ul className="flex h-full items-center gap-6 xl:gap-9">
                   <li className="group/mega h-full" onMouseEnter={() => setMegaDismissed(false)} onFocus={() => setMegaDismissed(false)}>
-                    <Link href="/urunler" onClick={closeOnLinkClick} className={linkClass(productsActive)} aria-current={pathname === "/urunler" ? "page" : undefined}>
+                    <Link href="/somine-modelleri" onClick={closeOnLinkClick} className={linkClass(productsActive)} aria-current={pathname === "/somine-modelleri" ? "page" : undefined}>
                       {rollLabel("Koleksiyonlar")}
                       <ChevronDown aria-hidden="true" className="h-3.5 w-3.5 transition-transform duration-300 group-hover/mega:rotate-180" />
                     </Link>
@@ -259,7 +259,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
                               </div>
                               <p className="mt-4 text-[14px] leading-relaxed text-steel">Malzemeden yerleşime, projenizi birlikte ele alalım.</p>
                               <div className="mt-5">
-                                <ArrowFillButton href="/urunler" tone="ink" size="sm">
+                                <ArrowFillButton href="/somine-modelleri" tone="ink" size="sm">
                                   Tüm koleksiyonlar
                                 </ArrowFillButton>
                               </div>
@@ -317,7 +317,7 @@ export function HeaderBar({ companyName, logoUrl, phone, email, socials, categor
                 </button>
                 <ul hidden={!productsOpen} className="pb-4">
                   <li>
-                    <Link href="/urunler" className="flex min-h-12 items-center text-[15px] font-semibold text-ember-ink">
+                    <Link href="/somine-modelleri" className="flex min-h-12 items-center text-[15px] font-semibold text-ember-ink">
                       Tüm koleksiyonlar
                     </Link>
                   </li>

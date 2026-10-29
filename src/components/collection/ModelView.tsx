@@ -9,7 +9,6 @@ import { ProductDrawings } from "@/components/site/ProductDrawings";
 import { ProductOptions } from "@/components/site/ProductOptions";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
-import { ShowroomBlock } from "@/components/site/ShowroomBlock";
 import { TrustPoints } from "@/components/site/TrustPoints";
 import { Button3D } from "@/components/ui/button-3d";
 import { PROCESS } from "@/content/company";
@@ -352,7 +351,6 @@ export function ModelView({
         </div>
       </nav>
 
-      <ShowroomBlock />
       <MobileCta label="Bu model için teklif al" />
     </>
   );

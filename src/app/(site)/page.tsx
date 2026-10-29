@@ -86,7 +86,12 @@ export default async function HomePage() {
       <HomeShowroom image={settings.showroomImage} imageAlt={settings.showroomImageAlt} />
       <HomeRegions />
       <HomeGuide posts={posts} />
-      <SelectionFeature image={settings.aboutImage} imageAlt={settings.aboutImageAlt} video={settings.aboutVideo} />
+      {/* Yatay (4:3) şömine videosu: üç tarafı camlı traverten mimari şömine. */}
+      <SelectionFeature
+        image="/uploads/2026/10/bifire-uc-tarafli-cam-traverten-mimari-somine-9a08ed.jpg"
+        imageAlt="Traverten kaplamalı, üç tarafı camlı mimari odunlu şömine"
+        video="/uploads/2026/10/bifire-uc-tarafli-cam-traverten-mimari-somine-ates-6c553b.mp4"
+      />
     </>
   );
 }

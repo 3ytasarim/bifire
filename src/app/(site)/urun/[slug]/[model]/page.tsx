@@ -57,7 +57,7 @@ export default async function ModelPage({ params }: Props) {
   const parent = category.parent?.active ? category.parent : null;
   const crumbs: Crumb[] = [
     { name: "Ana Sayfa", path: "/" },
-    { name: "Ürünler", path: routes.products },
+    { name: "Şömine Modelleri", path: routes.products },
     ...(parent ? [{ name: parent.name, path: routes.category(parent.slug) }] : []),
     { name: category.name, path: routes.category(category.slug, parent?.slug) },
     { name: product.name, path: routes.product(product.slug) },

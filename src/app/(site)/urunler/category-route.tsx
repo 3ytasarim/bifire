@@ -49,7 +49,7 @@ export async function CategoryRoute({ kategori, at }: { kategori: string; at: st
   const path = routes.category(category.slug, category.parent?.slug);
   const crumbs: Crumb[] = [
     { name: "Ana Sayfa", path: "/" },
-    { name: "Ürünler", path: routes.products },
+    { name: "Şömine Modelleri", path: routes.products },
     ...(category.parent?.parent ? [{ name: category.parent.parent.name, path: routes.category(category.parent.parent.slug) }] : []),
     ...(category.parent ? [{ name: category.parent.name, path: routes.category(category.parent.slug) }] : []),
     { name: category.name, path },

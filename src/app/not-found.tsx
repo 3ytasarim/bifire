@@ -26,7 +26,7 @@ export default function NotFound() {
         <h1 className="display-2 -mt-6 max-w-2xl text-ink sm:-mt-10">Aradığınız sayfa sönmüş olabilir.</h1>
         <p className="lead mt-6 max-w-xl text-steel">Sayfa taşınmış, kaldırılmış ya da adres hatalı yazılmış olabilir. Aşağıdaki bağlantılardan devam edebilirsiniz.</p>
         <nav aria-label="Önerilen sayfalar" className="mt-10 flex flex-col items-start gap-3 sm:flex-row">
-          <ArrowFillButton href="/urunler" tone="ember">
+          <ArrowFillButton href="/somine-modelleri" tone="ember">
             Ürünleri keşfet
           </ArrowFillButton>
           <ArrowFillButton href="/" tone="light">

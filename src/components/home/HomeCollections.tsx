@@ -57,7 +57,7 @@ export function HomeCollections({ categories }: { categories: NavCategory[] }) {
               Mekânınızın Karakterine Uygun Şömineyi Keşfedin.
             </h2>
           </div>
-          <StudioLink href="/urunler">Tüm koleksiyonlar</StudioLink>
+          <StudioLink href="/somine-modelleri">Tüm koleksiyonlar</StudioLink>
         </Reveal>
         <div className="mt-8 grid gap-8 lg:mt-10 lg:grid-cols-[678fr_565fr] lg:gap-6">
           <CollectionCard c={first.c} title={first.title} big delay={0} />

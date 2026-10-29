@@ -41,6 +41,7 @@ export function ArrowFillButton(props: LinkProps | ButtonProps) {
     "[--circle-inset-y:calc((100%-var(--icon-circle))/2)]",
     fullWidth ? "w-full justify-center" : "w-fit",
     SIZES[size],
+    tone === "ember" ? "bronze-metal" : "",
     className,
   ].join(" ");
 

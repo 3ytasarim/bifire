@@ -44,8 +44,8 @@ export const STATIC_PAGES = {
     },
   },
   urunler: {
-    label: "Ürünler",
-    path: "/urunler",
+    label: "Şömine Modelleri",
+    path: "/somine-modelleri",
     defaults: {
       title: "Şömine Modelleri ve Şömine Sistemleri | Bifire",
       description:
