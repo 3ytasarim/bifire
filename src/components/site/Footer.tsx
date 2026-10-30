@@ -127,8 +127,8 @@ export async function Footer() {
       </div>
 
       <div className="shell">
-        <div className="grid gap-3 border-t border-sand py-4 text-[13px] text-stone md:grid-cols-[1fr_auto_1fr] md:items-center md:gap-6">
-          <p className="md:justify-self-start">
+        <div className="flex flex-col gap-3 border-t border-sand py-4 text-[13px] text-stone md:flex-row md:items-center md:gap-6">
+          <p className="shrink-0">
             © {year} {s.companyName} Şömine
           </p>
           {/* Tasarım imzası: bronz parıltı akan metin, hover'da alt çizgi dolar (azaltılmış harekette durur). */}
@@ -136,7 +136,7 @@ export async function Footer() {
             href="https://www.3ytasarim.com"
             target="_blank"
             rel="noopener"
-            className="group inline-flex min-h-10 items-center gap-1.5 justify-self-start text-[12px] tracking-[0.04em] md:justify-self-center"
+            className="group inline-flex min-h-10 items-center gap-1.5 self-start text-[12px] tracking-[0.04em] md:mx-auto md:self-auto"
           >
             <span className="text-stone">Design by</span>
             <span className="credit-shimmer relative font-semibold">
@@ -145,7 +145,7 @@ export async function Footer() {
             </span>
             <ArrowUpRight aria-hidden="true" className="h-3.5 w-3.5 text-ember-ink transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
           </a>
-          <ul className="flex flex-wrap items-center gap-x-6 md:justify-self-end">
+          <ul className="flex shrink-0 flex-wrap items-center gap-x-6">
             {LEGAL.map((l) => (
               <li key={l.href}>
                 <Link href={l.href} className="inline-flex min-h-10 items-center transition-colors hover:text-ink">
