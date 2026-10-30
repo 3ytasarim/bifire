@@ -51,10 +51,10 @@ export default async function ProductsPage() {
             <h2 id="kategoriler" className="display-3">
               Ürün grupları
             </h2>
-            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+            <ul className="mt-10 grid gap-4 sm:grid-cols-2 lg:gap-6">
               {categories.map((c, i) => (
                 <li key={c.id}>
-                  <CategoryCard category={{ ...c, count: c._count.products }} aspect="aspect-[4/5]" sizes="(min-width: 1024px) 25vw, (min-width: 640px) 50vw, 100vw" priority={i < 2} />
+                  <CategoryCard category={{ ...c, count: c._count.products }} aspect="aspect-[4/3] sm:aspect-[16/10]" sizes="(min-width: 1360px) 640px, (min-width: 640px) 50vw, 100vw" priority={i < 2} />
                 </li>
               ))}
             </ul>
