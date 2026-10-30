@@ -7,7 +7,7 @@ import Link from "next/link";
 import { notFound } from "next/navigation";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { PostCard, ProductCard } from "@/components/site/Cards";
-import { FinalCta } from "@/components/site/FinalCta";
+import { GuideInvite } from "@/components/site/GuideInvite";
 import { JsonLd } from "@/components/site/JsonLd";
 import { RichText } from "@/components/site/RichText";
 import { formatDate, readingMinutes, routes } from "@/lib/catalog";
@@ -188,7 +188,7 @@ export default async function PostPage({ params }: Props) {
           </div>
         </section>
       ) : null}
-      {next ? null : <FinalCta />}
+      {next ? null : <GuideInvite />}
     </>
   );
 }

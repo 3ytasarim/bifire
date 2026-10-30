@@ -1,7 +1,7 @@
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProductCard, ProjectCard } from "@/components/site/Cards";
-import { FinalCta } from "@/components/site/FinalCta";
+import { GuideInvite } from "@/components/site/GuideInvite";
 import { ImageGrid } from "@/components/site/ImageGrid";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
@@ -134,7 +134,7 @@ export default async function ProjectPage({ params }: Props) {
           </div>
         </section>
       ) : null}
-      <FinalCta title="Benzer bir proje mi planlıyorsunuz?" context={`Proje: ${project.title}`} />
+      <GuideInvite />
     </>
   );
 }

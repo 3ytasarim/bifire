@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import Link from "next/link";
 import { CategoryCard, ProductCard } from "@/components/site/Cards";
 import { EmptyState } from "@/components/site/EmptyState";
-import { FinalCta } from "@/components/site/FinalCta";
+import { GuideInvite } from "@/components/site/GuideInvite";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { routes } from "@/lib/catalog";
@@ -89,7 +89,7 @@ export default async function ProductsPage() {
           )}
         </div>
       </div>
-      <FinalCta />
+      <GuideInvite />
     </>
   );
 }

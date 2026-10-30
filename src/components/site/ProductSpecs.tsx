@@ -47,6 +47,9 @@ export function VariantHighlights({ groups, fallback, rows, code }: { groups: st
   if (!items.length && !code) return null;
   const complete = hasData(rows, key);
   const codeValue = code?.values[key];
+  // Uzun değerler (ör. "70cm x 54cm x 16,5cm") büyük rakam stilinde sığmaz: iki sütun ve küçük, satır kırabilen metin.
+  const isLong = (v: string | undefined) => (v?.length ?? 0) > 9;
+  const anyLong = items.some((r) => isLong(r.values[key]));
   return (
     <div className="mt-8 border-y border-sand py-5">
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-2">
@@ -66,13 +69,13 @@ export function VariantHighlights({ groups, fallback, rows, code }: { groups: st
         ) : null}
       </div>
       {complete ? (
-        <dl className={`mt-4 grid gap-x-4 gap-y-5 ${items.length >= 4 ? "grid-cols-2 sm:grid-cols-4 sm:gap-x-3" : "grid-cols-3"}`}>
+        <dl className={`mt-4 grid gap-x-4 gap-y-5 ${anyLong ? "grid-cols-2 gap-x-6" : items.length >= 4 ? "grid-cols-2 sm:grid-cols-4 sm:gap-x-3" : "grid-cols-3"}`}>
           {items.map((r) => {
             const v = r.values[key];
             return (
               <div key={r.label} className="flex min-w-0 flex-col-reverse justify-end">
                 <dt className="mt-1.5 text-[10px] leading-snug font-semibold tracking-[0.1em] text-stone uppercase">{r.label}</dt>
-                <dd className="font-display text-[1.6rem] leading-none font-semibold tracking-[-0.03em] whitespace-nowrap text-ink tabular-nums xl:text-[1.75rem]">
+                <dd className={`font-display font-semibold text-ink tabular-nums ${isLong(v) ? "text-[1.05rem] leading-snug tracking-[-0.01em] break-words sm:text-[1.2rem]" : "text-[1.6rem] leading-none tracking-[-0.03em] whitespace-nowrap xl:text-[1.75rem]"}`}>
                   {v ? (
                     <>
                       {r.unit === "%" ? <span className="text-ember">%</span> : null}

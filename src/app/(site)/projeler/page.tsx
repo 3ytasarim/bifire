@@ -2,7 +2,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { ProjectCard } from "@/components/site/Cards";
 import { EmptyState } from "@/components/site/EmptyState";
-import { FinalCta } from "@/components/site/FinalCta";
+import { GuideInvite } from "@/components/site/GuideInvite";
 import { JsonLd } from "@/components/site/JsonLd";
 import { PageHero } from "@/components/site/PageHero";
 import { routes } from "@/lib/catalog";
@@ -57,7 +57,7 @@ export default async function ProjectsPage() {
           )}
         </div>
       </section>
-      <FinalCta />
+      <GuideInvite />
     </>
   );
 }
