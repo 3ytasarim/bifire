@@ -10,7 +10,9 @@ import { ProductOptions } from "@/components/site/ProductOptions";
 import { RequestForm } from "@/components/site/RequestForm";
 import { RichText } from "@/components/site/RichText";
 import { TrustPoints } from "@/components/site/TrustPoints";
+import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { Button3D } from "@/components/ui/button-3d";
+import type { ModelPage } from "@/content/model-pages";
 import { PROCESS } from "@/content/company";
 import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
@@ -52,7 +54,10 @@ export function ModelView({
   settings,
   form,
   siblings,
+  page,
 }: {
+  /** Modelin kendi içeriği (başlık, görsel, tanıtım, yerleşim); yoksa aile metniyle genel model sayfası. */
+  page?: ModelPage | null;
   product: ProductDetail;
   models: CollectionModel[];
   model: CollectionModel;
@@ -62,9 +67,10 @@ export function ModelView({
   form: { categories: { id: string; name: string }[]; products: { id: string; name: string; categoryId: string }[] };
 }) {
   const family = familyOf(product);
-  const name = modelName(family, product.name, model.size);
+  const name = page?.h1 ?? modelName(family, product.name, model.size);
   const path = modelPath(product.slug, model.slug);
-  const gallery = galleryOf(product);
+  // Kendi görseli olan model yalnız kendi görselini gösterir (başka modelin görseli galeride yer almaz).
+  const gallery = page ? [{ url: page.image.url, alt: page.image.alt, width: page.image.width, height: page.image.height }] : galleryOf(product);
   const values = keyValues(model);
   const story = splitHtmlSections(product.description);
   const section = (t: string) => story.sections.find((s) => s.title === t)?.html ?? "";
@@ -77,7 +83,7 @@ export function ModelView({
   const sameSeries = models.filter((m) => m.series === model.series);
   const seriesTarget = (s: string) => models.find((m) => m.series === s && m.size === model.size) ?? models.find((m) => m.series === s)!;
   const label = [model.series, model.size].filter(Boolean).join(" · ");
-  const description = `${name} (${model.code}) — ${family?.desc ?? product.shortDescription ?? product.name}`;
+  const description = page?.metaDescription ?? `${name} (${model.code}) — ${family?.desc ?? product.shortDescription ?? product.name}`;
   const drawings = product.drawings.map((d, n) => ({ url: d.url, alt: d.alt || `${name} — ölçü çizimi ${n + 1}`, variant: d.variant, width: d.width, height: d.height }));
   const tableRows = model.rows.filter((r) => r.label !== CODE_LABEL);
 
@@ -134,10 +140,16 @@ export function ModelView({
                   {model.series ? ` · ${model.series}` : ""}
                 </Link>
                 <h1 className="display-2 mt-5">{name}</h1>
-                <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-sand bg-white px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-stone uppercase">
-                  Katalog kodu <span className="text-ink tabular-nums">{model.code}</span>
-                </p>
-                {family ? <p className="lead mt-5 text-steel">{family.line} Hazne, kaplama, baca ve montaj kapsamı projenize özel olarak netleştirilir.</p> : null}
+                {page ? (
+                  <p className="lead mt-5 text-steel">{page.lead}</p>
+                ) : (
+                  <>
+                    <p className="mt-4 inline-flex items-center gap-2 rounded-full border border-sand bg-white px-3 py-1.5 text-[11px] font-semibold tracking-[0.12em] text-stone uppercase">
+                      Katalog kodu <span className="text-ink tabular-nums">{model.code}</span>
+                    </p>
+                    {family ? <p className="lead mt-5 text-steel">{family.line} Hazne, kaplama, baca ve montaj kapsamı projenize özel olarak netleştirilir.</p> : null}
+                  </>
+                )}
 
                 <div className="mt-8 space-y-6">
                   {seriesList.length > 1 ? (
@@ -165,7 +177,7 @@ export function ModelView({
                     </div>
                   </nav>
                 </div>
-                <ProductOptions groups={extraOptions} prefix={`Model: ${model.code} (${label})`} numberFrom={seriesList.length > 1 ? 3 : 2} />
+                <ProductOptions groups={extraOptions} prefix={page ? `Model: ${name}` : `Model: ${model.code} (${label})`} numberFrom={seriesList.length > 1 ? 3 : 2} />
 
                 {values.length ? (
                   <dl className="mt-8 grid grid-cols-2 gap-x-4 gap-y-5 border-y border-sand py-5 sm:grid-cols-4 sm:gap-x-3">
@@ -190,7 +202,7 @@ export function ModelView({
                   <Button3D href="#teklif" tone="ember" size="lg" fullWidth>
                     Bu model için teklif al <ArrowRight aria-hidden="true" className="h-4 w-4" />
                   </Button3D>
-                  <ContactButtons settings={settings} message={`Model: ${name} (${model.code}) — ${absoluteUrl(path)}`} />
+                  <ContactButtons settings={settings} message={page ? `Model: ${name} — ${absoluteUrl(path)}` : `Model: ${name} (${model.code}) — ${absoluteUrl(path)}`} />
                 </div>
                 <div className="mt-8 border-t border-sand pt-6">
                   <TrustPoints compact />
@@ -203,6 +215,33 @@ export function ModelView({
           </div>
         </div>
       </article>
+
+      {page ? (
+        <section aria-labelledby="model-tanitim" className="border-t border-sand bg-white py-16 sm:py-24">
+          <div className="shell grid gap-12 lg:grid-cols-2 lg:gap-16">
+            <Reveal>
+              <p className="eyebrow text-ember-ink">Modeli tanıyın</p>
+              <h2 id="model-tanitim" className="display-3 mt-5 text-balance">
+                {name}
+              </h2>
+              <div className="mt-6 space-y-4 text-[17px] leading-relaxed text-steel">
+                {page.intro.map((p) => (
+                  <p key={p}>{p}</p>
+                ))}
+              </div>
+            </Reveal>
+            <Reveal delay={0.1}>
+              <p className="eyebrow text-ember-ink">Mekânda yerleşim</p>
+              <h2 className="display-3 mt-5 text-balance">Mekânınızda nasıl konumlanır?</h2>
+              <div className="mt-6 space-y-4 text-[17px] leading-relaxed text-steel">
+                {page.placement.map((p) => (
+                  <p key={p}>{p}</p>
+                ))}
+              </div>
+            </Reveal>
+          </div>
+        </section>
+      ) : null}
 
       <section aria-labelledby="teknik" className="border-y border-sand bg-white py-16 sm:py-24">
         <div className="shell grid gap-10 lg:grid-cols-12">
@@ -309,6 +348,23 @@ export function ModelView({
         </section>
       ) : null}
 
+      {page ? (
+        <section aria-labelledby="model-davet" className="bg-paper py-14 sm:py-20">
+          <div className="shell flex flex-col items-start gap-6 border-y border-sand py-10 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="eyebrow text-ember-ink">Projenizin ilk adımı</p>
+              <h2 id="model-davet" className="display-3 mt-4 text-balance">
+                Size Uygun Şömineyi Birlikte Bulalım.
+              </h2>
+              <p className="mt-3 max-w-xl text-[16px] leading-relaxed text-steel">Mekânınızın planını ve fotoğraflarını paylaşın; {name} için yerleşim ve uygulama seçeneklerini birlikte değerlendirelim.</p>
+            </div>
+            <ArrowFillButton href="#teklif" tone="ember" size="lg">
+              Projenizi Paylaşın
+            </ArrowFillButton>
+          </div>
+        </section>
+      ) : null}
+
       <section id="teklif" aria-labelledby="teklif-baslik" className="scroll-mt-28 border-t border-sand bg-bone py-16 sm:py-24">
         <div className="shell grid gap-12 lg:grid-cols-12">
           <Reveal className="lg:col-span-5">
@@ -317,6 +373,7 @@ export function ModelView({
               {name} için teklif alın
             </h2>
             <p className="lead mt-6 text-steel">Mekân ölçülerinizi ve beklentinizi paylaşın; uygulama detaylarıyla birlikte size özel teklif hazırlayalım ya da Tuzla fabrika showroomumuzda görüşelim.</p>
+            {page ? <p className="mt-4 text-[14px] text-stone">Seçtiğiniz model ({name}) talebinize otomatik olarak eklenir.</p> : null}
           </Reveal>
           <div className="lg:col-span-7">
             <RequestForm type="QUOTE" categories={form.categories} products={form.products} defaultCategoryId={product.categoryId} defaultProductId={product.id} sourcePath={path} submitLabel="Talebimi gönder" showroomToggle district />
@@ -331,7 +388,7 @@ export function ModelView({
               {product.name} modelleri
             </p>
             <Link href={`${routes.product(product.slug)}#modeller`} className="mt-3 inline-flex min-h-11 items-center gap-1.5 text-[15px] font-semibold text-ember-ink underline-offset-4 hover:underline">
-              Tüm ölçü ve serileri karşılaştırın <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
+              {page ? "Tüm modelleri karşılaştırın" : "Tüm ölçü ve serileri karşılaştırın"} <ArrowUpRight aria-hidden="true" className="h-4 w-4" />
             </Link>
           </div>
           <div>

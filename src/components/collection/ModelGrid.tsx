@@ -6,7 +6,19 @@ import { useId, useMemo, useState } from "react";
 import { ArrowUpRight, Flame, Gauge, Ruler, Search, Weight, Wind, type LucideIcon } from "lucide-react";
 import { AnimatePresence, motion, MotionConfig } from "motion/react";
 
-export type GridModel = { href: string; code: string; series: string | null; size: string; name: string; values: { label: string; text: string }[]; hasData: boolean };
+export type GridModel = {
+  href: string;
+  code: string;
+  series: string | null;
+  size: string;
+  name: string;
+  values: { label: string; text: string }[];
+  hasData: boolean;
+  /** Modelin kendi görseli (yoksa ürün kapağı). Kendi sayfası olan modellerde kod rozeti gizlenir. */
+  image?: string | null;
+  imageAlt?: string | null;
+  own?: boolean;
+};
 
 const EASE = [0.16, 1, 0.3, 1] as const;
 const ALL = "Tüm seriler";
@@ -19,7 +31,7 @@ const iconOf = (label: string) => ICONS.find(([r]) => r.test(label))?.[1] ?? Rul
  * kod ve ölçü; altında simgeli kısa değerler. Karta tıklayınca modelin teknik sayfası açılır.
  * Tüm kartlar SSR HTML'inde de vardır (filtre yalnızca istemcide gizler).
  */
-export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel[]; note?: string; image?: string | null; imageAlt?: string | null }) {
+export function ModelGrid({ models, note, image, imageAlt, groupLabel = "Ölçü" }: { models: GridModel[]; note?: string; image?: string | null; imageAlt?: string | null; groupLabel?: string }) {
   const series = useMemo(() => [...new Set(models.map((m) => m.series).filter(Boolean))] as string[], [models]);
   const [active, setActive] = useState(ALL);
   const [q, setQ] = useState("");
@@ -84,19 +96,19 @@ export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel
               >
                 {/* Ürün kapak görseli: seri, kod ve ölçü görselin üzerinde */}
                 <span className="relative block aspect-[4/3] overflow-hidden bg-linen">
-                  {image ? (
-                    <Image src={image} alt={imageAlt ? `${imageAlt} — ${m.name}` : m.name} fill sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw" priority={i < 2} className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]" />
+                  {m.image || image ? (
+                    <Image src={(m.image || image)!} alt={m.image ? m.imageAlt || m.name : imageAlt ? `${imageAlt} — ${m.name}` : m.name} fill sizes="(min-width: 1280px) 22vw, (min-width: 1024px) 30vw, (min-width: 640px) 45vw, 92vw" priority={i < 2} className="object-cover transition-transform duration-[1.2s] ease-[cubic-bezier(0.16,1,0.3,1)] group-hover:scale-[1.06]" />
                   ) : (
                     <span aria-hidden="true" className="ember-placeholder absolute inset-0" />
                   )}
                   <span aria-hidden="true" className="absolute inset-0 bg-gradient-to-t from-ink/85 via-ink/20 to-ink/10" />
                   <span className="absolute inset-x-4 top-4 flex items-center justify-between gap-3">
                     {m.series ? <span className="rounded-full bg-ember px-3 py-1 text-[11px] font-semibold tracking-[0.06em] text-white shadow-sm">{m.series}</span> : <span />}
-                    <span className="rounded-full bg-white/15 px-2.5 py-1 font-mono text-[10.5px] tracking-[0.06em] text-white backdrop-blur-md">{m.code}</span>
+                    {m.own ? <span /> : <span className="rounded-full bg-white/15 px-2.5 py-1 font-mono text-[10.5px] tracking-[0.06em] text-white backdrop-blur-md">{m.code}</span>}
                   </span>
                   <span className="absolute inset-x-4 bottom-4 flex items-end justify-between gap-3 text-white">
                     <span>
-                      <span className="block text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">Ölçü</span>
+                      <span className="block text-[11px] font-semibold tracking-[0.16em] text-white/70 uppercase">{groupLabel}</span>
                       <span className="block font-display text-[2.4rem] leading-none font-semibold tracking-[-0.03em]">{m.size}</span>
                     </span>
                     <span aria-hidden="true" className="flex h-10 w-10 items-center justify-center rounded-full bg-white/15 backdrop-blur-md transition-colors duration-500 group-hover:bg-ember group-hover:text-white">
@@ -120,10 +132,10 @@ export function ModelGrid({ models, note, image, imageAlt }: { models: GridModel
                         );
                       })}
                     </dl>
-                  ) : (
+                  ) : m.own ? null : (
                     <p className="mt-4 text-[13px] leading-relaxed text-stone">Teknik bilgiler tamamlanacak.</p>
                   )}
-                  <span className="mt-auto pt-5 text-[13px] font-semibold text-ember-ink underline-offset-4 group-hover:underline">Modeli incele</span>
+                  <span className="mt-auto pt-5 text-[13px] font-semibold text-ember-ink underline-offset-4 group-hover:underline">{m.own ? "Modeli İnceleyin" : "Modeli incele"}</span>
                 </span>
               </Link>
             </motion.li>

@@ -5,7 +5,8 @@ import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import { buildModels, keyValues, formatSpec, modelPath } from "@/lib/models";
 import { getCollectionSiblings, getFormOptions, getProductBySlug } from "@/lib/queries";
-import { buildEntityMetadata } from "@/lib/seo/metadata";
+import { buildEntityMetadata, buildMetadata } from "@/lib/seo/metadata";
+import { modelPageOf } from "@/content/model-pages";
 import type { Crumb } from "@/lib/seo/json-ld";
 import { getSiteSettings } from "@/lib/settings";
 
@@ -26,7 +27,9 @@ async function load(slug: string, modelSlug: string) {
 }
 
 /**
- * Model sayfaları birbirine çok benzer (aynı aile metni, yalnız değerler farklı). Ölçekli/ince içerik riskine
+ * Kendi içeriği olan modeller (content/model-pages.ts) kendi başlığı, açıklaması ve görseliyle indekslenir ve
+ * site haritasına girer (self canonical).
+ * Diğer model sayfaları birbirine çok benzer (aynı aile metni, yalnız değerler farklı). Ölçekli/ince içerik riskine
  * karşı `noindex, follow`: arama motorları tüm modelleri ve değerlerini aile sayfasındaki listeden okur,
  * bağlantıları takip eder; model sayfaları site haritasına da eklenmez.
  */
@@ -35,6 +38,17 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const data = await load(slug, m);
   if (!data) return {};
   const { product, model } = data;
+  const page = modelPageOf(product.slug, model.slug);
+  if (page) {
+    return buildMetadata({
+      title: page.seoTitle,
+      description: page.metaDescription,
+      keywords: page.keywords,
+      path: modelPath(product.slug, model.slug),
+      image: page.image.url,
+      imageAlt: page.image.alt,
+    });
+  }
   const name = modelName(familyOf(product), product.name, model.size);
   const values = keyValues(model, 3).map((r) => `${r.label} ${formatSpec(r.value, r.unit)}`).join(", ");
   return buildEntityMetadata({
@@ -52,6 +66,7 @@ export default async function ModelPage({ params }: Props) {
   const data = await load(slug, m);
   if (!data) notFound();
   const { product, models, model } = data;
+  const page = modelPageOf(product.slug, model.slug);
   const [[categories, products], settings, siblings] = await Promise.all([getFormOptions(), getSiteSettings(), getCollectionSiblings(product)]);
   const category = product.category;
   const parent = category.parent?.active ? category.parent : null;
@@ -61,7 +76,7 @@ export default async function ModelPage({ params }: Props) {
     ...(parent ? [{ name: parent.name, path: routes.category(parent.slug) }] : []),
     { name: category.name, path: routes.category(category.slug, parent?.slug) },
     { name: product.name, path: routes.product(product.slug) },
-    { name: [model.series, model.size].filter(Boolean).join(" · "), path: modelPath(product.slug, model.slug) },
+    { name: page?.h1 ?? [model.series, model.size].filter(Boolean).join(" · "), path: modelPath(product.slug, model.slug) },
   ];
-  return <ModelView product={product} models={models} model={model} crumbs={crumbs} settings={settings} form={{ categories, products }} siblings={siblings} />;
+  return <ModelView product={product} models={models} model={model} crumbs={crumbs} settings={settings} form={{ categories, products }} siblings={siblings} page={page} />;
 }

@@ -13,13 +13,14 @@ import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import { extractFaq, splitHtmlSections } from "@/lib/html-sections";
 import { SeoArticle } from "@/components/site/SeoArticle";
-import { formatSpec, keyValues, modelPath, type CollectionModel } from "@/lib/models";
+import { formatSpec, keyValues, modelPath, variantGroupsOf, type CollectionModel } from "@/lib/models";
 import type { ProductDetail } from "@/lib/queries";
 import { breadcrumbNode, faqNode, graph, itemListNode, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { deriveDescription } from "@/lib/seo/metadata";
 import { absoluteUrl } from "@/lib/seo/site";
 import type { SiteSettings } from "@/lib/settings";
 import { ModelGrid } from "./ModelGrid";
+import { modelPageOf } from "@/content/model-pages";
 import { CollectionAside, ContactButtons, galleryOf, shortLabel } from "./parts";
 
 const NOTE = "Ölçü etiketleri nominal model adlarıdır; gerçek ölçünün birimi, sırası ve cam veya gövde karşılığı teknik çizimle netleştirilir.";
@@ -56,15 +57,22 @@ export function FamilyView({
   // Tek ürünlü kategorinin SEO metninin SSS'leri de aynı FAQPage şemasına girer (sayfada görünür).
   const schemaFaqs = [...faqs, ...extractFaq(categoryArticle?.content)];
   const description = deriveDescription(product.shortDescription, product.description) || product.name;
-  const grid = models.map((m) => ({
-    href: modelPath(product.slug, m.slug),
-    code: m.code,
-    series: m.series,
-    size: m.size,
-    name: modelName(family, product.name, m.size),
-    values: keyValues(m).map((r) => ({ label: shortLabel(r.label), text: formatSpec(r.value, r.unit) })),
-    hasData: m.hasData,
-  }));
+  const grid = models.map((m) => {
+    const page = modelPageOf(product.slug, m.slug);
+    return {
+      href: modelPath(product.slug, m.slug),
+      code: m.code,
+      series: m.series,
+      size: m.size,
+      name: page?.h1 ?? modelName(family, product.name, m.size),
+      values: keyValues(m).map((r) => ({ label: shortLabel(r.label), text: formatSpec(r.value, r.unit) })),
+      hasData: m.hasData,
+      image: page?.image.url ?? null,
+      imageAlt: page?.image.alt ?? null,
+      own: Boolean(page),
+    };
+  });
+  const groupLabel = variantGroupsOf(product.options, product.specifications).at(-1) ?? "Ölçü";
   const others = siblings.map((x) => [x.slug, { title: x.familyTitle || x.name }] as const);
 
   return (
@@ -125,7 +133,7 @@ export function FamilyView({
         <div className="shell">
           <Reveal className="grid gap-6 lg:grid-cols-12 lg:items-end">
             <div className="lg:col-span-7">
-              <p className="eyebrow text-ember-ink">Ölçü ve seri seçenekleri</p>
+              <p className="eyebrow text-ember-ink">{grid.every((g) => g.own) ? `${grid.length} model` : "Ölçü ve seri seçenekleri"}</p>
               <h2 id="modeller-baslik" className="display-3 mt-5">
                 Modelinizi yakından tanıyın.
               </h2>
@@ -133,7 +141,7 @@ export function FamilyView({
             <p className="text-[16px] leading-relaxed text-steel lg:col-span-5">Modeli açın; teknik bilgileri, ölçü çizimlerini ve üretim detaylarını inceleyin.</p>
           </Reveal>
           <div className="mt-10">
-            <ModelGrid models={grid} note={NOTE} image={product.coverImage} imageAlt={product.coverImageAlt} />
+            <ModelGrid models={grid} note={grid.every((g) => g.own) ? undefined : NOTE} image={product.coverImage} imageAlt={product.coverImageAlt} groupLabel={groupLabel} />
           </div>
         </div>
       </section>

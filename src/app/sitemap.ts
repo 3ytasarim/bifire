@@ -6,6 +6,8 @@ import { publishedWhere } from "@/lib/queries";
 import { absoluteUrl, canonicalUrl } from "@/lib/seo/site";
 import { FEATURES } from "@/lib/features";
 import { REGION_GROUPS } from "@/content/region-groups";
+import { MODEL_PAGES } from "@/content/model-pages";
+import { modelPath } from "@/lib/models";
 import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 
 export const revalidate = 3600;
@@ -66,6 +68,10 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("showroom", routes.showroom, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("mekan-tasarim", routes.design, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-bolgeleri", routes.regions, { changeFrequency: "monthly", priority: 0.7 }),
+    // Kendi içeriği olan model sayfaları (ör. Orta Şömine modelleri); diğer model sayfaları noindex.
+    ...Object.entries(MODEL_PAGES).flatMap(([product, pages]) =>
+      Object.entries(pages).map(([model, page]) => ({ url: canonicalUrl(modelPath(product, model)), changeFrequency: "monthly" as const, priority: 0.6, images: [absoluteUrl(page.image.url)] })),
+    ),
     // Bölge grubu sayfaları (Marmara, Ege, Akdeniz, Bolu ve Düzce).
     ...REGION_GROUPS.filter((g) => !g.province).map((g) => ({ url: canonicalUrl(routes.regionGroup(g.slug)), changeFrequency: "monthly" as const, priority: 0.65 })),
     // İl sayfaları + indekslenen ilçeler (yerel bilgisi eklenmemiş ilçe taslakları noindex, site haritasında yok).
