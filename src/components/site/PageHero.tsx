@@ -38,7 +38,7 @@ export function PageHero({
         <div className={`mt-10 grid items-center gap-12 lg:mt-14 ${image ? "lg:grid-cols-12" : ""}`}>
           <div className={image ? "lg:col-span-6" : "max-w-4xl"}>
             {eyebrow ? <p className="eyebrow animate-rise text-ember-ink">{eyebrow}</p> : null}
-            <h1 className="display-1 mt-5 animate-rise text-ink [animation-delay:80ms]">{title}</h1>
+            <h1 className={`${title.length > 50 ? "display-2" : "display-1"} mt-5 animate-rise text-balance text-ink [animation-delay:80ms]`}>{title}</h1>
             {intro ? <p className="lead mt-7 max-w-2xl animate-rise text-steel [animation-delay:160ms]">{intro}</p> : null}
             {children ? <div className="mt-9 animate-rise [animation-delay:240ms]">{children}</div> : null}
           </div>

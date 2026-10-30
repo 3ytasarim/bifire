@@ -36,11 +36,11 @@ export const STATIC_PAGES = {
     },
   },
   kurumsal: {
-    label: "Kurumsal",
+    label: "Bifire & Biwool",
     path: "/kurumsal",
     defaults: {
-      title: "Kurumsal | Bifire",
-      description: "Bifire; şömineyi bir ısıtma cihazı değil, yaşam alanının mimari merkezi olarak ele alan şömine markasıdır.",
+      title: "Bifire & Biwool | Bifire Şömine Marka Hikâyesi",
+      description: "Biwool’un yalıtım birikimiyle şekillenen Bifire Şömine: kendi ürettiğimiz odunlu şömine hazneleri, kendi keşif ve montaj ekibimiz ve Tuzla fabrika showroomumuz.",
     },
   },
   urunler: {
