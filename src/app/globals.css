@@ -537,3 +537,29 @@
     inset 0 -1px 0 rgb(0 0 0 / 0.18);
   text-shadow: 0 1px 1px rgb(0 0 0 / 0.25);
 }
+
+/* Footer tasarım imzası: koyu bronzdan açık bronza akan parıltı (metin rengi gradyandan). */
+.credit-shimmer {
+  background-image: linear-gradient(100deg, #7a5a3a 0%, #7a5a3a 35%, #c9a77c 50%, #7a5a3a 65%, #7a5a3a 100%);
+  background-size: 250% 100%;
+  background-clip: text;
+  -webkit-background-clip: text;
+  color: transparent;
+  animation: credit-shimmer 4.5s ease-in-out infinite;
+}
+@keyframes credit-shimmer {
+  0% {
+    background-position: 100% 0;
+  }
+  60%,
+  100% {
+    background-position: 0% 0;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .credit-shimmer {
+    animation: none;
+    color: var(--color-ember-ink);
+    background: none;
+  }
+}
