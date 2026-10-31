@@ -64,7 +64,7 @@ type BuildInput = {
 export async function buildMetadata(input: BuildInput): Promise<Metadata> {
   const settings = await getSiteSettings();
   const url = canonicalUrl(input.path, input.canonical);
-  const imagePath = input.image || settings.defaultOgImage || "/og/bifire-og.png";
+  const imagePath = input.image || settings.defaultOgImage || "/og/bifire-og-bronz.png";
   const imageUrl = absoluteUrl(imagePath);
   const meta = await getImageMeta(imagePath);
   const ogTitle = input.ogTitle?.trim() || input.title;
