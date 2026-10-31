@@ -98,7 +98,8 @@ export const routes = {
   province: (il: string) => `/hizmet-bolgeleri/${il}`,
   /** Bölge grubu (Marmara, Ege…) — tek illik gruplar il sayfasına gider. */
   regionGroup: (slug: string) => `/hizmet-bolgeleri/bolge/${slug}`,
-  region: (il: string, ilce: string) => (il === FLAT_REGION_PROVINCE ? `/hizmet-bolgeleri/${ilce}${FLAT_REGION_SUFFIX}` : `/hizmet-bolgeleri/${il}/${ilce}`),
+  /** İlçe adresinin son parçası her ilde "-somine" ile biter: /hizmet-bolgeleri/pendik-somine, /hizmet-bolgeleri/yalova/armutlu-somine. */
+  region: (il: string, ilce: string) => (il === FLAT_REGION_PROVINCE ? `/hizmet-bolgeleri/${ilce}${FLAT_REGION_SUFFIX}` : `/hizmet-bolgeleri/${il}/${ilce}${FLAT_REGION_SUFFIX}`),
   kvkk: "/kvkk",
   privacy: "/gizlilik-politikasi",
   cookies: "/cerez-politikasi",
