@@ -13,16 +13,21 @@ export const revalidate = 300;
 
 /**
  * Bu segment iki sayfa türü taşır:
- * - İl sayfası (/hizmet-bolgeleri/ankara).
+ * - İl sayfası (/hizmet-bolgeleri/ankara-somine; eski /hizmet-bolgeleri/ankara kalıcı yönlenir).
  * - İstanbul ilçe sayfası, yayındaki düz adresiyle (/hizmet-bolgeleri/adalar-somine).
  * Eski kısa İstanbul ilçe adresi (/hizmet-bolgeleri/adalar) kalıcı olarak düz adrese yönlenir.
  */
 export function generateStaticParams() {
   const istanbul = provinceBySlug(FLAT_REGION_PROVINCE)!;
-  return [...PROVINCES.map((p) => ({ il: p.slug })), ...istanbul.districts.map((d) => ({ il: `${d.slug}${FLAT_REGION_SUFFIX}` }))];
+  return [...PROVINCES.flatMap((p) => [{ il: `${p.slug}${FLAT_REGION_SUFFIX}` }, { il: p.slug }]), ...istanbul.districts.map((d) => ({ il: `${d.slug}${FLAT_REGION_SUFFIX}` }))];
 }
 
 type Props = { params: Promise<{ il: string }> };
+
+/** "yalova-somine" → il "yalova" (yoksa null). İl adlarıyla İstanbul ilçe adları çakışmaz. */
+function provinceOf(segment: string) {
+  return segment.endsWith(FLAT_REGION_SUFFIX) ? provinceBySlug(segment.slice(0, -FLAT_REGION_SUFFIX.length)) : null;
+}
 
 /** "/adalar-somine" → İstanbul ilçesi "adalar" (yoksa null). */
 function flatDistrict(segment: string) {
@@ -32,14 +37,17 @@ function flatDistrict(segment: string) {
 
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { il } = await params;
-  if (provinceBySlug(il)) return buildStaticPageMetadata(`il-${il}` as StaticPageKey);
+  const prov = provinceOf(il);
+  if (prov) return buildStaticPageMetadata(`il-${prov.slug}` as StaticPageKey);
+  if (provinceBySlug(il)) return {};
   const flat = flatDistrict(il);
   return flat ? districtMetadata(FLAT_REGION_PROVINCE, flat.district.slug) : {};
 }
 
 export default async function ProvincePage({ params }: Props) {
   const { il } = await params;
-  const province = provinceBySlug(il);
+  if (provinceBySlug(il)) permanentRedirect(routes.province(il));
+  const province = provinceOf(il);
   if (!province) {
     const flat = flatDistrict(il);
     if (flat) return <DistrictContent data={flat} />;

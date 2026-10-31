@@ -3,6 +3,7 @@
 import Link from "next/link";
 import { useState } from "react";
 import { motion, MotionConfig, useReducedMotion } from "motion/react";
+import { routes } from "@/lib/catalog";
 
 /**
  * Şematik yerleşim (viewBox koordinatı): coğrafi yönler korunur (Trakya batıda, Ankara doğuda, Bursa/Balıkesir
@@ -102,7 +103,7 @@ export function RegionsMap({ provinces }: { provinces: { name: string; slug: str
             const on = hover === n.slug;
             const labelLeft = n.side === "l";
             return (
-              <Link key={n.slug} href={`/hizmet-bolgeleri/${n.slug}`} aria-label={`${n.name} — ${n.count} ilçe`} onMouseEnter={() => setHover(n.slug)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(n.slug)} onBlur={() => setHover(null)}>
+              <Link key={n.slug} href={routes.province(n.slug)} aria-label={`${n.name} — ${n.count} ilçe`} onMouseEnter={() => setHover(n.slug)} onMouseLeave={() => setHover(null)} onFocus={() => setHover(n.slug)} onBlur={() => setHover(null)}>
                 <motion.g initial={{ opacity: 0, scale: 0.6 }} whileInView={{ opacity: 1, scale: 1 }} viewport={{ once: true }} transition={{ duration: 0.5, delay: 0.6 + i * 0.09, ease: EASE }} style={{ transformOrigin: `${x}px ${y}px` }}>
                   <circle cx={x} cy={y} r={on ? 11 : 8} fill="rgb(255 255 255)" stroke="rgb(146 113 78)" strokeWidth={on ? 2.5 : 1.5} className="transition-all duration-300" />
                   <circle cx={x} cy={y} r={3} fill={on ? "rgb(146 113 78)" : "rgb(40 42 40)"} />

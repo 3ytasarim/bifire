@@ -26,7 +26,7 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
   const index = useMemo<Hit[]>(
     () =>
       provinces.flatMap((p) => [
-        { name: p.name, province: "İl sayfası", href: `/hizmet-bolgeleri/${p.slug}`, focus: p.focus, kind: "il" as const },
+        { name: p.name, province: "İl sayfası", href: routes.province(p.slug), focus: p.focus, kind: "il" as const },
         ...p.districts.map((d) => ({ name: d.name, province: p.name, href: routes.region(p.slug, d.slug), focus: d.focus, kind: "ilçe" as const })),
       ]),
     [provinces],
@@ -151,7 +151,7 @@ export function RegionFinder({ provinces, priority = [] }: { provinces: Province
                 <p className="text-[11px] font-semibold tracking-[0.2em] text-ember-ink uppercase">{province.districts.length} ilçe</p>
                 <h3 className="mt-3 font-display text-4xl leading-none font-semibold tracking-[-0.03em] text-ink">{province.name}</h3>
                 <p className="mt-4 text-[15px] leading-relaxed text-steel">{province.focus}</p>
-                <Link href={`/hizmet-bolgeleri/${province.slug}`} className="group mt-6 inline-flex min-h-12 items-center gap-3 rounded-full bg-ink pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-ember hover:text-white">
+                <Link href={routes.province(province.slug)} className="group mt-6 inline-flex min-h-12 items-center gap-3 rounded-full bg-ink pr-2 pl-6 text-[14px] font-semibold text-white transition-colors hover:bg-ember hover:text-white">
                   {province.name} sayfasını inceleyin
                   <span aria-hidden="true" className="flex h-9 w-9 items-center justify-center rounded-full bg-white/10 transition-transform duration-300 group-hover:rotate-45">
                     <ArrowUpRight className="h-4 w-4" />

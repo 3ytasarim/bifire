@@ -95,7 +95,8 @@ export const routes = {
   showroom: "/fabrika-showroom",
   design: "/mekaniniza-ozel-tasarim",
   regions: "/hizmet-bolgeleri",
-  province: (il: string) => `/hizmet-bolgeleri/${il}`,
+  /** İl sayfası: /hizmet-bolgeleri/yalova-somine (eski /hizmet-bolgeleri/yalova kalıcı yönlenir). */
+  province: (il: string) => `/hizmet-bolgeleri/${il}${FLAT_REGION_SUFFIX}`,
   /** Bölge grubu (Marmara, Ege…) — tek illik gruplar il sayfasına gider. */
   regionGroup: (slug: string) => `/hizmet-bolgeleri/bolge/${slug}`,
   /** İlçe adresinin son parçası her ilde "-somine" ile biter: /hizmet-bolgeleri/pendik-somine, /hizmet-bolgeleri/yalova/armutlu-somine. */
