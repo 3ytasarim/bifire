@@ -16,7 +16,8 @@
     "demo:clear": "tsx scripts/demo-clear.ts",
     "postinstall": "prisma generate",
     "brand:assets": "tsx scripts/generate-brand-assets.ts",
-    "areas:names": "tsx scripts/generate-area-names.ts"
+    "areas:names": "tsx scripts/generate-area-names.ts",
+    "crm:forward": "tsx --conditions=react-server scripts/crm-forward.ts"
   },
   "dependencies": {
     "@node-rs/argon2": "^2.2.1",

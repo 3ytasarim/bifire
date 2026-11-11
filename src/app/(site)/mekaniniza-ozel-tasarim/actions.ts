@@ -7,6 +7,7 @@ import { DESIGN_FLUE, DESIGN_PREFERENCES } from "@/content/design-service";
 import { DISTRICT_OPTIONS } from "@/content/service-areas/names";
 import { prisma } from "@/lib/db";
 import { safeIntakeRequest } from "@/lib/crm/intake";
+import { forwardToCrmAfterResponse } from "@/lib/crm/forward";
 import { isFormRateLimited } from "@/lib/rate-limit";
 import { getIpHash } from "@/lib/request-meta";
 import { privateStorage } from "@/lib/storage/private";
@@ -164,6 +165,8 @@ export async function submitDesignRequest(_prev: DesignFormState, formData: Form
     });
     // CRM: müşteri eşleştirme + proje + ilk dönüş görevi (başarısız olsa da form akışı bozulmaz).
     await safeIntakeRequest(created.id);
+    // Bifire CRM'e aktarım: CRM_FORWARD_ENABLED=true değilse hiçbir şey yapmaz; yanıttan sonra çalışır.
+    forwardToCrmAfterResponse(created.id);
   } catch {
     if (storedKey) await privateStorage.remove(storedKey);
     return { status: "error", message: "Talebiniz şu an kaydedilemedi. Lütfen tekrar deneyin ya da telefonla ulaşın.", values };

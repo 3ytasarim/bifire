@@ -3,6 +3,7 @@
 import { z } from "zod";
 import { prisma } from "@/lib/db";
 import { safeIntakeRequest } from "@/lib/crm/intake";
+import { forwardToCrmAfterResponse } from "@/lib/crm/forward";
 import { getIpHash } from "@/lib/request-meta";
 import { isFormRateLimited } from "@/lib/rate-limit";
 import { PROJECT_STAGES, PROJECT_TIMELINES, PROJECT_TOPICS } from "@/content/company";
@@ -124,6 +125,8 @@ export async function submitRequest(_prev: RequestFormState, formData: FormData)
     });
     // CRM: müşteri eşleştirme + proje + ilk dönüş görevi (başarısız olsa da form akışı bozulmaz).
     await safeIntakeRequest(created.id);
+    // Bifire CRM'e aktarım: CRM_FORWARD_ENABLED=true değilse hiçbir şey yapmaz; yanıttan sonra çalışır.
+    forwardToCrmAfterResponse(created.id);
   } catch {
     return { status: "error", message: "Talebiniz şu an kaydedilemedi. Lütfen tekrar deneyin ya da telefonla ulaşın.", values };
   }
