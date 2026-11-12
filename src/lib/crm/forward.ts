@@ -56,7 +56,7 @@ async function signedPost(cfg: Config, path: string, body: unknown, timeoutMs: n
 }
 
 /** ContactRequest → CRM yükü (sürüm 1). Fotoğraflar özel depodan okunur ve base64 olarak eklenir. */
-async function buildPayload(requestId: string) {
+export async function buildCrmPayload(requestId: string) {
   const r = await prisma.contactRequest.findUnique({ where: { id: requestId }, include: { attachments: true } });
   if (!r) return null;
   const attachments: { name: string; mimeType: string; dataBase64: string }[] = [];
@@ -90,7 +90,7 @@ async function buildPayload(requestId: string) {
 export async function forwardRequestToCrm(requestId: string, cfg = crmForwardConfig()): Promise<ForwardResult> {
   if (!cfg) return { ok: false, error: "disabled" };
   try {
-    const payload = await buildPayload(requestId);
+    const payload = await buildCrmPayload(requestId);
     if (!payload) return { ok: false, error: "not_found" };
     const { status, json } = await signedPost(cfg, "/api/v1/intake/website", payload, 20_000);
     if (status === 200 || status === 202) return { ok: true, duplicate: Boolean((json as { duplicate?: boolean } | null)?.duplicate) };
