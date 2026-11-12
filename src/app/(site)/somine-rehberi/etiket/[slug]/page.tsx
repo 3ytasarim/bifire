@@ -9,7 +9,7 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sayfa?: string }> };
 
-/** Etiket arşivleri ince içerik üretmesin diye noindex,follow (bağlantıları takip edilir, sitemap'te yok). */
+/** Etiket arşivleri indekslenir ve site haritasına girer. */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const tag = await getBlogTag((await params).slug);
   if (!tag) return {};
@@ -17,8 +17,6 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
     title: `${tag.name} yazıları | Bifire Blog`,
     description: `Bifire blogunda "${tag.name}" etiketli şömine yazıları.`,
     path: routes.blogTag(tag.slug),
-    index: false,
-    follow: true,
   });
 }
 

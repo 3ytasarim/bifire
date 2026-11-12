@@ -7,7 +7,7 @@ import { absoluteUrl, canonicalUrl } from "@/lib/seo/site";
 import { FEATURES } from "@/lib/features";
 import { REGION_GROUPS } from "@/content/region-groups";
 import { MODEL_PAGES } from "@/content/model-pages";
-import { modelPath } from "@/lib/models";
+import { buildModels, modelPath } from "@/lib/models";
 import { isDistrictIndexable, PROVINCES } from "@/content/service-areas";
 
 export const revalidate = 3600;
@@ -21,7 +21,7 @@ type Entry = MetadataRoute.Sitemap[number];
  * Ürün/proje/blog görselleri <image:image> olarak eklenir (Google Görseller keşfi).
  */
 export default async function sitemap(): Promise<Entry[]> {
-  const [categories, products, projects, posts, seoPages] = await Promise.all([
+  const [categories, products, projects, posts, seoPages, modelSources, tags] = await Promise.all([
     prisma.productCategory.findMany({
       where: { active: true, noIndex: false, OR: [{ parentId: null }, { parent: { active: true } }] },
       select: { slug: true, updatedAt: true, image: true, canonicalUrl: true, _count: { select: { children: { where: { active: true } }, products: { where: { active: true } } } } },
@@ -39,6 +39,13 @@ export default async function sitemap(): Promise<Entry[]> {
     }),
     prisma.blogPost.findMany({ where: { ...publishedWhere(), noIndex: false }, select: { slug: true, updatedAt: true, coverImage: true } }),
     prisma.seoPage.findMany({ select: { key: true, robotsIndex: true } }),
+    // Model alt sayfaları (/urun/{ürün}/{model}) için ürünlerin teknik tabloları.
+    prisma.product.findMany({
+      where: { active: true, noIndex: false, category: { active: true } },
+      select: { slug: true, updatedAt: true, specifications: { select: { label: true, value: true, unit: true, variant: true }, orderBy: { sortOrder: "asc" } }, options: { select: { group: true, value: true }, orderBy: { sortOrder: "asc" } } },
+    }),
+    // Yayında yazısı olan etiketler.
+    prisma.blogTag.findMany({ where: { posts: { some: publishedWhere() } }, select: { slug: true } }),
   ]);
 
   const noindexStatic = new Set(seoPages.filter((p) => !p.robotsIndex).map((p) => p.key));
@@ -68,16 +75,19 @@ export default async function sitemap(): Promise<Entry[]> {
     ...page("showroom", routes.showroom, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("mekan-tasarim", routes.design, { changeFrequency: "monthly", priority: 0.7 }),
     ...page("hizmet-bolgeleri", routes.regions, { changeFrequency: "monthly", priority: 0.7 }),
-    // Kendi içeriği olan model sayfaları (ör. Orta Şömine modelleri); diğer model sayfaları noindex.
-    ...Object.entries(MODEL_PAGES).flatMap(([product, pages]) =>
-      Object.entries(pages).map(([model, page]) => ({ url: canonicalUrl(modelPath(product, model)), changeFrequency: "monthly" as const, priority: 0.6, images: [absoluteUrl(page.image.url)] })),
+    // Model sayfaları: kendi içeriği olanlar (MODEL_PAGES) kendi görseliyle, diğerleri aile teknik tablosundan.
+    ...modelSources.flatMap((p) =>
+      buildModels(p).map((m) => {
+        const own = MODEL_PAGES[p.slug]?.[m.slug];
+        return { url: canonicalUrl(modelPath(p.slug, m.slug)), lastModified: p.updatedAt, changeFrequency: "monthly" as const, priority: 0.6, ...(own ? { images: [absoluteUrl(own.image.url)] } : {}) };
+      }),
     ),
     // Bölge grubu sayfaları (Marmara, Ege, Akdeniz, Bolu ve Düzce).
     ...REGION_GROUPS.filter((g) => !g.province).map((g) => ({ url: canonicalUrl(routes.regionGroup(g.slug)), changeFrequency: "monthly" as const, priority: 0.65 })),
-    // İl sayfaları + indekslenen ilçeler (yerel bilgisi eklenmemiş ilçe taslakları noindex, site haritasında yok).
+    // İl sayfaları + tüm ilçeler (İstanbul ilçeleri Admin > SEO'dan yönetilir).
     ...PROVINCES.flatMap((p) => [
       ...page(`il-${p.slug}`, routes.province(p.slug), { changeFrequency: "monthly", priority: 0.65 }),
-      ...(isDistrictIndexable(p.slug) ? p.districts.flatMap((d) => page(`bolge-${d.slug}`, routes.region(p.slug, d.slug), { changeFrequency: "monthly", priority: 0.6 })) : []),
+      ...(isDistrictIndexable(p.slug) ? p.districts.flatMap((d) => page(`bolge-${d.slug}`, routes.region(p.slug, d.slug), { changeFrequency: "monthly", priority: 0.6 })) : p.districts.map((d) => ({ url: canonicalUrl(routes.region(p.slug, d.slug)), changeFrequency: "monthly" as const, priority: 0.55 }))),
     ]),
     ...categories.map((c) => ({ url: canonicalUrl(routes.category(c.slug)), lastModified: c.updatedAt, changeFrequency: "weekly" as const, priority: 0.8, ...images(c.image) })),
     ...products.map((p) => ({
@@ -94,6 +104,7 @@ export default async function sitemap(): Promise<Entry[]> {
       priority: 0.6,
       ...images(p.coverImage, ...p.images.map((i) => i.url)),
     })),
+    ...tags.map((t) => ({ url: canonicalUrl(routes.blogTag(t.slug)), changeFrequency: "weekly" as const, priority: 0.4 })),
     ...posts.map((p) => ({ url: canonicalUrl(routes.post(p.slug)), lastModified: p.updatedAt, changeFrequency: "monthly" as const, priority: 0.6, ...images(p.coverImage) })),
   ];
 }

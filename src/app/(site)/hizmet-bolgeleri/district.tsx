@@ -19,14 +19,14 @@ export function loadDistrict(il: string, ilce: string) {
 }
 
 /**
- * İndekslenen ilçeler (İstanbul) Admin > SEO'dan yönetilir; diğer ilçe taslakları yerel bilgi eklenene kadar
- * `noindex, follow` (yayın planı — bkz. content/service-areas INDEXED_DISTRICT_PROVINCES).
+ * Tüm ilçe sayfaları indekslenir. İstanbul ilçelerinin SEO alanları Admin > SEO'dan yönetilir (INDEXED_DISTRICT_PROVINCES);
+ * diğer illerin ilçeleri kendi içerik dosyasındaki başlık/açıklamayı kullanır.
  */
 export async function districtMetadata(il: string, ilce: string): Promise<Metadata> {
   const data = loadDistrict(il, ilce);
   if (!data) return {};
   if (isDistrictIndexable(il)) return buildStaticPageMetadata(`bolge-${ilce}` as StaticPageKey);
-  return buildMetadata({ title: data.district.seoTitle, description: data.district.meta, keywords: data.district.keywords, image: data.district.image?.url, imageAlt: data.district.image?.alt, path: routes.region(il, ilce), index: false, follow: true });
+  return buildMetadata({ title: data.district.seoTitle, description: data.district.meta, keywords: data.district.keywords, image: data.district.image?.url, imageAlt: data.district.image?.alt, path: routes.region(il, ilce) });
 }
 
 export async function DistrictContent({ data }: { data: NonNullable<ReturnType<typeof loadDistrict>> }) {

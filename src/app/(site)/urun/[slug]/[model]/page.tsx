@@ -29,9 +29,7 @@ async function load(slug: string, modelSlug: string) {
 /**
  * Kendi içeriği olan modeller (content/model-pages.ts) kendi başlığı, açıklaması ve görseliyle indekslenir ve
  * site haritasına girer (self canonical).
- * Diğer model sayfaları birbirine çok benzer (aynı aile metni, yalnız değerler farklı). Ölçekli/ince içerik riskine
- * karşı `noindex, follow`: arama motorları tüm modelleri ve değerlerini aile sayfasındaki listeden okur,
- * bağlantıları takip eder; model sayfaları site haritasına da eklenmez.
+ * Diğer model sayfaları aile metni + modelin kendi teknik değerleriyle indekslenir ve site haritasına girer.
  */
 export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const { slug, model: m } = await params;
@@ -54,7 +52,7 @@ export async function generateMetadata({ params }: Props): Promise<Metadata> {
   return buildEntityMetadata({
     name: `${name} ${model.code}`,
     path: modelPath(product.slug, model.slug),
-    seo: { metaTitle: null, metaDescription: null, metaKeywords: null, canonicalUrl: null, ogImage: null, noIndex: true },
+    seo: { metaTitle: null, metaDescription: null, metaKeywords: null, canonicalUrl: null, ogImage: null, noIndex: false },
     fallbackDescription: [`${name} (${model.code})${model.series ? `, ${model.series}` : ""}${values ? `: ${values}.` : "."} Teknik özellikler, ölçü çizimi ve üretim detayları; Bifire kendi üretim ve montaj.`],
     image: product.coverImage,
     imageAlt: product.coverImageAlt || product.name,

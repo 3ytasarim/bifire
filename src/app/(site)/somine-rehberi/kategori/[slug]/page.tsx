@@ -25,13 +25,11 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sayfa?: string; konu?: string }> };
 
-/** Alt konu filtresi ve 2+. sayfalar noindex,follow (kopya liste adresleri dizine girmez); yazılar bağlantıyla keşfedilir. */
-export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
+/** Alt konu filtresi ve 2+. sayfalar da indekslenir (canonical kategori sayfası). */
+export async function generateMetadata({ params }: Props): Promise<Metadata> {
   const c = guideCategoryBySlug((await params).slug);
   if (!c) return {};
-  const sp = await searchParams;
-  const filtered = Boolean(sp.konu) || (Number(sp.sayfa) || 1) > 1;
-  return buildMetadata({ title: `${c.name} Rehberi | Şömine Rehberi | Bifire`, description: c.intro, path: routes.blogCategory(c.slug), index: !filtered, follow: true });
+  return buildMetadata({ title: `${c.name} Rehberi | Şömine Rehberi | Bifire`, description: c.intro, path: routes.blogCategory(c.slug) });
 }
 
 /** Rehber kategori sayfası: merkez rehber, alt konu filtresi, 12'şerli sayfalanmış yazılar, diğer konular. */
