@@ -1,6 +1,7 @@
 import type { Metadata } from "next";
 import { DesignRequest } from "@/components/site/DesignRequest";
 import { DesignTogether } from "@/components/site/DesignTogether";
+import { CookieConsent } from "@/components/site/CookieConsent";
 import { Footer } from "@/components/site/Footer";
 import { GoogleTagManager } from "@/components/site/GoogleTagManager";
 import { Header } from "@/components/site/Header";
@@ -36,6 +37,7 @@ export default async function SiteLayout({ children }: { children: React.ReactNo
       {/* Site geneli mekân fotoğrafı başvurusu: [data-design-open] öğeleri (ürün sayfası, mekân tasarım sayfası) açar. */}
       <DesignRequest />
       <RevealObserver />
+      <CookieConsent />
       <GoogleTagManager />
     </>
   );

@@ -563,3 +563,19 @@
     background: none;
   }
 }
+
+/* KVKK çerez penceresi: aşağıdan yumuşak giriş (azaltılmış harekette yok). */
+.cookie-consent {
+  animation: cookie-in 600ms cubic-bezier(0.16, 1, 0.3, 1) 400ms both;
+}
+@keyframes cookie-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px) scale(0.98);
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .cookie-consent {
+    animation: none;
+  }
+}

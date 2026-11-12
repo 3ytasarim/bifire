@@ -154,6 +154,11 @@ export async function Footer() {
               </li>
             ))}
             <li>
+              <button type="button" data-consent-open="" className="inline-flex min-h-10 cursor-pointer items-center transition-colors hover:text-ink">
+                Çerez Tercihleri
+              </button>
+            </li>
+            <li>
               <a href="#" className="group inline-flex min-h-10 items-center gap-1.5 text-ink transition-colors hover:text-ember-ink">
                 Yukarı dön <ArrowUp aria-hidden="true" className="h-3.5 w-3.5 text-ember-ink transition-transform duration-300 group-hover:-translate-y-0.5" />
               </a>
