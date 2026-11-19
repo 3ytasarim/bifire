@@ -12,6 +12,8 @@ export const metadata: Metadata = {
   metadataBase: new URL(getSiteUrl()),
   applicationName: SITE_NAME,
   formatDetection: { telephone: false },
+  // Pinterest alan adı doğrulaması: <meta name="p:domain_verify" …> tüm sayfalarda.
+  verification: { other: { "p:domain_verify": "d143fa844fff007e57a708f50a1036e8" } },
 };
 
 export const viewport: Viewport = {
