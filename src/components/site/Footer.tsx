@@ -104,7 +104,6 @@ export async function Footer() {
         <div>
           <h3 className={headCls}>Fabrika Showroom</h3>
           <p className="mt-4 font-display text-[18px] text-ink">İstanbul, Tuzla</p>
-          <p className="mt-2 max-w-[280px] text-[14px] leading-relaxed">Modelleri ve malzemeleri projeniz üzerinden değerlendirelim.</p>
           {s.phone || s.email || s.address ? (
             <address className="mt-3 space-y-1 text-[14px] not-italic">
               {s.address ? (
@@ -124,10 +123,6 @@ export async function Footer() {
               ) : null}
             </address>
           ) : null}
-          <Link href={routes.showroom} className="group mt-4 inline-flex min-h-11 items-center gap-6 border-b border-sand pb-1 text-[15px] text-ink transition-colors hover:border-ember">
-            Showroomu inceleyin
-            <ArrowUpRight aria-hidden="true" className="h-4 w-4 text-ember-ink transition-transform duration-300 group-hover:translate-x-0.5 group-hover:-translate-y-0.5" />
-          </Link>
         </div>
       </div>
 
