@@ -44,6 +44,13 @@ export function serializeJsonLd(data: unknown): string {
 
 /** Doğrulanmış firma konumu (fabrika showroom) ve öncelikli hizmet bölgesi — yerel SEO için. */
 const LOCALITY = { locality: "Tuzla", region: "İstanbul", country: "TR" } as const;
+/** Yerel numara (0554 …) → E.164 (+90554…): arama motorları ve haritalar uluslararası biçimi tercih eder. */
+const intlPhone = (p: string) => {
+  const d = p.replace(/D/g, "");
+  return d.startsWith("90") ? `+${d}` : d.startsWith("0") ? `+90${d.slice(1)}` : p;
+};
+/** Adresin sonundaki 5 haneli posta kodu (ör. "… İstanbul 34956"). */
+const postalCodeOf = (a: string) => a.match(/(d{5})s*$/)?.[1];
 /** Hizmet bölgesi illeri (content/service-areas: 17 il). */
 const AREA_SERVED = PROVINCE_NAMES.map((p) => p.name);
 
@@ -70,10 +77,11 @@ export function organizationNode(s: SiteSettings, logo?: { url: string; meta: Im
       : {}),
     ...(s.footerDescription ? { description: s.footerDescription } : {}),
     ...(s.email ? { email: s.email } : {}),
-    ...(s.phone ? { telephone: s.phone } : {}),
+    ...(s.phone ? { telephone: intlPhone(s.phone) } : {}),
     address: {
       "@type": "PostalAddress",
-      ...(s.address ? { streetAddress: s.address } : {}),
+      ...(s.address ? { streetAddress: s.address.replace(/,?s*Tuzla,s*İstanbuls*d{5}s*$/, "") } : {}),
+      ...(s.address && postalCodeOf(s.address) ? { postalCode: postalCodeOf(s.address) } : {}),
       addressLocality: LOCALITY.locality,
       addressRegion: LOCALITY.region,
       addressCountry: LOCALITY.country,
@@ -86,7 +94,7 @@ export function organizationNode(s: SiteSettings, logo?: { url: string; meta: Im
             "@type": "ContactPoint",
             contactType: "customer service",
             availableLanguage: ["Turkish"],
-            ...(s.phone ? { telephone: s.phone } : {}),
+            ...(s.phone ? { telephone: intlPhone(s.phone) } : {}),
             ...(s.email ? { email: s.email } : {}),
           },
         }

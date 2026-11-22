@@ -1,5 +1,5 @@
 import Link from "next/link";
-import { ArrowUp, ArrowUpRight, Mail, Phone } from "lucide-react";
+import { ArrowUp, ArrowUpRight, Mail, MapPin, Phone } from "lucide-react";
 import { routes } from "@/lib/catalog";
 import { getNavCategories } from "@/lib/queries";
 import { getSiteSettings, socialLinks, telHref } from "@/lib/settings";
@@ -105,8 +105,13 @@ export async function Footer() {
           <h3 className={headCls}>Fabrika Showroom</h3>
           <p className="mt-4 font-display text-[18px] text-ink">İstanbul, Tuzla</p>
           <p className="mt-2 max-w-[280px] text-[14px] leading-relaxed">Modelleri ve malzemeleri projeniz üzerinden değerlendirelim.</p>
-          {s.phone || s.email ? (
+          {s.phone || s.email || s.address ? (
             <address className="mt-3 space-y-1 text-[14px] not-italic">
+              {s.address ? (
+                <a href={s.mapsUrl || undefined} target="_blank" rel="noopener noreferrer" className="flex items-start gap-2.5 py-1.5 leading-relaxed transition-colors hover:text-ink">
+                  <MapPin aria-hidden="true" className="mt-0.5 h-4 w-4 shrink-0 text-ember" /> {s.address}
+                </a>
+              ) : null}
               {s.phone ? (
                 <a href={telHref(s.phone)} className="flex min-h-9 items-center gap-2.5 transition-colors hover:text-ink">
                   <Phone aria-hidden="true" className="h-4 w-4 text-ember" /> {s.phone}
