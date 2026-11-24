@@ -168,6 +168,24 @@ model SeoPage {
   updatedAt     DateTime @updatedAt
 }
 
+/// Sayfaya özel yerel içerik (Admin > Yerel İçerik): model ve hizmet bölgesi sayfalarının ortak şablonundan ayrışan alanı.
+/// key: "model:{ürünSlug}/{modelSlug}" · "bolge:{il}/{ilçe}" · "il:{il}". Kayıt yoksa sayfa ortak şablonla aynen çalışır.
+model LocalContent {
+  id        String   @id @default(cuid())
+  key       String   @unique
+  /// Sayfaya özel açıklama (zengin metin, HTML).
+  intro     String?
+  /// Model: kullanım/yerleşim notu · Bölge: hizmet bilgisi (zengin metin, HTML).
+  note      String?
+  /// Gerçek uygulama / model fotoğrafı.
+  image     String?
+  imageAlt  String?
+  /// Model: teknik çizim görseli · Bölge: ikinci uygulama fotoğrafı.
+  image2    String?
+  image2Alt String?
+  updatedAt DateTime @updatedAt
+}
+
 model Redirect {
   id              String   @id @default(cuid())
   sourcePath      String   @unique
@@ -683,21 +701,21 @@ enum CrmActivityType {
 }
 
 model CrmCustomer {
-  id       String    @id @default(cuid())
+  id        String    @id @default(cuid())
   /// Görünen müşteri numarası (BF-0001).
-  code     Int       @unique @default(autoincrement())
-  name     String
-  phone    String?
+  code      Int       @unique @default(autoincrement())
+  name      String
+  phone     String?
   /// Eşleştirme anahtarı: yalnız rakamlar, son 10 hane (0532…, +90532… aynı kişi).
-  phoneKey String?
-  email    String?
-  emailKey String?
-  city     String?
-  district String?
-  source   CrmSource @default(OTHER)
-  notes    String?
-  createdAt DateTime @default(now())
-  updatedAt DateTime @updatedAt
+  phoneKey  String?
+  email     String?
+  emailKey  String?
+  city      String?
+  district  String?
+  source    CrmSource @default(OTHER)
+  notes     String?
+  createdAt DateTime  @default(now())
+  updatedAt DateTime  @updatedAt
 
   projects CrmProject[]
   requests ContactRequest[]

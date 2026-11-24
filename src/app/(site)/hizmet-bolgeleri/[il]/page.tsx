@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getLocalContent, localKey } from "@/lib/local-content";
 import { notFound, permanentRedirect } from "next/navigation";
 import { AreaPageView } from "@/components/areas/AreaPageView";
 import { districtProducts } from "@/content/regions";
@@ -54,6 +55,6 @@ export default async function ProvincePage({ params }: Props) {
     if (istanbulDistrictBySlug(il)) permanentRedirect(routes.region(FLAT_REGION_PROVINCE, il));
     notFound();
   }
-  const [[categories, products], recommended] = await Promise.all([getFormOptions(), getProductsBySlugs(districtProducts(""))]);
-  return <AreaPageView province={province} district={null} products={recommended} form={{ categories, products }} />;
+  const [[categories, products], recommended, local] = await Promise.all([getFormOptions(), getProductsBySlugs(districtProducts("")), getLocalContent(localKey.province(province.slug))]);
+  return <AreaPageView province={province} district={null} products={recommended} form={{ categories, products }} local={local} />;
 }

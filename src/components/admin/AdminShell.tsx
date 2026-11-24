@@ -26,6 +26,7 @@ import {
   Users,
   Warehouse,
   X,
+  MapPinned,
 } from "lucide-react";
 import { logoutAction } from "@/app/admin/login/actions";
 import { FEATURES } from "@/lib/features";
@@ -54,6 +55,7 @@ const NAV = [
     group: "İçerik",
     items: [
       { href: "/admin/slider", label: "Slider", icon: LayoutTemplate },
+      { href: "/admin/yerel-icerik", label: "Yerel içerik", icon: MapPinned },
       { href: "/admin/projeler", label: "Projeler", icon: Warehouse },
       { href: "/admin/blog", label: "Blog", icon: FileText },
       { href: "/admin/medya", label: "Medya", icon: Images },

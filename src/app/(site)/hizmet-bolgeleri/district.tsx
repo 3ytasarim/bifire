@@ -1,4 +1,5 @@
 import type { Metadata } from "next";
+import { getLocalContent, localKey } from "@/lib/local-content";
 import { AreaPageView } from "@/components/areas/AreaPageView";
 import { districtProducts } from "@/content/regions";
 import { districtOf, isDistrictIndexable, provinceBySlug } from "@/content/service-areas";
@@ -31,6 +32,10 @@ export async function districtMetadata(il: string, ilce: string): Promise<Metada
 
 export async function DistrictContent({ data }: { data: NonNullable<ReturnType<typeof loadDistrict>> }) {
   const il = data.province.slug;
-  const [[categories, products], recommended] = await Promise.all([getFormOptions(), getProductsBySlugs(districtProducts(il === "istanbul" ? data.district.slug : ""))]);
-  return <AreaPageView province={data.province} district={data.district} products={recommended} form={{ categories, products }} />;
+  const [[categories, products], recommended, local] = await Promise.all([
+    getFormOptions(),
+    getProductsBySlugs(districtProducts(il === "istanbul" ? data.district.slug : "")),
+    getLocalContent(localKey.district(il, data.district.slug)),
+  ]);
+  return <AreaPageView province={data.province} district={data.district} products={recommended} form={{ categories, products }} local={local} />;
 }

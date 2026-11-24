@@ -4,6 +4,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { ProductCard } from "@/components/site/Cards";
 import { FaqList } from "@/components/site/FaqList";
 import { JsonLd } from "@/components/site/JsonLd";
+import { LocalContentSection } from "@/components/site/LocalContentSection";
 import { MobileCta } from "@/components/site/MobileCta";
 import { PageHero } from "@/components/site/PageHero";
 import { RequestForm } from "@/components/site/RequestForm";
@@ -12,6 +13,7 @@ import { ArrowFillButton } from "@/components/ui/arrow-fill-button";
 import { PRIORITY_DISTRICTS } from "@/content/regions";
 import { districtOption, PROVINCES, SHOWROOM_AREA, type AreaPage, type Province } from "@/content/service-areas";
 import { routes } from "@/lib/catalog";
+import type { LocalContent } from "@/lib/local-content";
 import type { ProductCardData } from "@/lib/queries";
 import { breadcrumbNode, faqNode, graph, imageNode, serviceNode, webPageNode } from "@/lib/seo/json-ld";
 import { AreaArticle } from "./AreaArticle";
@@ -23,7 +25,7 @@ type FormOptions = { categories: { id: string; name: string }[]; products: { id:
  * İl ve ilçe hizmet sayfası (ortak görünüm). İl sayfasında ilçe kartları, ilçe sayfasında aynı ilin diğer ilçeleri
  * gösterilir. Metin: content/service-areas (Word paketi). Şube iddiası yok — fabrika showroom Tuzla'dadır.
  */
-export function AreaPageView({ province, district, products, form }: { province: Province; district: AreaPage | null; products: ProductCardData[]; form: FormOptions }) {
+export function AreaPageView({ province, district, products, form, local }: { province: Province; district: AreaPage | null; products: ProductCardData[]; form: FormOptions; local?: LocalContent | null }) {
   const page = district ?? province.page;
   const isProvince = !district;
   const path = district ? routes.region(province.slug, district.slug) : routes.province(province.slug);
@@ -37,6 +39,11 @@ export function AreaPageView({ province, district, products, form }: { province:
   const isShowroom = province.slug === SHOWROOM_AREA.province && district?.slug === SHOWROOM_AREA.district;
   const priority = province.slug === "istanbul" ? PRIORITY_DISTRICTS.map((d) => d.slug) : [];
   const siblings = district ? province.districts.filter((d) => d.slug !== district.slug) : [];
+  // Alt listede ilk 12 (öncelikliler önce) açık, kalanı katlanır.
+  const VISIBLE = 12;
+  const orderedSiblings = [...siblings.filter((d) => priority.includes(d.slug)), ...siblings.filter((d) => !priority.includes(d.slug))];
+  const siblingsShown = orderedSiblings.slice(0, VISIBLE);
+  const siblingsMore = orderedSiblings.slice(VISIBLE);
   const otherProvinces = PROVINCES.filter((p) => p.slug !== province.slug);
   const cta = page.cta || `${district?.name ?? province.name} projem için görüşme talep et`;
 
@@ -117,6 +124,11 @@ export function AreaPageView({ province, district, products, form }: { province:
           />
         </div>
       </section>
+
+      {/* Admin > Yerel İçerik: bölgeye özel açıklama, hizmet bilgisi ve gerçek uygulama fotoğrafları. */}
+      {local ? (
+        <LocalContentSection content={local} id="bolge-ozel" eyebrow={`${place} · yerel bilgiler`} title={`${place} uygulamalarımız`} noteTitle="Bölgedeki hizmetimiz" fallbackAlt={`${place} şömine uygulaması`} />
+      ) : null}
 
       {isProvince ? (
         <section id="ilceler" aria-labelledby="ilceler-baslik" className="scroll-mt-28 border-y border-sand bg-white py-16 sm:py-24">
@@ -200,8 +212,8 @@ export function AreaPageView({ province, district, products, form }: { province:
               <h2 id="diger-bolgeler" className="text-[11px] font-semibold tracking-[0.2em] text-stone uppercase">
                 {province.name} ilçeleri
               </h2>
-              <ul className="mt-4 flex flex-wrap gap-2">
-                {siblings.map((o) => (
+              {/* Uzun ilçe listesi: öncelikli ilçeler açık, kalanı katlanır (bağlantılar HTML'de kalır, taranabilir). */}
+              <ul className="mt-4 flex flex-wrap gap-2">{siblingsShown.map((o: { slug: string; name: string }) => (
                   <li key={o.slug}>
                     <Link
                       href={routes.region(province.slug, o.slug)}
@@ -210,8 +222,25 @@ export function AreaPageView({ province, district, products, form }: { province:
                       {o.name}
                     </Link>
                   </li>
-                ))}
-              </ul>
+                ))}</ul>
+              {siblingsMore.length ? (
+                <details className="group mt-3">
+                  <summary className="inline-flex min-h-11 cursor-pointer list-none items-center gap-2 text-[14px] font-semibold text-ember-ink underline-offset-4 hover:underline [&::-webkit-details-marker]:hidden">
+                    <span className="group-open:hidden">Tüm {province.name} ilçelerini göster ({siblingsMore.length} ilçe daha)</span>
+                    <span className="hidden group-open:inline">İlçe listesini daralt</span>
+                  </summary>
+                  <ul className="mt-3 flex flex-wrap gap-2">{siblingsMore.map((o: { slug: string; name: string }) => (
+                  <li key={o.slug}>
+                    <Link
+                      href={routes.region(province.slug, o.slug)}
+                      className={`inline-flex min-h-11 items-center rounded-full border px-4 text-[14px] font-semibold text-ink transition-colors hover:border-ink ${priority.includes(o.slug) ? "border-ember/30 bg-ember/[0.04]" : "border-linen bg-paper"}`}
+                    >
+                      {o.name}
+                    </Link>
+                  </li>
+                ))}</ul>
+                </details>
+              ) : null}
             </div>
           ) : null}
           <div>

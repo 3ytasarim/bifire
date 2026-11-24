@@ -4,6 +4,7 @@ import { Reveal, Stagger, StaggerItem } from "@/components/motion/Motion";
 import { Breadcrumbs } from "@/components/site/Breadcrumbs";
 import { FaqList } from "@/components/site/FaqList";
 import { JsonLd } from "@/components/site/JsonLd";
+import { LocalContentSection } from "@/components/site/LocalContentSection";
 import { MobileCta } from "@/components/site/MobileCta";
 import { ProductDrawings } from "@/components/site/ProductDrawings";
 import { ProductOptions } from "@/components/site/ProductOptions";
@@ -18,6 +19,7 @@ import { familyOf, modelName } from "@/lib/collection";
 import { routes } from "@/lib/catalog";
 import { splitHtmlSections } from "@/lib/html-sections";
 import { formatSpec, groupOptions, keyValues, modelPath, variantGroupsOf, type CollectionModel } from "@/lib/models";
+import type { LocalContent } from "@/lib/local-content";
 import type { ProductDetail } from "@/lib/queries";
 import { breadcrumbNode, faqNode, graph, productNode, webPageNode, type Crumb } from "@/lib/seo/json-ld";
 import { absoluteUrl } from "@/lib/seo/site";
@@ -55,7 +57,10 @@ export function ModelView({
   form,
   siblings,
   page,
+  local,
 }: {
+  /** Admin > Yerel İçerik: bu modele özel açıklama, not, fotoğraf ve teknik çizim. */
+  local?: LocalContent | null;
   /** Modelin kendi içeriği (başlık, görsel, tanıtım, yerleşim); yoksa aile metniyle genel model sayfası. */
   page?: ModelPage | null;
   product: ProductDetail;
@@ -215,6 +220,10 @@ export function ModelView({
           </div>
         </div>
       </article>
+
+      {local ? (
+        <LocalContentSection content={local} id="model-ozel" eyebrow="Bu modele özel" title={`${name} hakkında`} noteTitle="Kullanım ve yerleşim notu" fallbackAlt={`${name} (${model.code})`} />
+      ) : null}
 
       {page ? (
         <section aria-labelledby="model-tanitim" className="border-t border-sand bg-white py-16 sm:py-24">
