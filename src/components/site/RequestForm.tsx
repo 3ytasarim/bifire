@@ -12,6 +12,15 @@ import { selectionStore } from "@/lib/selection-store";
 
 type Option = { id: string; name: string };
 
+const noop = () => () => {};
+/**
+ * Tarayıcıda true, sunucu HTML'inde false. Uzun seçenek listeleri (≈300 il/ilçe, tüm ürünler) yalnız tarayıcıda
+ * çizilir: her form sayfasında aynı ~1.000 kelimelik liste HTML'e girmez (tekrar eden içerik), form aynı çalışır.
+ */
+export function useHydrated() {
+  return useSyncExternalStore(noop, () => true, () => false);
+}
+
 function Submit({ label }: { label: string }) {
   const { pending } = useFormStatus();
   return (
@@ -44,15 +53,18 @@ export function Select({
   defaultValue?: string;
   placeholder?: string;
 }) {
+  const hydrated = useHydrated();
   return (
     <div>
       <label htmlFor={id} className="text-sm font-semibold text-ink">
         {label}
       </label>
       <div className="relative">
-        <select id={id} name={name} defaultValue={defaultValue ?? ""} className={`${inputCls} appearance-none pr-10`}>
+        {/* key: liste tarayıcıda eklenince select yeniden kurulur, defaultValue doğru seçeneğe oturur. */}
+        <select key={hydrated ? "full" : "ssr"} id={id} name={name} defaultValue={defaultValue ?? ""} className={`${inputCls} appearance-none pr-10`}>
           <option value="">{placeholder}</option>
-          {groups?.map((g) => (
+          {!hydrated && defaultValue ? <option value={defaultValue}>{defaultValue}</option> : null}
+          {hydrated && groups?.map((g) => (
             <optgroup key={g.label} label={g.label}>
               {g.options.map((o) => (
                 <option key={o} value={o}>
@@ -61,7 +73,7 @@ export function Select({
               ))}
             </optgroup>
           ))}
-          {options.map((o) => (
+          {hydrated && options.map((o) => (
             <option key={o} value={o}>
               {o}
             </option>
@@ -120,6 +132,7 @@ export function RequestForm({
   const storeSelection = useSyncExternalStore(selectionStore.subscribe, selectionStore.get, selectionStore.getServer);
   const selection = selectionOverride ?? storeSelection;
   const statusRef = useRef<HTMLDivElement>(null);
+  const hydrated = useHydrated();
 
   // Formun açılış zamanı (bot tuzağı) ref'te tutulur ve gönderim anında FormData'ya eklenir. DOM alanı
   // kullanılmaz: React 19 form action'ı hata sonrası formu sıfırlar; alan 0'a dönerse ilk denemesi hatalı
@@ -147,7 +160,10 @@ export function RequestForm({
 
   const v = state.values ?? {};
   const err = state.errors ?? {};
-  const visibleProducts = categoryId ? products.filter((p) => p.categoryId === categoryId) : products;
+  const allVisible = categoryId ? products.filter((p) => p.categoryId === categoryId) : products;
+  // Sunucu HTML'inde yalnız önceden seçili ürün; tam liste tarayıcıda (bkz. useHydrated).
+  const preselected = v.productId ?? defaultProductId ?? "";
+  const visibleProducts = hydrated ? allVisible : allVisible.filter((p) => p.id === preselected);
   const fieldId = (n: string) => `${idPrefix ?? type.toLowerCase()}-${n}`;
   // Yarım genişlikli alan sayısı tekse son seçim kutusu tam genişliğe yayılır (boş hücre kalmasın).
   const oddHalf = [district, project, project, project].filter(Boolean).length % 2 === 1;
@@ -292,7 +308,7 @@ export function RequestForm({
               id={fieldId("product")}
               name="productId"
               defaultValue={v.productId ?? defaultProductId ?? ""}
-              key={categoryId}
+              key={`${categoryId}-${hydrated ? "full" : "ssr"}`}
               className={`${inputCls} appearance-none pr-10`}
             >
               <option value="">Seçiniz</option>
