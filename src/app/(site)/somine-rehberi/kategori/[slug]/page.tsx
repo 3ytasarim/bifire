@@ -25,11 +25,21 @@ export function generateStaticParams() {
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sayfa?: string; konu?: string }> };
 
-/** Alt konu filtresi ve 2+. sayfalar da indekslenir (canonical kategori sayfası). */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+/**
+ * Sayfalama: 2+. sayfalar farklı yazılar listeler → self canonical (?sayfa=N) ve başlıkta sayfa numarası.
+ * Alt konu filtresi (?konu=) kategori listesinin alt kümesidir → canonical filtresiz kategori sayfası.
+ */
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const c = guideCategoryBySlug((await params).slug);
   if (!c) return {};
-  return buildMetadata({ title: `${c.name} Rehberi | Şömine Rehberi | Bifire`, description: c.intro, path: routes.blogCategory(c.slug) });
+  const sp = await searchParams;
+  const page = sp.konu ? 1 : Math.max(1, Number(sp.sayfa) || 1);
+  const suffix = page > 1 ? ` – Sayfa ${page}` : "";
+  return buildMetadata({
+    title: `${c.name} Rehberi${suffix} | Şömine Rehberi | Bifire`,
+    description: page > 1 ? `${c.intro} (Sayfa ${page})` : c.intro,
+    path: page > 1 ? `${routes.blogCategory(c.slug)}?sayfa=${page}` : routes.blogCategory(c.slug),
+  });
 }
 
 /** Rehber kategori sayfası: merkez rehber, alt konu filtresi, 12'şerli sayfalanmış yazılar, diğer konular. */

@@ -9,14 +9,16 @@ import { buildMetadata } from "@/lib/seo/metadata";
 
 type Props = { params: Promise<{ slug: string }>; searchParams: Promise<{ sayfa?: string }> };
 
-/** Etiket arşivleri indekslenir ve site haritasına girer. */
-export async function generateMetadata({ params }: Props): Promise<Metadata> {
+/** Etiket arşivleri indekslenir ve site haritasına girer; 2+. sayfalar self canonical (?sayfa=N). */
+export async function generateMetadata({ params, searchParams }: Props): Promise<Metadata> {
   const tag = await getBlogTag((await params).slug);
   if (!tag) return {};
+  const page = Math.max(1, Number((await searchParams).sayfa) || 1);
+  const suffix = page > 1 ? ` – Sayfa ${page}` : "";
   return buildMetadata({
-    title: `${tag.name} yazıları | Bifire Blog`,
-    description: `Bifire blogunda "${tag.name}" etiketli şömine yazıları.`,
-    path: routes.blogTag(tag.slug),
+    title: `${tag.name} yazıları${suffix} | Bifire Şömine Rehberi`,
+    description: `Bifire Şömine Rehberi'nde "${tag.name}" etiketli yazılar${page > 1 ? ` (Sayfa ${page})` : ""}.`,
+    path: page > 1 ? `${routes.blogTag(tag.slug)}?sayfa=${page}` : routes.blogTag(tag.slug),
   });
 }
 

@@ -27,7 +27,17 @@ const nextConfig: NextConfig = {
   },
   // Rehber /blog → /somine-rehberi taşındı (kalıcı yönlendirme; eski bağlantılar ve dış linkler korunur).
   async redirects() {
+    // Yayından kalkan eski rehber yazıları → aynı konudaki güncel rehber (zincir olmasın diye /blog/ biçimi de doğrudan).
+    const retired: [string, string][] = [
+      ["somine-kaplama-malzemeleri", "somine-kaplamasi-secimi"],
+      ["somine-bakimi-ve-guvenli-kullanim", "somine-bakimi-neleri-kapsar"],
+      ["kose-somine-nedir", "kose-somine-cam-birlesimi-ve-gorus-acisi-rehberi"],
+      ["uc-tarafli-ve-tunel-somineler", "cift-yonlu-somine"],
+    ];
     return [
+      ...retired.flatMap(([from, to]) =>
+        ["/blog/", "/somine-rehberi/"].map((base) => ({ source: `${base}${from}`, destination: `/somine-rehberi/${to}`, permanent: true })),
+      ),
       { source: "/blog", destination: "/somine-rehberi", permanent: true },
       { source: "/blog/:path*", destination: "/somine-rehberi/:path*", permanent: true },
     ];

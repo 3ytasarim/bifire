@@ -54,7 +54,9 @@ export function canonicalUrl(path: string, override?: string | null): string {
     }
   }
   const clean = new URL(path, site);
-  return `${clean.origin}${stripTrailingSlash(clean.pathname)}`;
+  // Sayfalama (?sayfa=2…) farklı içerik listeler → self canonical korunur; diğer parametreler (filtre, arama) atılır.
+  const page = Number(clean.searchParams.get("sayfa"));
+  return `${clean.origin}${stripTrailingSlash(clean.pathname)}${page > 1 ? `?sayfa=${page}` : ""}`;
 }
 
 function stripTrailingSlash(pathname: string): string {
